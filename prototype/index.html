@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temperature Conversion System - Milestone 2 Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="badge">Milestone 2: Core Module Prototype</div>
+      <h1>Temperature Conversion System</h1>
+      <p class="subtitle">High-precision scientific temperature conversion across Celsius, Fahrenheit, and Kelvin.</p>
+    </header>
+
+    <main class="main-card">
+      <div class="converter-grid">
+        <!-- Input Section -->
+        <div class="input-group">
+          <label for="tempInput">Input Temperature</label>
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="tempInput" 
+              placeholder="e.g. 100 or -40" 
+              autocomplete="off" 
+              aria-label="Temperature value"
+            />
+            <span class="unit-symbol" id="inputUnitSymbol">°C</span>
+          </div>
+          <div class="error-msg" id="errorMessage" role="alert" aria-live="polite"></div>
+        </div>
+
+        <!-- From Unit Selector -->
+        <div class="selector-group">
+          <label for="fromUnit">From Scale</label>
+          <select id="fromUnit">
+            <option value="C" selected>Celsius (°C)</option>
+            <option value="F">Fahrenheit (°F)</option>
+            <option value="K">Kelvin (K)</option>
+          </select>
+        </div>
+
+        <!-- Swap Button -->
+        <div class="swap-action">
+          <button id="swapBtn" type="button" title="Swap input and output units" aria-label="Swap units">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8v12M17 20l4-4M17 20l-4-4"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- To Unit Selector -->
+        <div class="selector-group">
+          <label for="toUnit">To Scale</label>
+          <select id="toUnit">
+            <option value="C">Celsius (°C)</option>
+            <option value="F" selected>Fahrenheit (°F)</option>
+            <option value="K">Kelvin (K)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Controls: Precision, Auto-convert -->
+      <div class="controls-row">
+        <div class="precision-control">
+          <label for="precisionSelect">Decimal Precision:</label>
+          <select id="precisionSelect">
+            <option value="2">2 decimal places</option>
+            <option value="4" selected>4 decimal places</option>
+            <option value="6">6 decimal places</option>
+            <option value="8">8 decimal places</option>
+            <option value="raw">Raw (Full Precision)</option>
+          </select>
+        </div>
+
+        <div class="preset-chips">
+          <span class="chip-label">Quick Presets:</span>
+          <button type="button" class="chip" data-val="0" data-unit="C">0°C (Freezing)</button>
+          <button type="button" class="chip" data-val="100" data-unit="C">100°C (Boiling)</button>
+          <button type="button" class="chip" data-val="37" data-unit="C">37°C (Body Temp)</button>
+          <button type="button" class="chip" data-val="0" data-unit="K">0 K (Abs Zero)</button>
+        </div>
+      </div>
+
+      <!-- Primary Action Buttons -->
+      <div class="action-buttons">
+        <button id="convertBtn" class="btn btn-primary" type="button">Convert Temperature</button>
+        <button id="resetBtn" class="btn btn-secondary" type="button">Reset</button>
+      </div>
+
+      <!-- Result Section -->
+      <div class="result-section" id="resultSection">
+        <div class="result-card">
+          <div class="result-header">
+            <span class="result-label">Conversion Result</span>
+            <button id="copyBtn" class="btn-icon" title="Copy result to clipboard" aria-label="Copy result">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="result-value-display">
+            <span class="value-highlight" id="resultOutput">--</span>
+            <span class="result-unit-symbol" id="resultUnitSymbol"></span>
+          </div>
+
+          <!-- Formula & Step-by-Step Breakdown -->
+          <div class="explanation-box" id="explanationBox">
+            <div class="formula-title">Mathematical Derivation:</div>
+            <div class="formula-equation" id="formulaEquation">Please enter a valid temperature to view formula steps.</div>
+            <div class="formula-steps" id="formulaSteps"></div>
+          </div>
+
+          <!-- Physical State Indicator -->
+          <div class="physical-state-indicator" id="stateIndicator">
+            <span class="state-icon" id="stateIcon">🌡️</span>
+            <span class="state-text" id="stateText">Normal Range</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- History Section -->
+    <section class="history-card">
+      <div class="history-header">
+        <h2>Conversion History (Session & LocalStorage)</h2>
+        <div class="history-actions">
+          <button id="clearHistoryBtn" class="btn btn-outline-danger" type="button">Clear History</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="history-table" id="historyTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Timestamp</th>
+              <th>Input</th>
+              <th>From</th>
+              <th>Result</th>
+              <th>To</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <tr class="empty-row">
+              <td colspan="7">No conversion history recorded yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Verification / Specification Footer -->
+    <footer class="app-footer">
+      <p>Temperature Conversion System • Milestone 2 Implementation • Authors: Prakhar Harne & Naman Shrivastav</p>
+      <p>Complies with IEEE 754 Floating Point Precision & Thermodynamic Absolute Zero Constraints.</p>
+    </footer>
+  </div>
+
+  <script src="converter.js"></script>
+</body>
+</html>

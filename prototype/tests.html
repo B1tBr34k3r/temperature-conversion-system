@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Temperature Converter - Unit Test Runner</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .test-container { max-width: 900px; margin: 2rem auto; font-family: 'Inter', sans-serif; }
+    .test-result { padding: 0.5rem 0.8rem; margin-bottom: 0.35rem; border-radius: 6px; font-family: monospace; font-size: 0.9rem; }
+    .test-pass { background-color: #ecfdf5; color: #065f46; border-left: 4px solid #10b981; }
+    .test-fail { background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444; }
+    .summary-card { padding: 1.25rem; background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <header class="app-header">
+      <div class="badge">Milestone 2 Quality Assurance</div>
+      <h1>Automated Verification Suite</h1>
+      <p class="subtitle">Unit Testing for Validation Boundaries, Floating-Point Precision & Round-Trip Symmetry</p>
+    </header>
+
+    <div class="summary-card" id="summaryCard">
+      <h2>Test Execution Status: <span id="statusText">Running...</span></h2>
+      <p id="statsText"></p>
+      <div style="margin-top: 1rem;">
+        <a href="index.html" class="btn btn-secondary">← Back to Converter Prototype</a>
+      </div>
+    </div>
+
+    <div id="testOutput"></div>
+  </div>
+
+  <script src="converter.js"></script>
+  <script>
+    const output = document.getElementById('testOutput');
+    let pass = 0, fail = 0;
+
+    function record(condition, msg) {
+      const div = document.createElement('div');
+      div.className = 'test-result ' + (condition ? 'test-pass' : 'test-fail');
+      div.textContent = (condition ? '✓ [PASS] ' : '✗ [FAIL] ') + msg;
+      output.appendChild(div);
+      if (condition) pass++; else fail++;
+    }
+
+    function recordClose(actual, expected, tol, msg) {
+      const diff = Math.abs(actual - expected);
+      record(diff <= tol, `${msg} (Expected: ${expected}, Got: ${actual})`);
+    }
+
+    // Run tests
+    record(!InputValidator.validate('', 'C').isValid, 'Reject empty input');
+    record(!InputValidator.validate('abc', 'C').isValid, 'Reject non-numeric characters');
+    record(InputValidator.validate('100', 'C').isValid, 'Accept 100°C');
+    record(InputValidator.validate('-273.15', 'C').isValid, 'Accept Absolute Zero Celsius (-273.15°C)');
+    record(!InputValidator.validate('-273.16', 'C').isValid, 'Reject below Absolute Zero Celsius (-273.16°C)');
+    record(InputValidator.validate('0', 'K').isValid, 'Accept 0 Kelvin');
+    record(!InputValidator.validate('-1', 'K').isValid, 'Reject negative Kelvin');
+    recordClose(TemperatureConverter.celsiusToFahrenheit(0), 32, 1e-5, '0°C to 32°F Freezing Point');
+    recordClose(TemperatureConverter.celsiusToFahrenheit(100), 212, 1e-5, '100°C to 212°F Boiling Point');
+    recordClose(TemperatureConverter.celsiusToFahrenheit(-40), -40, 1e-5, '-40°C to -40°F Convergence Point');
+    recordClose(TemperatureConverter.celsiusToKelvin(0), 273.15, 1e-5, '0°C to 273.15 K');
+    recordClose(TemperatureConverter.kelvinToCelsius(0), -273.15, 1e-5, '0 K to -273.15°C');
+    recordClose(TemperatureConverter.fahrenheitToKelvin(32), 273.15, 1e-5, '32°F to 273.15 K');
+    recordClose(TemperatureConverter.kelvinToFahrenheit(0), -459.67, 1e-2, '0 K to -459.67°F');
+
+    const total = pass + fail;
+    document.getElementById('statusText').textContent = fail === 0 ? 'ALL PASSED (100%)' : 'FAILURES DETECTED';
+    document.getElementById('statsText').textContent = `Total Assertions: ${total} | Passed: ${pass} | Failed: ${fail}`;
+  </script>
+</body>
+</html>
