@@ -165,12 +165,14 @@ def create_report():
     r_sub.font.color.rgb = RGBColor(0x25, 0x63, 0xEB)
 
     # Metadata Box Table
-    meta_table = doc.add_table(rows=7, cols=2)
+    meta_table = doc.add_table(rows=9, cols=2)
     meta_table.alignment = WD_TABLE_ALIGNMENT.CENTER
     meta_data = [
         ("Project Title:", "Temperature Conversion System (Web-Based)"),
         ("Milestone Phase:", "Milestone 2 (Core Module Implementation & Prototyping)"),
         ("Authors:", "Prakhar Harne and Naman Shrivastav"),
+        ("GitHub Repository:", "https://github.com/B1tBr34k3r/temperature-conversion-system"),
+        ("Live Web Prototype:", "https://b1tbr34k3r.github.io/temperature-conversion-system/"),
         ("Platform & Stack:", "HTML5, Modern CSS3, JavaScript (ES6+), Web APIs, LocalStorage"),
         ("Architecture Model:", "Client-Side MVC Architecture with High-Precision Scientific Engine"),
         ("Current Version:", "Version 2.0 (Milestone 2 Deliverable)"),
