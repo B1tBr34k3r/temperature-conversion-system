@@ -1,5 +1,5 @@
 /**
- * Futuristic Cyber-HUD Master Controller
+ * Laboratory Bench Instrument Model TC-800 • Master Controller
  * Milestone 3: Full-Stack Integration
  * Authors: Prakhar Harne & Naman Shrivastav
  */
@@ -7,6 +7,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
   // DOM Elements
   const tempInput = document.getElementById('tempInput');
+  const tempSlider = document.getElementById('tempSlider');
+  const scrubValueDisplay = document.getElementById('scrubValueDisplay');
   const fromScale = document.getElementById('fromScale');
   const toScale = document.getElementById('toScale');
   const swapBtn = document.getElementById('swapBtn');
@@ -29,117 +31,141 @@ document.addEventListener('DOMContentLoaded', async () => {
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   const exportJsonBtn = document.getElementById('exportJsonBtn');
 
-  // Initialize Canvas Particle Reactor & Gauge
+  // Initialize Hardware Visualizers: Galvanometer & Particle Chamber
+  const galvanometer = new PhysicalGalvanometer();
   const particleReactor = new ThermalParticleReactor('thermalCanvas');
-  const gauge = new HolographicGauge('holographicGaugeSvg');
 
   // Check Backend Server Health
   const health = await window.apiClient.checkHealth();
   updateServerStatus(health);
 
-  // Load Initial Database History & Telemetry
+  // Load Initial Database History
   refreshHistory();
+
+  // Initial trigger with starting value 100°C -> °F
+  executeConversion(false);
 
   // --- Event Listeners ---
 
-  // Input conversion (debounce)
+  // Text input with debounce
   let debounceTimer;
   tempInput.addEventListener('input', () => {
+    const val = parseFloat(tempInput.value);
+    if (!isNaN(val)) {
+      tempSlider.value = Math.max(-273.15, Math.min(500, val));
+      scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
+    }
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => executeConversion(false), 220);
+    debounceTimer = setTimeout(() => executeConversion(false), 180);
   });
 
+  // Continuous Scrubber Slider
+  tempSlider.addEventListener('input', () => {
+    tempInput.value = tempSlider.value;
+    scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
+    window.instrumentAudio.playSliderTick();
+    executeConversion(false);
+  });
+
+  // Scale dropdown changes
   fromScale.addEventListener('change', () => {
-    window.hudAudio.playBeep(700, 0.05);
+    window.instrumentAudio.playRotaryClunk();
     executeConversion(false);
   });
 
   toScale.addEventListener('change', () => {
-    window.hudAudio.playBeep(700, 0.05);
+    window.instrumentAudio.playRotaryClunk();
     executeConversion(false);
   });
 
   precisionSelect.addEventListener('change', () => {
-    window.hudAudio.playBeep(600, 0.05);
+    window.instrumentAudio.playRelayClick(800);
     executeConversion(false);
   });
 
-  // Scale Swap
+  // Tactile Invert Swap Lever
   swapBtn.addEventListener('click', () => {
     const temp = fromScale.value;
     fromScale.value = toScale.value;
     toScale.value = temp;
-    window.hudAudio.playSwap();
+
+    window.instrumentAudio.playRotaryClunk();
     swapBtn.classList.add('rotating');
-    setTimeout(() => swapBtn.classList.remove('rotating'), 350);
+    setTimeout(() => swapBtn.classList.remove('rotating'), 300);
+
     executeConversion(false);
   });
 
-  // Action Button Convert
+  // Transmute / Convert Button Click
   convertBtn.addEventListener('click', () => {
+    window.instrumentAudio.playTransmute();
     executeConversion(true);
   });
 
-  // Preset Chips
-  document.querySelectorAll('.preset-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const val = btn.getAttribute('data-val');
-      const scale = btn.getAttribute('data-scale');
+  // Bench Preset Chips
+  document.querySelectorAll('.preset-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const val = chip.getAttribute('data-val');
+      const scale = chip.getAttribute('data-scale');
+
       tempInput.value = val;
       fromScale.value = scale;
-      window.hudAudio.playBeep(900, 0.08);
+      tempSlider.value = Math.max(-273.15, Math.min(500, parseFloat(val)));
+      scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
+
+      window.instrumentAudio.playRelayClick(1400);
       executeConversion(true);
     });
   });
 
-  // Sound Toggle
+  // Audio Toggle
   soundToggleBtn.addEventListener('click', () => {
-    const isEnabled = window.hudAudio.toggleSound();
+    const isEnabled = window.instrumentAudio.toggleSound();
     soundToggleBtn.classList.toggle('active', isEnabled);
-    soundToggleBtn.querySelector('.toggle-label').textContent = isEnabled ? 'AUDIO: ON' : 'AUDIO: MUTED';
+    soundToggleBtn.querySelector('.toggle-text').textContent = isEnabled ? 'RELAY CLICKS: ON' : 'AUDIO: MUTED';
   });
 
-  // CRT Scanline Toggle
+  // Phosphor CRT Scanlines Toggle
   crtToggleBtn.addEventListener('click', () => {
     document.body.classList.toggle('crt-active');
     crtToggleBtn.classList.toggle('active');
-    window.hudAudio.playBeep(500, 0.05);
+    window.instrumentAudio.playRelayClick(950);
   });
 
-  // Clipboard Copy
+  // Copy Result Button
   copyBtn.addEventListener('click', () => {
     const text = resultDisplay.textContent;
     const unit = resultUnit.textContent;
     if (text === '--' || text === 'ERR') return;
 
     navigator.clipboard.writeText(`${text} ${unit}`).then(() => {
-      window.hudAudio.playBeep(1200, 0.1);
+      window.instrumentAudio.playRelayClick(2200);
       const span = copyBtn.querySelector('span');
-      span.textContent = 'COPIED!';
-      setTimeout(() => span.textContent = 'COPY', 1500);
+      span.textContent = 'COPIED TO CLIPBOARD';
+      setTimeout(() => span.textContent = 'COPY RESULT', 1600);
     });
   });
 
-  // History & Export
+  // Database Purge & Export
   clearHistoryBtn.addEventListener('click', async () => {
-    window.hudAudio.playBeep(300, 0.12, 'square');
-    if (confirm('Purge all historical records from SQLite database?')) {
+    window.instrumentAudio.playRelayClick(400);
+    if (confirm('Purge all historical telemetry from SQLite database?')) {
       await window.apiClient.clearHistory();
       refreshHistory();
     }
   });
 
   exportCsvBtn.addEventListener('click', () => {
-    window.hudAudio.playBeep(800, 0.08);
+    window.instrumentAudio.playRelayClick(1600);
     window.location.href = '/api/export/csv';
   });
 
   exportJsonBtn.addEventListener('click', () => {
-    window.hudAudio.playBeep(800, 0.08);
+    window.instrumentAudio.playRelayClick(1600);
     window.location.href = '/api/export/json';
   });
 
-  // --- Core Conversion Routine ---
+  // --- Core Execution Logic ---
   async function executeConversion(isExplicit = false) {
     const rawVal = tempInput.value.trim();
     if (rawVal === '') {
@@ -163,28 +189,30 @@ document.addEventListener('DOMContentLoaded', async () => {
       resultDisplay.textContent = data.resultValue;
       resultUnit.textContent = getUnitSymbol(data.toScale);
 
-      // Play Sound
-      if (isExplicit) window.hudAudio.playConvert();
+      // Base Celsius for physical simulation
+      const baseC = getCelsiusEquivalent(data.inputValue, data.fromScale);
 
-      // Update Particle Simulation speed and color based on Celsius base
-      const baseC = data.rawResult ? getCelsiusEquivalent(data.inputValue, data.fromScale) : 25;
+      // Dynamic Ambient Thermal Theme on Body & Aura
+      updateAmbientThermalTheme(baseC);
+
+      // Update Kinetic Brownian Molecular Simulation
       particleReactor.setTemperature(baseC);
 
-      // Update Holographic Radial Gauge
-      gauge.update(baseC, data.resultValue, getUnitSymbol(data.toScale), data.physicalState);
+      // Update Galvanometer Needle & Liquid Mercury Tube
+      galvanometer.update(baseC, data.resultValue, getUnitSymbol(data.toScale), data.physicalState);
 
-      // Update Step-by-Step Derivation Terminal
+      // Update Step-by-Step Derivation Trace
       renderDerivation(data.derivation);
 
-      // Update Full Multi-Scale Telemetry Deck
+      // Update 8-Scale Multi-Vector Tiles
       renderTelemetryRadar(data.allScalesTelemetry);
 
-      // If explicit click, refresh history from database
+      // If user clicked execute, refresh database table
       if (isExplicit) {
         refreshHistory();
       }
     } catch (err) {
-      window.hudAudio.playError();
+      window.instrumentAudio.playError();
       errorAlert.textContent = err.message;
       errorAlert.classList.add('active');
       tempInput.classList.add('input-invalid');
@@ -199,24 +227,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     tempInput.classList.remove('input-invalid');
     resultDisplay.textContent = '--';
     resultUnit.textContent = '';
-    formulaEquation.textContent = 'Awaiting input telemetry...';
-    formulaTerminal.innerHTML = '<div class="terminal-line text-muted">// Enter a valid thermal constant to execute derivation.</div>';
+    formulaEquation.textContent = 'Awaiting input magnitude...';
+    formulaTerminal.innerHTML = '<div class="trace-line header-trace">// ENTER VALUE TO INITIALIZE AUDIT TRACE.</div>';
+  }
+
+  function updateAmbientThermalTheme(celsius) {
+    document.body.classList.remove('theme-cryo', 'theme-boil', 'theme-ambient');
+    if (celsius <= 0) {
+      document.body.classList.add('theme-cryo');
+    } else if (celsius >= 100) {
+      document.body.classList.add('theme-boil');
+    } else {
+      document.body.classList.add('theme-ambient');
+    }
   }
 
   function renderDerivation(derivation) {
     if (!derivation) return;
     formulaEquation.textContent = derivation.formula;
-    formulaTerminal.innerHTML = derivation.steps.map((s, idx) => `
-      <div class="terminal-line"><span class="prompt">></span> [STEP ${idx + 1}] ${s}</div>
-    `).join('');
+    formulaTerminal.innerHTML = `
+      <div class="trace-line header-trace">// PHYSICAL TRANSFORMATION MATRIX:</div>
+      ${derivation.steps.map((s, idx) => `
+        <div class="trace-line ${idx === derivation.steps.length - 1 ? 'highlight' : ''}">
+          <span class="bullet">${idx + 1}.</span> ${s}
+        </div>
+      `).join('')}
+    `;
   }
 
   function renderTelemetryRadar(telemetry) {
     if (!telemetry || Object.keys(telemetry).length === 0) return;
     telemetryGrid.innerHTML = Object.values(telemetry).map(item => `
-      <div class="telemetry-card">
-        <div class="telemetry-label">${item.name} (${item.symbol})</div>
-        <div class="telemetry-value">${item.value}</div>
+      <div class="vector-tile" data-scale="${item.scale}">
+        <span class="v-label">${item.name} (${item.symbol})</span>
+        <span class="v-val">${item.value}</span>
       </div>
     `).join('');
   }
@@ -224,29 +268,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function refreshHistory() {
     const list = await window.apiClient.getHistory();
     if (!list || list.length === 0) {
-      historyTbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No database telemetry recorded yet.</td></tr>`;
+      historyTbody.innerHTML = `<tr><td colspan="7" class="empty-cell">No SQLite database telemetry recorded yet.</td></tr>`;
       return;
     }
 
     historyTbody.innerHTML = list.slice(0, 15).map(item => `
       <tr>
-        <td class="text-mono">#${item.id}</td>
-        <td class="text-mono">${new Date(item.timestamp).toLocaleTimeString()}</td>
-        <td><strong>${item.inputValue}</strong> ${getUnitSymbol(item.fromScale)}</td>
-        <td class="text-accent">${getUnitSymbol(item.fromScale)} → ${getUnitSymbol(item.toScale)}</td>
-        <td class="text-glow"><strong>${Number(item.resultValue).toFixed(item.precisionSetting === 'raw' ? 4 : item.precisionSetting)}</strong> ${getUnitSymbol(item.toScale)}</td>
-        <td><span class="badge badge-state">${item.physicalState || 'Normal'}</span></td>
-        <td><button class="btn-micro" data-val="${item.inputValue}" data-from="${item.fromScale}" data-to="${item.toScale}">LOAD</button></td>
+        <td style="font-family: var(--font-mono); font-weight: 700; color: #ff9f1c;">#${item.id}</td>
+        <td style="font-family: var(--font-mono); color: #94a3b8;">${new Date(item.timestamp).toLocaleTimeString()}</td>
+        <td><strong style="color: #ffffff;">${item.inputValue}</strong> ${getUnitSymbol(item.fromScale)}</td>
+        <td style="font-family: var(--font-mono); color: #64748b;">${getUnitSymbol(item.fromScale)} → ${getUnitSymbol(item.toScale)}</td>
+        <td><strong style="color: #ffb703; font-family: var(--font-mono); font-size: 0.95rem;">${Number(item.resultValue).toFixed(item.precisionSetting === 'raw' ? 4 : item.precisionSetting)}</strong> ${getUnitSymbol(item.toScale)}</td>
+        <td><span style="background: #1e2634; border: 1px solid #334155; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.72rem; color: #cbd5e1;">${item.physicalState || 'Normal'}</span></td>
+        <td><button class="tactile-mini-btn btn-load" data-val="${item.inputValue}" data-from="${item.fromScale}" data-to="${item.toScale}">RECALL</button></td>
       </tr>
     `).join('');
 
-    // Wire up load buttons
-    historyTbody.querySelectorAll('.btn-micro').forEach(btn => {
+    // Wire up recall buttons
+    historyTbody.querySelectorAll('.btn-load').forEach(btn => {
       btn.addEventListener('click', () => {
         tempInput.value = btn.getAttribute('data-val');
         fromScale.value = btn.getAttribute('data-from');
         toScale.value = btn.getAttribute('data-to');
-        window.hudAudio.playBeep(1000, 0.05);
+        tempSlider.value = Math.max(-273.15, Math.min(500, parseFloat(btn.getAttribute('data-val'))));
+        scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
+        window.instrumentAudio.playRelayClick(1800);
         executeConversion(true);
       });
     });
@@ -254,11 +300,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function updateServerStatus(health) {
     if (health && health.status === 'OPTIMAL') {
-      serverStatusBadge.textContent = 'ONLINE • REST & SQLITE ACTIVE';
-      serverStatusBadge.className = 'status-badge status-online';
+      serverStatusBadge.innerHTML = '<span class="pill-dot"></span><span class="pill-label">SQLITE ENGINE: ACTIVE (WAL)</span>';
+      serverStatusBadge.style.color = '#10b981';
     } else {
-      serverStatusBadge.textContent = 'LOCAL CLIENT RESILIENCY ACTIVE';
-      serverStatusBadge.className = 'status-badge status-fallback';
+      serverStatusBadge.innerHTML = '<span class="pill-dot" style="background:#f59e0b; box-shadow:0 0 8px #f59e0b;"></span><span class="pill-label">CLIENT RESILIENCY FALLBACK</span>';
+      serverStatusBadge.style.color = '#f59e0b';
     }
   }
 
@@ -274,6 +320,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (scale === 'K') return val - 273.15;
     if (scale === 'R') return (val - 491.67) * 5 / 9;
     if (scale === 'De') return 100 - (val * 2 / 3);
+    if (scale === 'N') return val * (100 / 33);
+    if (scale === 'Re') return val * 1.25;
+    if (scale === 'Ro') return (val - 7.5) * (40 / 21);
     return val;
   }
 });

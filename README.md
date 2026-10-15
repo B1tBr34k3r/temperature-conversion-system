@@ -1,33 +1,35 @@
-# Quantum Thermal HUD • Temperature Conversion System
+# TC-800 Laboratory Calibrator • Temperature Conversion System
 
-A modern, high-precision scientific temperature conversion and thermal telemetry application built for students, researchers, and engineers. Engineered with a full-stack 3-tier architecture—combining a futuristic **Cyber-HUD** front-end, a modular **Express.js REST API**, and a high-performance **SQLite 3** relational database with Write-Ahead Logging (WAL mode).
+An artisanal, high-precision scientific temperature conversion and thermal telemetry instrument built for students, researchers, and laboratory engineers. Designed with a distinct **tactile analog-digital hardware aesthetic**—combining a physical bench-instrument interface, an **Express.js REST API**, and an embedded **SQLite 3** relational database engine operating with Write-Ahead Logging (WAL mode).
 
 ---
 
-## ✨ System Features
+## ✨ System Features & Tactile Hardware Design
+
+- **Artisanal Analog-Digital Instrument Surface:**
+  - **Damped Spring Galvanometer:** A physical analog needle driven by real spring-physics simulation (`F = -k*x - c*v`) that swings, overshoots, and dampens smoothly like a genuine bench galvanometer.
+  - **Liquid Dispersion Mercury Column:** Vertical laboratory glass thermometer tube with dynamic fluid level, meniscus surface-tension bounce, and animated boiling bubbles when temperature passes $100^\circ\text{C}$.
+  - **Dynamic Thermal Aura:** Adaptive ambient radiance that shifts between frosty cryogenic mist ($< 0^\circ\text{C}$), warm amber equilibrium ($0\text{--}99^\circ\text{C}$), and incandescent magma ($100^\circ\text{C}+$).
+  - **Continuous Magnitude Scrubber:** Interactive tactile slider with real-time value scrubbing and physical audio ticks.
+  - **Synthesized Mechanical Sound Design:** Tactile relay clicks, rotary switch clunks, and analog coil whines synthesized via the **Web Audio API** (zero external MP3/WAV assets).
+  - **Vintage Phosphor Screen:** Warm amber phosphor digits with cathode ray scanlines and scientific 64-bit precision telemetry.
 
 - **8-Scale Scientific Engine:** Accurate transformations across all primary thermodynamic and historical scales:
   - **Celsius (°C)**, **Fahrenheit (°F)**, **Kelvin (K)**
   - **Rankine (°R)**, **Delisle (°De)**, **Newton (°N)**
   - **Réaumur (°Ré)**, **Rømer (°Rø)**
-- **Thermodynamic Limit Enforcement:** Enforces Absolute Zero lower boundaries ($-273.15^\circ\text{C}$, $-459.67^\circ\text{F}$, $0\text{ K}$, $0^\circ\text{R}$) with physical validation checks.
-- **Kinetic Molecular Reactor (Canvas 2D):** A real-time molecular Brownian motion simulation that physically reacts to temperature: particles freeze into crystalline lattices at cryogenic temperatures and accelerate into high-energy plasma states at elevated temperatures.
-- **Holographic Radial Gauge:** Dynamic SVG dial displaying thermodynamic excitation levels and classified environmental thermal tiers (Absolute Zero, Cryogenic, Ambient, Biological, Boiling, Magma, Plasma).
-- **8-Scale Simultaneous Telemetry Radar:** Projects entered temperatures across all 8 scales simultaneously for side-by-side scientific comparison.
-- **Synthesized Sci-Fi Audio FX:** Generates holographic laser chirps, quantum swap chimes, and alert klaxons synthesized in real time via the **Web Audio API** (zero external audio files).
+- **Thermodynamic Limit Enforcement:** Enforces Absolute Zero lower boundaries ($-273.15^\circ\text{C}$, $-459.67^\circ\text{F}$, $0\text{ K}$, $0^\circ\text{R}$) with rigorous validation checks.
+- **Kinetic Molecular Reactor (Canvas 2D):** A real-time molecular Brownian motion simulation that physically reacts to temperature: particles freeze into crystalline lattices at cryogenic temperatures and accelerate into buoyant convective plumes at elevated temperatures.
 - **Embedded SQLite 3 Database:** Logs conversions with temporal indexing, providing analytical telemetry, historical review, and one-click **CSV/JSON export**.
-- **Retro CRT Scanline Mode:** Optional retro-futuristic CRT filter for an authentic command-center dashboard experience.
 
 ---
 
 ## 🏗️ Full-Stack 3-Tier Architecture
 
-The system implements a decoupled client-server-database architecture:
-
 ```
 ┌────────────────────────────────────────────────────────┐
-│      PRESENTATION TIER: Futuristic Cyber-HUD UI        │
-│  HTML5 • CSS3 Glassmorphism • Canvas 2D • Web Audio    │
+│     PRESENTATION TIER: TC-800 Laboratory Instrument    │
+│  Tactile Bench Console • Spring Physics • Canvas 2D   │
 └───────────────────────────┬────────────────────────────┘
                             │ HTTP / JSON REST API
 ┌───────────────────────────▼────────────────────────────┐
@@ -47,8 +49,8 @@ The system implements a decoupled client-server-database architecture:
 ### Database Schema (SQLite 3)
 ![Database Schema](diagrams/db_schema_er.png)
 
-### Live Cyber-HUD Command Deck
-![Live Cyber-HUD](diagrams/milestone3_live_hud.png)
+### Live Laboratory Instrument Console
+![Live Instrument Console](diagrams/milestone3_live_hud.png)
 
 ---
 
@@ -56,16 +58,16 @@ The system implements a decoupled client-server-database architecture:
 
 ```
 temperature-conversion-system/
-├── client/                           # Futuristic Cyber-HUD Frontend
-│   ├── index.html                    # Quantum Command Deck Layout
+├── client/                           # Tactile Laboratory Instrument Frontend
+│   ├── index.html                    # TC-800 Hardware Console Layout
 │   ├── css/
-│   │   └── hud.css                   # Glassmorphism & Cyberpunk Neon Styling
+│   │   └── hud.css                   # Artisanal Milled Metal & Phosphor Styling
 │   └── js/
-│       ├── audio.js                  # Web Audio API Synthesizer
-│       ├── particles.js              # Kinetic Molecular Brownian Simulation
-│       ├── gauge.js                  # Holographic Radial SVG Gauge
+│       ├── audio.js                  # Mechanical Relay & Analog Synthesizer
+│       ├── particles.js              # Kinetic Brownian Convection Engine
+│       ├── gauge.js                  # Spring-Physics Galvanometer & Liquid Tube
 │       ├── api.js                    # REST API Client with Offline Fallback
-│       └── app.js                    # Master UI Controller
+│       └── app.js                    # Master Console Controller
 ├── server/                           # Express.js REST Backend
 │   ├── config/
 │   │   └── db.js                     # SQLite 3 Database & WAL Setup
@@ -99,7 +101,7 @@ cd temperature-conversion-system
 npm install
 ```
 
-### 2. Launch the System
+### 2. Launch the Instrument Console
 Start the integrated server:
 ```bash
 npm start
@@ -114,16 +116,6 @@ Execute the automated test suite covering all 8 scales, thermodynamic bounds, an
 ```bash
 npm test
 ```
-
----
-
-## 🧪 Automated Verification Suite
-
-The system includes 43 automated unit and integration assertions:
-- **8-Scale Accuracy:** Freezing, boiling, and convergence benchmarks validated within $\le 10^{-4}$ tolerance.
-- **Thermodynamic Limits:** Absolute Zero lower boundaries verified across all scales.
-- **Syntactic Validation:** Rejection of empty strings, non-numeric tokens, and infinity values.
-- **Database Transactions:** Insertions, chronological queries, analytics, and VACUUM verified with zero data corruption.
 
 ---
 

@@ -3,282 +3,427 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum Thermal HUD • Temperature Conversion System</title>
+  <title>TC-800 Lab Instrument • Scientific Temperature Calibrator</title>
   <link rel="stylesheet" href="css/hud.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Cabinet+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
 </head>
-<body>
-  <div class="hud-container">
-    <!-- Top System Telemetry Ribbon -->
-    <header class="hud-header">
-      <div class="brand-section">
-        <div class="system-title">
-          <span style="color: var(--cyan-glow);">◈</span> QUANTUM THERMAL HUD
-        </div>
-        <div class="system-sub">
-          MILESTONE 3: FULL-STACK SCIENTIFIC CONVERSION & SQLITE ENGINE
-        </div>
+<body class="theme-ambient">
+
+  <!-- Background Ambient Thermal Aura (Radiates cold frost or fiery heat) -->
+  <div class="thermal-aura" id="thermalAura"></div>
+
+  <div class="instrument-chassis">
+    
+    <!-- Top Faceplate: Screws, Brand, Power & Status -->
+    <header class="chassis-header">
+      <div class="screw-mount tl"></div>
+      <div class="screw-mount tr"></div>
+
+      <div class="brand-block">
+        <div class="brand-badge">LAB BENCH BENCHMARK • MODEL TC-800</div>
+        <h1 class="brand-title">THERMAL CALIBRATOR <span class="serial-tag">REV. 3.4 // MITS</span></h1>
+        <p class="brand-authors">Engineered by Prakhar Harne & Naman Shrivastav • High-Precision Relational Engine</p>
       </div>
 
-      <div class="header-controls">
-        <div id="serverStatusBadge" class="status-badge status-online">
-          CHECKING BACKEND...
+      <div class="header-utilities">
+        <!-- Mechanical Sound Toggle -->
+        <button id="soundToggleBtn" class="tactile-toggle active" title="Toggle Mechanical Audio Feedback">
+          <span class="toggle-light"></span>
+          <span class="toggle-text">RELAY CLICKS: ON</span>
+        </button>
+
+        <!-- Oscilloscope CRT phosphor toggle -->
+        <button id="crtToggleBtn" class="tactile-toggle" title="Toggle Cathode Phosphor Simulation">
+          <span class="toggle-light"></span>
+          <span class="toggle-text">PHOSPHOR CRT</span>
+        </button>
+
+        <!-- System Connection Status -->
+        <div id="serverStatusBadge" class="hw-status-pill">
+          <span class="pill-dot"></span>
+          <span class="pill-label">SQLITE ENGINE READY</span>
         </div>
-        <button id="soundToggleBtn" class="hud-btn active" title="Toggle Synthesized Audio FX">
-          🔊 <span class="toggle-label">AUDIO: ON</span>
-        </button>
-        <button id="crtToggleBtn" class="hud-btn" title="Toggle CRT Retro Scanlines">
-          📺 <span>CRT HUD</span>
-        </button>
       </div>
     </header>
 
-    <!-- Master Command Grid -->
-    <main class="deck-grid">
-      <!-- Left Column: Transmuter & Reaction Chamber -->
-      <section style="display: flex; flex-direction: column; gap: 1.5rem;">
+    <!-- Main Instrument Control Surface -->
+    <main class="console-body">
+
+      <!-- LEFT FLANK: Analog Galvanometer & Liquid Thermal Column -->
+      <section class="console-col flank-left">
         
-        <!-- Interactive Input Deck -->
-        <div class="hud-card">
-          <div class="card-title">
-            <span>⚡ CONVERSION MATRIX</span>
-            <span style="font-size: 0.75rem; color: var(--cyan-glow); font-family: var(--font-mono);">8-SCALE VECTOR ENGINE</span>
+        <!-- Analog Spring Galvanometer -->
+        <div class="metal-panel meter-panel">
+          <div class="panel-header">
+            <span class="panel-tag">ANALOG METER</span>
+            <span class="spec-text">DAMPED GALVANOMETER</span>
           </div>
 
-          <div class="input-matrix">
-            <div class="input-field-wrapper">
-              <input 
-                type="text" 
-                id="tempInput" 
-                class="cyber-input" 
-                placeholder="100 or -40" 
-                value="100" 
-                autocomplete="off" 
-                aria-label="Input temperature value"
-              />
+          <div class="galvanometer-box">
+            <svg id="galvanometerSvg" class="galvanometer-svg" viewBox="0 0 260 160">
+              <!-- Dial arc markings -->
+              <path d="M 30 140 A 105 105 0 0 1 230 140" fill="none" stroke="#2a303c" stroke-width="8" stroke-linecap="round"/>
+              <path id="dialActiveArc" d="M 30 140 A 105 105 0 0 1 230 140" fill="none" stroke="#ff9f1c" stroke-width="8" stroke-linecap="round" stroke-dasharray="320" stroke-dashoffset="320" />
+              
+              <!-- Calibration Tick Lines -->
+              <g id="dialTicks" stroke="#475569" stroke-width="1.5"></g>
+              
+              <!-- Scale Labels -->
+              <text x="32" y="152" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">ABS-0</text>
+              <text x="130" y="42" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">0°C ICE</text>
+              <text x="228" y="152" fill="#ff4d4d" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">BOIL</text>
+
+              <!-- Physical Galvanometer Needle (Rotated via JS Spring Physics) -->
+              <g id="needleGroup" transform="translate(130, 140) rotate(-60)">
+                <line x1="0" y1="0" x2="0" y2="-102" stroke="#ff3838" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="0" cy="0" r="7" fill="#1e2430" stroke="#ff3838" stroke-width="2"/>
+                <circle cx="0" cy="0" r="2.5" fill="#f8fafc"/>
+              </g>
+            </svg>
+
+            <!-- Physical Reading Readout -->
+            <div class="meter-readout-strip">
+              <span class="readout-label">THERMAL STAGE:</span>
+              <span id="gaugeTierBadge" class="readout-pill">AMBIENT EQUILIBRIUM</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Liquid Thermal Column (Mercury / Cryo tube with bubble physics) -->
+        <div class="metal-panel tube-panel">
+          <div class="panel-header">
+            <span class="panel-tag">LIQUID DISPERSION TUBE</span>
+            <span class="spec-text" id="tubeStateLabel">MERCURY COLUMN</span>
+          </div>
+
+          <div class="tube-enclosure">
+            <div class="glass-stem">
+              <div class="glass-glare"></div>
+              <!-- Graduation marks on the glass -->
+              <div class="tube-graduations">
+                <span>300°</span>
+                <span>200°</span>
+                <span>100°</span>
+                <span>0°</span>
+                <span>-100°</span>
+                <span>-273°</span>
+              </div>
+              <!-- Fluid Column -->
+              <div id="liquidColumn" class="liquid-fluid" style="height: 55%;">
+                <div class="liquid-meniscus"></div>
+                <div class="bubbles-container" id="bubblesContainer"></div>
+              </div>
+            </div>
+            
+            <div class="bulb-reservoir">
+              <div id="reservoirCore" class="reservoir-fluid"></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- CENTER FLANK: The Main Transmuter Controls & Telemetry Engine -->
+      <section class="console-col flank-center">
+        
+        <!-- Primary Input Deck -->
+        <div class="metal-panel primary-control-panel">
+          <div class="panel-header">
+            <span class="panel-tag">CALIBRATION MATRIX</span>
+            <span class="spec-text">IEEE-754 STABILIZED • 8-SCALE TRANSLATOR</span>
+          </div>
+
+          <div class="control-row-main">
+            <!-- Numeric Temperature Input -->
+            <div class="input-housing">
+              <label for="tempInput" class="input-micro-label">INPUT MAGNITUDE</label>
+              <div class="input-chassis">
+                <input 
+                  type="text" 
+                  id="tempInput" 
+                  class="tactile-input" 
+                  placeholder="Enter temp (e.g. 100)" 
+                  value="100" 
+                  autocomplete="off"
+                />
+                <span class="input-knob-hint">RAW INPUT</span>
+              </div>
             </div>
 
-            <select id="fromScale" class="cyber-select" aria-label="From Scale">
-              <option value="C" selected>Celsius (°C)</option>
-              <option value="F">Fahrenheit (°F)</option>
-              <option value="K">Kelvin (K)</option>
-              <option value="R">Rankine (°R)</option>
-              <option value="De">Delisle (°De)</option>
-              <option value="N">Newton (°N)</option>
-              <option value="Re">Réaumur (°Ré)</option>
-              <option value="Ro">Rømer (°Rø)</option>
-            </select>
+            <!-- From Scale Switcher -->
+            <div class="select-housing">
+              <label for="fromScale" class="input-micro-label">SOURCE SCALE</label>
+              <select id="fromScale" class="tactile-select">
+                <option value="C" selected>Celsius (°C)</option>
+                <option value="F">Fahrenheit (°F)</option>
+                <option value="K">Kelvin (K)</option>
+                <option value="R">Rankine (°R)</option>
+                <option value="De">Delisle (°De)</option>
+                <option value="N">Newton (°N)</option>
+                <option value="Re">Réaumur (°Ré)</option>
+                <option value="Ro">Rømer (°Rø)</option>
+              </select>
+            </div>
 
-            <button id="swapBtn" class="cyber-swap-btn" type="button" title="Invert Scales (Swap)" aria-label="Swap scales">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8v12M17 20l4-4M17 20l-4-4"/>
-              </svg>
-            </button>
+            <!-- Knurled Swap Lever -->
+            <div class="swap-housing">
+              <label class="input-micro-label">INVERT</label>
+              <button id="swapBtn" class="tactile-swap-btn" type="button" title="Invert Scales">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                  <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8v12M17 20l4-4M17 20l-4-4"/>
+                </svg>
+              </button>
+            </div>
 
-            <select id="toScale" class="cyber-select" aria-label="To Scale">
-              <option value="C">Celsius (°C)</option>
-              <option value="F" selected>Fahrenheit (°F)</option>
-              <option value="K">Kelvin (K)</option>
-              <option value="R">Rankine (°R)</option>
-              <option value="De">Delisle (°De)</option>
-              <option value="N">Newton (°N)</option>
-              <option value="Re">Réaumur (°Ré)</option>
-              <option value="Ro">Rømer (°Rø)</option>
-            </select>
+            <!-- Target Scale Switcher -->
+            <div class="select-housing">
+              <label for="toScale" class="input-micro-label">TARGET SCALE</label>
+              <select id="toScale" class="tactile-select">
+                <option value="C">Celsius (°C)</option>
+                <option value="F" selected>Fahrenheit (°F)</option>
+                <option value="K">Kelvin (K)</option>
+                <option value="R">Rankine (°R)</option>
+                <option value="De">Delisle (°De)</option>
+                <option value="N">Newton (°N)</option>
+                <option value="Re">Réaumur (°Ré)</option>
+                <option value="Ro">Rømer (°Rø)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Interactive Precision Scrub Slider -->
+          <div class="scrub-slider-box">
+            <div class="scrub-header">
+              <span class="scrub-label">CONTINUOUS MAGNITUDE SCRUBBER:</span>
+              <span id="scrubValueDisplay" class="scrub-val">100.00</span>
+            </div>
+            <input 
+              type="range" 
+              id="tempSlider" 
+              class="tactile-slider" 
+              min="-273.15" 
+              max="500" 
+              step="0.5" 
+              value="100"
+            />
+          </div>
+
+          <!-- Tactile Bench Presets (Quick physical benchmarks) -->
+          <div class="bench-presets-bar">
+            <span class="presets-title">LAB BENCHMARKS:</span>
+            <div class="presets-scroller">
+              <button type="button" class="preset-chip" data-val="0" data-scale="K">
+                <span class="chip-dot" style="background: #38bdf8;"></span> 0 K (Abs Zero)
+              </button>
+              <button type="button" class="preset-chip" data-val="-195.79" data-scale="C">
+                <span class="chip-dot" style="background: #0ea5e9;"></span> Liquid N₂
+              </button>
+              <button type="button" class="preset-chip" data-val="-78.5" data-scale="C">
+                <span class="chip-dot" style="background: #06b6d4;"></span> Dry Ice
+              </button>
+              <button type="button" class="preset-chip" data-val="0" data-scale="C">
+                <span class="chip-dot" style="background: #2dd4bf;"></span> 0°C (Ice Point)
+              </button>
+              <button type="button" class="preset-chip" data-val="37" data-scale="C">
+                <span class="chip-dot" style="background: #f59e0b;"></span> 37°C (Human Body)
+              </button>
+              <button type="button" class="preset-chip" data-val="100" data-scale="C">
+                <span class="chip-dot" style="background: #ef4444;"></span> 100°C (Boiling)
+              </button>
+              <button type="button" class="preset-chip" data-val="1538" data-scale="C">
+                <span class="chip-dot" style="background: #ec4899;"></span> Iron Melting
+              </button>
+            </div>
           </div>
 
           <!-- Error Alert Banner -->
-          <div id="errorAlert" class="error-alert"></div>
+          <div id="errorAlert" class="instrument-alert"></div>
 
-          <!-- Precision and Preset Controls -->
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span class="preset-label">PRECISION:</span>
-              <select id="precisionSelect" class="cyber-select" style="height: 34px; font-size: 0.8rem; padding: 0 0.5rem;">
+          <!-- Master Action Execution Button -->
+          <div class="execute-row">
+            <div class="precision-control-box">
+              <label for="precisionSelect" class="input-micro-label">PRECISION</label>
+              <select id="precisionSelect" class="tactile-select-mini">
                 <option value="2">2 Decimals</option>
                 <option value="4" selected>4 Decimals</option>
                 <option value="6">6 Decimals</option>
                 <option value="8">8 Decimals</option>
-                <option value="raw">Raw Unrounded</option>
+                <option value="raw">Full IEEE-754</option>
               </select>
             </div>
 
-            <div class="preset-row">
-              <span class="preset-label">QUANTUM PRESETS:</span>
-              <button type="button" class="preset-btn" data-val="0" data-scale="K">0 K (Abs Zero)</button>
-              <button type="button" class="preset-btn" data-val="-195.79" data-scale="C">Liquid N₂</button>
-              <button type="button" class="preset-btn" data-val="0" data-scale="C">0°C (Ice)</button>
-              <button type="button" class="preset-btn" data-val="37" data-scale="C">37°C (Body)</button>
-              <button type="button" class="preset-btn" data-val="100" data-scale="C">100°C (Boil)</button>
-            </div>
+            <button id="convertBtn" class="tactile-execute-btn" type="button">
+              <span class="btn-indicator"></span>
+              <span class="btn-text">TRANSMUTE & RECORD TO SQLITE</span>
+            </button>
           </div>
-
-          <button id="convertBtn" class="execute-btn" type="button">
-            EXECUTE QUANTUM CONVERSION & LOG TO DB
-          </button>
         </div>
 
-        <!-- Output Core & Kinetic Molecular Simulation -->
-        <div class="hud-card">
-          <div class="card-title">
-            <span>🔬 THERMAL REACTION CORE</span>
-            <button id="copyBtn" class="hud-btn" type="button" title="Copy result to clipboard">
-              <span>COPY</span>
+        <!-- Master Digital Luminescent Display -->
+        <div class="metal-panel digital-readout-panel">
+          <div class="panel-header">
+            <span class="panel-tag">DIGITAL EMISSION READOUT</span>
+            <button id="copyBtn" class="tactile-mini-btn" type="button">
+              <span>COPY RESULT</span>
             </button>
           </div>
 
-          <div class="output-deck">
-            <div class="output-header">
-              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #94a3b8; letter-spacing: 0.05em;">SYNTHESIZED OUTPUT:</span>
+          <div class="vintage-display-screen">
+            <div class="screen-scanline"></div>
+            <div class="display-main-num">
+              <span id="resultDisplay" class="phosphor-digits">212.0000</span>
+              <span id="resultUnit" class="phosphor-unit">°F</span>
             </div>
-            <div class="output-value-row">
-              <span id="resultDisplay" class="value-glitch">212.0000</span>
-              <span id="resultUnit" class="unit-glitch">°F</span>
+            <div class="screen-sub-telemetry">
+              <span class="screen-meta">SCIENTIFIC RESOLUTION: 64-BIT BINARY DOUBLE</span>
+              <span id="formulaEquation" class="screen-formula">°F = (°C × 9/5) + 32</span>
             </div>
-          </div>
-
-          <!-- Kinetic Molecular Canvas -->
-          <div class="canvas-deck">
-            <div class="canvas-overlay-tag">MOLECULAR BROWNIAN KINETICS SIMULATION</div>
-            <canvas id="thermalCanvas"></canvas>
           </div>
         </div>
 
-        <!-- Matrix Derivation Terminal -->
-        <div class="hud-card">
-          <div class="card-title">
-            <span>💻 MATHEMATICAL DERIVATION TERMINAL</span>
-            <span id="formulaEquation" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--cyan-glow);">°F = (°C × 9/5) + 32</span>
+        <!-- Step-by-Step Educational Derivation Window -->
+        <div class="metal-panel terminal-panel">
+          <div class="panel-header">
+            <span class="panel-tag">CALCULATION AUDIT TRACE</span>
+            <span class="spec-text">STEP-BY-STEP MATHEMATICAL PROOF</span>
           </div>
 
-          <div id="formulaTerminal" class="terminal-window">
-            <div class="terminal-header">// HIGH-PRECISION FLOATING-POINT TRACE:</div>
-            <div class="terminal-line"><span class="prompt">></span> [STEP 1] Multiply input by 1.8 (9/5): 100 × 1.8 = 180.000000</div>
-            <div class="terminal-line"><span class="prompt">></span> [STEP 2] Add 32 offset: 180.000000 + 32 = 212.000000</div>
-            <div class="terminal-line"><span class="prompt">></span> [STEP 3] Final precision stabilized: 212.0000 °F</div>
+          <div id="formulaTerminal" class="paper-trace-window">
+            <div class="trace-line header-trace">// PHYSICAL TRANSFORMATION MATRIX:</div>
+            <div class="trace-line"><span class="bullet">1.</span> Multiply input by 1.8 (9/5 ratio): 100 × 1.8 = 180.000000</div>
+            <div class="trace-line"><span class="bullet">2.</span> Add Fahrenheit baseline zero-shift: 180.000000 + 32 = 212.000000</div>
+            <div class="trace-line highlight"><span class="bullet">3.</span> Stabilized IEEE-754 Output: 212.0000 °F</div>
           </div>
         </div>
 
       </section>
 
-      <!-- Right Column: Holographic Gauge & Telemetry Radar -->
-      <section style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <!-- RIGHT FLANK: Kinetic Molecular Brownian Chamber & 8-Scale Radar -->
+      <section class="console-col flank-right">
         
-        <!-- Holographic Radial Gauge -->
-        <div class="hud-card">
-          <div class="card-title">
-            <span>📡 EXCITATION DIAL</span>
-            <span style="font-size: 0.75rem; color: var(--purple-glow); font-family: var(--font-mono);">THERMAL TELEMETRY</span>
+        <!-- Kinetic Molecular Reaction Chamber -->
+        <div class="metal-panel reactor-panel">
+          <div class="panel-header">
+            <span class="panel-tag">KINETIC BROWNIAN CHAMBER</span>
+            <span class="spec-text">MOLECULAR VELOCITY SIMULATOR</span>
           </div>
 
-          <div class="gauge-deck">
-            <svg id="holographicGaugeSvg" class="gauge-svg" viewBox="0 0 200 200">
-              <!-- Background Arc Ring -->
-              <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="12" stroke-dasharray="329.87" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(135 100 100)" />
-              
-              <!-- Progress Arc Ring -->
-              <circle id="gaugeProgressArc" cx="100" cy="100" r="70" fill="none" stroke="var(--cyan-glow)" stroke-width="12" stroke-linecap="round" transform="rotate(135 100 100)" style="transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease; filter: drop-shadow(0 0 8px var(--cyan-glow));" />
-              
-              <!-- Center Readout -->
-              <text id="gaugeCenterValue" x="100" y="98" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="24" font-weight="800" fill="#ffffff">212</text>
-              <text id="gaugeCenterUnit" x="100" y="122" text-anchor="middle" font-family="'Orbitron', sans-serif" font-size="14" font-weight="700" fill="var(--cyan-glow)">°F</text>
-            </svg>
-
-            <div id="gaugeTierBadge" class="gauge-tier-pill">
-              Water Boiling Point / Steam (≥100°C)
+          <div class="chamber-housing">
+            <canvas id="thermalCanvas"></canvas>
+            <div class="chamber-hud-overlay">
+              <div class="hud-stat">
+                <span class="hud-stat-label">KINETIC EXCITEMENT:</span>
+                <span id="hudKineticEnergy" class="hud-stat-val">373.15 K EQUIV</span>
+              </div>
+              <div class="hud-stat">
+                <span class="hud-stat-label">LATTICE STATE:</span>
+                <span id="hudLatticeState" class="hud-stat-val">VAPOR DISPERSION</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Full 8-Scale Telemetry Deck -->
-        <div class="hud-card">
-          <div class="card-title">
-            <span>🌐 8-SCALE MULTI-RADAR</span>
-            <span style="font-size: 0.72rem; color: #94a3b8; font-family: var(--font-mono);">SIMULTANEOUS PROJECTION</span>
+        <!-- Multi-Scale 8-Vector Scientific Grid -->
+        <div class="metal-panel telemetry-matrix-panel">
+          <div class="panel-header">
+            <span class="panel-tag">8-VECTOR PROJECTION</span>
+            <span class="spec-text">SIMULTANEOUS BENCHMARK</span>
           </div>
 
-          <div id="telemetryGrid" class="telemetry-grid">
-            <div class="telemetry-card">
-              <div class="telemetry-label">Celsius (°C)</div>
-              <div class="telemetry-value">100.0000</div>
+          <div id="telemetryGrid" class="vector-tiles-grid">
+            <div class="vector-tile" data-scale="C">
+              <span class="v-label">Celsius (°C)</span>
+              <span class="v-val">100.0000</span>
             </div>
-            <div class="telemetry-card">
-              <div class="telemetry-label">Fahrenheit (°F)</div>
-              <div class="telemetry-value">212.0000</div>
+            <div class="vector-tile" data-scale="F">
+              <span class="v-label">Fahrenheit (°F)</span>
+              <span class="v-val">212.0000</span>
             </div>
-            <div class="telemetry-card">
-              <div class="telemetry-label">Kelvin (K)</div>
-              <div class="telemetry-value">373.1500</div>
+            <div class="vector-tile" data-scale="K">
+              <span class="v-label">Kelvin (K)</span>
+              <span class="v-val">373.1500</span>
             </div>
-            <div class="telemetry-card">
-              <div class="telemetry-label">Rankine (°R)</div>
-              <div class="telemetry-value">671.6700</div>
+            <div class="vector-tile" data-scale="R">
+              <span class="v-label">Rankine (°R)</span>
+              <span class="v-val">671.6700</span>
             </div>
-            <div class="telemetry-card">
-              <div class="telemetry-label">Delisle (°De)</div>
-              <div class="telemetry-value">0.0000</div>
+            <div class="vector-tile" data-scale="De">
+              <span class="v-label">Delisle (°De)</span>
+              <span class="v-val">0.0000</span>
             </div>
-            <div class="telemetry-card">
-              <div class="telemetry-label">Newton (°N)</div>
-              <div class="telemetry-value">33.0000</div>
+            <div class="vector-tile" data-scale="N">
+              <span class="v-label">Newton (°N)</span>
+              <span class="v-val">33.0000</span>
             </div>
-            <div class="telemetry-card">
-              <div class="telemetry-label">Réaumur (°Ré)</div>
-              <div class="telemetry-value">80.0000</div>
+            <div class="vector-tile" data-scale="Re">
+              <span class="v-label">Réaumur (°Ré)</span>
+              <span class="v-val">80.0000</span>
             </div>
-            <div class="telemetry-card">
-              <div class="telemetry-label">Rømer (°Rø)</div>
-              <div class="telemetry-value">60.0000</div>
+            <div class="vector-tile" data-scale="Ro">
+              <span class="v-label">Rømer (°Rø)</span>
+              <span class="v-val">60.0000</span>
             </div>
           </div>
         </div>
 
       </section>
+
     </main>
 
-    <!-- Bottom Full-Width Deck: SQLite Database Logs & Analytics -->
-    <section class="hud-card">
-      <div class="card-title">
-        <span>💾 SQLITE TELEMETRY DATABASE REPOSITORY</span>
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button id="exportCsvBtn" class="hud-btn" type="button">EXPORT CSV</button>
-          <button id="exportJsonBtn" class="hud-btn" type="button">EXPORT JSON</button>
-          <button id="clearHistoryBtn" class="hud-btn" style="color: var(--red-alert); border-color: rgba(239, 68, 68, 0.4);" type="button">PURGE DB</button>
+    <!-- BOTTOM DECK: SQLite Database Log Bench & Analytical Telemetry -->
+    <section class="metal-panel history-deck-panel">
+      <div class="panel-header">
+        <div style="display: flex; align-items: baseline; gap: 0.75rem;">
+          <span class="panel-tag">SQLITE DATABASE PERSISTENCE BENCH</span>
+          <span class="spec-text">SERVER-SIDE WAL RELATIONAL LOGS</span>
+        </div>
+
+        <div class="history-controls">
+          <button id="exportCsvBtn" class="tactile-mini-btn" type="button">EXPORT CSV</button>
+          <button id="exportJsonBtn" class="tactile-mini-btn" type="button">EXPORT JSON</button>
+          <button id="clearHistoryBtn" class="tactile-mini-btn danger" type="button">PURGE SQLITE</button>
         </div>
       </div>
 
-      <div class="table-responsive">
-        <table class="cyber-table">
+      <div class="table-housing">
+        <table class="bench-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>TIMESTAMP</th>
+              <th>LOG ID</th>
+              <th>SYSTEM TIME</th>
               <th>INPUT VALUE</th>
               <th>VECTOR</th>
-              <th>RESULT VALUE</th>
-              <th>THERMAL TIER</th>
-              <th>ACTION</th>
+              <th>TRANSMUTED VALUE</th>
+              <th>THERMAL PHASE</th>
+              <th>RECALL</th>
             </tr>
           </thead>
           <tbody id="historyTbody">
             <tr>
-              <td colspan="7" class="text-center text-muted" style="text-align: center; padding: 2rem;">Loading SQLite conversion records...</td>
+              <td colspan="7" class="empty-cell">Initializing SQLite connection & loading records...</td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- Telemetry Footer -->
-    <footer class="hud-footer">
-      <p>TEMPERATURE CONVERSION SYSTEM • MILESTONE 3: FULL-STACK DEVELOPMENT & INTEGRATION</p>
-      <p>Authors: Prakhar Harne & Naman Shrivastav • Backend: Express.js • Database: SQLite3 WAL Mode • UI: Sci-Fi Cyber-HUD</p>
+    <!-- Chassis Baseplate Details -->
+    <footer class="chassis-footer">
+      <div class="screw-mount bl"></div>
+      <div class="screw-mount br"></div>
+      <p class="footer-meta">
+        <strong>TEMPERATURE CONVERSION SYSTEM</strong> • MILESTONE 3 SOFTWARE RELEASE • MITS GWALIOR (SDMS #5683)
+      </p>
+      <p class="footer-meta-sub">
+        Authors: Prakhar Harne & Naman Shrivastav • Backend: Node.js / Express • Engine: SQLite 3 WAL • Client: Analog-Digital Instrument
+      </p>
     </footer>
+
   </div>
 
-  <!-- Audio, Canvas, API & Controller Scripts -->
+  <!-- Client JavaScript Modules -->
   <script src="js/audio.js"></script>
   <script src="js/particles.js"></script>
   <script src="js/gauge.js"></script>
