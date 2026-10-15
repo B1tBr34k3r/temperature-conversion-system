@@ -133,31 +133,32 @@ def create_report():
     p_title.paragraph_format.space_before = Pt(20)
     p_title.paragraph_format.space_after = Pt(2)
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r = p_title.add_run("TEMPERATURE CONVERSION SYSTEM")
+    r = p_title.add_run("THERMACRAFT • TEMPERATURE CONVERSION SYSTEM")
     r.font.name = 'Calibri'
-    r.font.size = Pt(24)
+    r.font.size = Pt(22)
     r.font.bold = True
     r.font.color.rgb = RGBColor(0x1E, 0x3A, 0x8A)
 
     p_sub = doc.add_paragraph()
     p_sub.paragraph_format.space_after = Pt(14)
     p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r_sub = p_sub.add_run("Milestone 3: Implementation & Full-Stack System Development")
-    r_sub.font.size = Pt(14)
+    r_sub = p_sub.add_run("Milestone 3: Implementation, Development & Tactile Studio Delivery")
+    r_sub.font.size = Pt(13)
     r_sub.font.bold = True
     r_sub.font.color.rgb = RGBColor(0x25, 0x63, 0xEB)
 
     # Metadata Table
-    meta_table = doc.add_table(rows=8, cols=2)
+    meta_table = doc.add_table(rows=9, cols=2)
     meta_table.alignment = WD_TABLE_ALIGNMENT.CENTER
     meta_data = [
-        ("Project Title:", "Temperature Conversion System (High-Precision Full-Stack Engine)"),
+        ("Project Title:", "ThermaCraft • High-Precision Multi-Scale Workstation"),
         ("Milestone Phase:", "Milestone 3: Implementation / Development"),
-        ("Milestone Objective:", "Convert architectural design into a working, integrated software system"),
+        ("Milestone Objective:", "Convert architectural design into a working, integrated, human-relatable software system"),
         ("Authors / Engineers:", "Prakhar Harne and Naman Shrivastav"),
-        ("Full-Stack Architecture:", "3-Tier (Client Cyber-HUD + Node.js/Express REST API + SQLite 3 DB)"),
+        ("Full-Stack Architecture:", "3-Tier (Client Workstation + Express.js REST API + SQLite 3 DB + GitHub Pages Standalone)"),
         ("Version Control Repository:", "https://github.com/B1tBr34k3r/temperature-conversion-system"),
-        ("Current System Version:", "Version 3.0 (Milestone 3 Deliverable)"),
+        ("Live Public Web Application:", "https://b1tbr34k3r.github.io/temperature-conversion-system/"),
+        ("Current System Version:", "Version 3.2 (ThermaCraft Studio Release)"),
         ("Date of Evaluation:", "October 2026")
     ]
     for idx, (label, val) in enumerate(meta_data):
@@ -188,7 +189,7 @@ def create_report():
     # Milestone 3 Objective Callout
     add_callout(
         "Milestone 3 Core Deliverables Fulfillment",
-        "Milestone 3 converts the system design into a working, production-grade software system satisfying all four prescribed deliverables: (1) Modular Source Code (client, server, services, config); (2) Front-End and Back-End Integration via RESTful API; (3) SQLite Database Implementation with WAL persistence; and (4) Version Control Repository synchronized with GitHub."
+        "Milestone 3 successfully converts the architectural specifications into an operational, production-grade software system satisfying all four prescribed deliverables: (1) Modular Source Code (client, server, services, config); (2) Front-End and Back-End Integration via RESTful API; (3) SQLite Database Implementation with WAL persistence; and (4) Version Control Repository synchronized with GitHub and deployed live to GitHub Pages."
     )
 
     # =========================================================
@@ -196,16 +197,17 @@ def create_report():
     # =========================================================
     add_heading_1("1. Executive Summary & Full-Stack Evolution")
     add_para(
-        "Milestone 3 marks the definitive transition of the Temperature Conversion System from an architectural prototype into a fully integrated, modular, multi-tier software system. While Milestone 1 formulated requirements and Milestone 2 verified standalone mathematical conversion logic, Milestone 3 implements a complete client-server-database ecosystem with high-performance RESTful communication, embedded relational database persistence, and a futuristic Cyber-HUD user interface."
+        "Milestone 3 marks the definitive transition of the Temperature Conversion System from an architectural prototype into a fully integrated, modular, multi-tier software system christened ThermaCraft. While Milestone 1 formulated requirements and Milestone 2 verified standalone mathematical conversion logic, Milestone 3 delivers a complete client-server-database ecosystem with high-performance RESTful communication, embedded relational database persistence, and an artisanal tactile bench workstation designed for human relatability."
     )
     add_para(
         "Key engineering breakthroughs achieved in Milestone 3 include:"
     )
     add_bullet(" Expanded the core scientific conversion engine from the initial 3 scales to 8 thermodynamic scales: Celsius (°C), Fahrenheit (°F), Kelvin (K), Rankine (°R), Delisle (°De), Newton (°N), Réaumur (°Ré), and Rømer (°Rø).", "1. Multi-Scale Scientific Matrix:")
-    add_bullet(" Engineered an Express.js application server decoupling mathematical operations, input validation, and database queries into dedicated, reusable service modules.", "2. Modular RESTful Backend:")
+    add_bullet(" Engineered an Express.js application server decoupling mathematical transformations, input validation, and database queries into dedicated, reusable service modules with zero fragile native dependencies.", "2. Modular RESTful Backend:")
     add_bullet(" Implemented native SQLite 3 database persistence using Write-Ahead Logging (WAL mode), indexing, and complete CRUD functionality, including analytical telemetry and CSV/JSON data streaming.", "3. Relational Database Layer:")
-    add_bullet(" Built a futuristic Cyber-HUD dashboard featuring a real-time HTML5 Canvas kinetic molecular simulator (Brownian motion reacting to temperature), an SVG holographic radial gauge, synthesized Web Audio API sound effects, and an 8-scale live projection radar.", "4. Futuristic Cyber-HUD Interface:")
-    add_bullet(" Automated verification with 43 passing unit and integration tests covering all 8 scales, thermodynamic bounds, database transactions, and API endpoints.", "5. Comprehensive Test Automation:")
+    add_bullet(" Created the ThermaCraft tactile workstation featuring a Dual-Scale Conversion Bridge, Everyday Matter & Substance Scanner, Living Comfort Galvanometer with Absurd Overdrive Mode, Dynamic Extreme Living Benchmarks, and synthesized Web Audio mechanical sound design.", "4. Tactile Human-Centric Interface:")
+    add_bullet(" Automated verification with 43 passing unit and integration tests covering all 8 scales, thermodynamic bounds, database transactions, and API endpoints with 100% test success.", "5. Comprehensive Test Automation:")
+    add_bullet(" Dual deployment architecture enabling full-stack local server execution and 100% zero-dependency in-browser client execution deployed globally on GitHub Pages.", "6. Dual-Mode Deployment:")
 
     # =========================================================
     # 2. SYSTEM ARCHITECTURE & 3-TIER INTEGRATION
@@ -222,16 +224,18 @@ def create_report():
     )
     
     # Codebase Structure Table
-    code_tbl = doc.add_table(rows=7, cols=3)
+    code_tbl = doc.add_table(rows=9, cols=3)
     code_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-    c_headers = ["Module / Directory", "Component Role", "Primary Responsibilities"]
+    c_headers = ["Module / File", "Component Role", "Primary Responsibilities"]
     c_rows = [
-        ("server/server.js", "Server Entry Point", "Configures Express, CORS, static client asset streaming, and API routing"),
+        ("server/server.js", "Server Entry Point", "Configures Express, CORS, static asset streaming, and API routing"),
         ("server/config/db.js", "Persistence Layer", "Native SQLite 3 connection, schema migration, WAL pragma, and CRUD methods"),
         ("server/services/conversionService.js", "Scientific Engine", "8-scale conversion algorithms, IEEE 754 epsilon formatting, formula generator"),
         ("server/services/validationService.js", "Validation Layer", "Thermodynamic lower bound (Absolute Zero) checks, regex syntax, finiteness"),
         ("server/routes/api.js", "REST Controller", "HTTP endpoints: /convert, /history, /stats, /export/csv, /export/json, /health"),
-        ("client/ (UI & Scripts)", "Presentation Tier", "Futuristic Cyber-HUD, Web Audio synthesizer, canvas particles, radial gauge")
+        ("client/js/gauge.js", "Galvanometer Engine", "Damped spring-physics comfort tachometer with active overdrive needle flutter"),
+        ("client/js/thermalContext.js", "Matter Scanner", "Simulates substance state transitions (Cocoa, Tech, Steam, Cooking) & curiosities"),
+        ("client/js/audio.js", "Audio Synthesizer", "Synthesizes mechanical relay clicks and rotary switch clunks via Web Audio API")
     ]
     for c_idx, h_text in enumerate(c_headers):
         cell = code_tbl.rows[0].cells[c_idx]
@@ -328,20 +332,23 @@ def create_report():
     doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
     # =========================================================
-    # 5. FUTURISTIC CYBER-HUD USER INTERFACE SHOWCASE
+    # 5. THERMACRAFT TACTILE WORKSTATION & USER EXPERIENCE
     # =========================================================
-    add_heading_1("5. Futuristic Cyber-HUD User Interface & Visual Showcase")
+    add_heading_1("5. ThermaCraft Tactile Workstation & Human-Centric UI Showcase")
     add_para(
-        "To elevate the user experience beyond conventional static academic wireframes, Milestone 3 introduces a futuristic Cyber-HUD command interface combining glassmorphism, dynamic holographic telemetry, and responsive sound design."
+        "To elevate the user experience beyond conventional static academic wireframes and obscure scientific meters, Milestone 3 delivers the ThermaCraft Workstation. Designed with an artisanal milled metal and luminescent phosphor aesthetic, it connects abstract thermodynamic numbers to relatable real-world experiences."
     )
-    add_image_figure('diagrams/milestone3_live_hud.png', "Figure 3: Live Futuristic Cyber-HUD Command Deck in Active Operation (Converting 100°C to 212°F)")
+    add_image_figure('diagrams/github_pages_live.png', "Figure 3: Live ThermaCraft Tactile Workstation in Active Operation (100°C Converted to 212°F)")
 
-    add_heading_2("5.1 Unique Interactive Components")
-    add_bullet(" An HTML5 Canvas molecular simulation that models thermodynamic Brownian motion. Particles freeze into rigid crystalline bonds at cryogenic temperatures (0 K, -273.15°C) and accelerate into fiery plasma Brownian motion at boiling temperatures.", "1. Kinetic Thermal Particle Reactor:")
-    add_bullet(" A vector SVG dial with a dynamic progress ring that maps the current temperature across a 270° arc from Absolute Zero to superheated states, color-coding thermal tiers.", "2. Holographic Radial Excitation Gauge:")
-    add_bullet(" Projects the entered temperature across all 8 supported thermodynamic scales simultaneously, allowing instant side-by-side scientific comparison.", "3. 8-Scale Multi-Radar Telemetry Grid:")
-    add_bullet(" Synthesizes laser chirps, quantum swap chimes, and alert hums on-the-fly using the Web Audio API without requiring any external MP3/WAV assets, complete with a mute toggle.", "4. Synthesized Sci-Fi Audio FX:")
-    add_bullet(" A retro-futuristic CRT scanline filter that users can toggle for a customized command center aesthetic.", "5. CRT Scanline Mode:")
+    add_heading_2("5.1 Core Interactive Workstation Components")
+    add_bullet(" A synchronized side-by-side visual ruler that graphically maps input magnitude to the target scale with live animated pips, exact scale ratio multipliers (1°C = 1.8000°F), and baseline shift chips (+32°F).", "1. Dual-Scale Conversion Bridge:")
+    add_bullet(" A real-time physical simulation tracking how everyday substances transform at the exact converted temperature across four domains: Cocoa & Butter, Smartphone Tech & Battery safety limits, Water & Steam Dynamics (1,600× volume expansion), and Culinary Chemistry.", "2. Everyday Matter & Substance Scanner:")
+    add_bullet(" A spring-physics analog needle dynamically sweeping across Freezing (<0°C), Comfort Living (15–26°C), Summer Heat (27–50°C), and Scalding/Cooking (50–220°C). When extreme temperatures (>220°C or <-50°C) are entered, it engages Active Overdrive Mode with dynamic needle flutter jitter, in-dial warning callouts, and boiling energy multipliers.", "3. Living Comfort Gauge with Overdrive Flutter:")
+    add_bullet(" Provides 8 clickable presets for real-world scenarios plus an 8th dynamic extreme slot that automatically computes real-world equivalents for absurd inputs: from Liquid Nitrogen (-196°C) and Absolute Zero (-273.15°C), to Basalt Lava (1,000°C), Molten Steel (1,538°C), Tungsten Filament (3,422°C), Solar Surface (5,505°C), Lightning (30,000°C), and Stellar Fusion (15,000,000°C).", "4. 8 Dynamic Everyday Benchmarks & Extreme Slot:")
+    add_bullet(" Highlights the Big Three global scales (Celsius, Fahrenheit, Kelvin) with an expandable drawer exploring 5 historical antique scales (Rankine, Delisle, Newton, Réaumur, Rømer) with concise historical notes.", "5. Primary Essentials & Antique Scales Drawer:")
+    add_bullet(" Synthesizes tactile mechanical relay clicks, rotary switch clunks, and analog hums dynamically using the Web Audio API without requiring any external audio assets.", "6. Synthesized Mechanical Sound Design:")
+
+    add_image_figure('diagrams/sdms_thumbnail.png', "Figure 4: ThermaCraft High-Resolution Architectural Console Showcase Poster")
 
     # =========================================================
     # 6. QUALITY ASSURANCE & AUTOMATED VERIFICATION
@@ -401,7 +408,11 @@ def create_report():
         bold_prefix="Official GitHub Repository: "
     )
     add_para(
-        "The repository includes comprehensive commit histories, a professional README, automated test scripts, and complete instructions for executing both the backend server and frontend client."
+        "https://b1tbr34k3r.github.io/temperature-conversion-system/",
+        bold_prefix="Live Public GitHub Pages: "
+    )
+    add_para(
+        "The repository includes comprehensive commit histories, an updated README with architecture diagrams, automated test scripts, and complete instructions for executing both the backend server and frontend workstation."
     )
 
     # =========================================================
@@ -409,7 +420,7 @@ def create_report():
     # =========================================================
     add_heading_1("8. Conclusion & Roadmap for Milestone 4")
     add_para(
-        "Milestone 3 has successfully converted the initial system design into a working, high-performance software system. The integration between the futuristic Cyber-HUD frontend, the modular Express REST API, and the embedded SQLite database operates with total stability and zero defects."
+        "Milestone 3 has successfully converted the initial system design into a working, high-performance software system. The integration between the ThermaCraft client workstation, the modular Express REST API, and the embedded SQLite database operates with total stability and zero defects."
     )
     add_para(
         "Planned extensions for Milestone 4 (Comprehensive Testing & Optimization) include:"
