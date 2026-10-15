@@ -42,9 +42,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   const exportJsonBtn = document.getElementById('exportJsonBtn');
 
-  // Initialize Instruments: Spring Galvanometer & Heat Flux Oscilloscope
+  // Real-World Reality Guide Elements
+  const realityIcon = document.getElementById('realityIcon');
+  const realityTitle = document.getElementById('realityTitle');
+  const rcWearText = document.getElementById('rcWearText');
+  const rcWaterText = document.getElementById('rcWaterText');
+  const rcTwinText = document.getElementById('rcTwinText');
+  const rcSafetyText = document.getElementById('rcSafetyText');
+
+  // Initialize Instrument: Spring-Physics Galvanometer
   const galvanometer = new PhysicalGalvanometer();
-  const oscilloscope = new ThermalOscilloscope('oscilloscopeCanvas');
 
   // Number Rolling Animation State
   let currentAnimatedNum = 212.0;
@@ -236,8 +243,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Dynamic Ambient Thermal Theme on Body & Aura
       updateAmbientThermalTheme(baseC);
 
-      // Update Oscilloscope Waveform harmonics
-      oscilloscope.setTemperature(baseC);
+      // Update Real-World Living Reality Guide (What to wear, water phase, everyday twin)
+      updateRealWorldGuide(baseC);
 
       // Update Galvanometer Needle
       galvanometer.update(baseC, data.resultValue, getUnitSymbol(data.toScale), data.physicalState);
@@ -342,6 +349,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       document.body.classList.add('theme-ambient');
     }
+  }
+
+  function updateRealWorldGuide(celsius) {
+    if (!window.RealWorldThermalContext) return;
+    const ctx = window.RealWorldThermalContext.getContext(celsius);
+    if (realityIcon) realityIcon.textContent = ctx.icon;
+    if (realityTitle) {
+      realityTitle.textContent = ctx.title;
+      realityTitle.style.color = ctx.color;
+    }
+    if (rcWearText) rcWearText.textContent = ctx.wear;
+    if (rcWaterText) rcWaterText.textContent = ctx.water;
+    if (rcTwinText) rcTwinText.textContent = ctx.twin;
+    if (rcSafetyText) rcSafetyText.textContent = ctx.safety;
   }
 
   function renderDerivation(derivation) {

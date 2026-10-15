@@ -672,46 +672,126 @@ body.crt-active::after {
   font-weight: 700;
 }
 
-/* Oscilloscope Block */
-.oscilloscope-block {
+/* Real-World Living Reality Guide */
+.reality-guide-block {
   background: var(--deck-inset);
   border: 1px solid #1f2735;
-  border-radius: 8px;
-  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.reality-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.5rem;
+}
+
+.reality-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reality-avatar {
+  font-size: 1.85rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+  animation: bounce-subtle 1.8s infinite ease-in-out;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.06); }
+}
+
+.reality-main-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.reality-title-text {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  transition: color 0.3s ease;
+}
+
+.reality-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.reality-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.65rem;
+}
+
+@media (max-width: 600px) {
+  .reality-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.reality-card {
+  background: #10141c;
+  border: 1px solid #1f2838;
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.reality-card:hover {
+  background: #151a24;
+  border-color: #3b495f;
+  transform: translateY(-1px);
+}
+
+.rc-header {
+  display: flex;
+  align-items: center;
   gap: 0.4rem;
 }
 
-.oscilloscope-header {
-  display: flex;
-  justify-content: space-between;
+.rc-icon {
+  font-size: 0.9rem;
+}
+
+.rc-title {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-}
-
-.osc-title {
-  color: #8da2be;
+  font-size: 0.62rem;
   font-weight: 700;
+  color: #718096;
+  letter-spacing: 0.04em;
 }
 
-.osc-spec {
-  color: #475569;
-}
-
-.oscilloscope-canvas-wrap {
-  width: 100%;
-  height: 110px;
-  background: #06070a;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid #161c27;
-}
-
-#oscilloscopeCanvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+.rc-content {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.35;
 }
 
 /* Paper Audit Proof Window */
