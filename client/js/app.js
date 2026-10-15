@@ -42,14 +42,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   const exportJsonBtn = document.getElementById('exportJsonBtn');
 
-  // Real-World Reality Guide Elements
-  const realityIcon = document.getElementById('realityIcon');
-  const realityTitle = document.getElementById('realityTitle');
-  const rcWearText = document.getElementById('rcWearText');
-  const rcWaterText = document.getElementById('rcWaterText');
-  const rcTwinText = document.getElementById('rcTwinText');
-  const rcSafetyText = document.getElementById('rcSafetyText');
-
   // Initialize Instrument: Spring-Physics Galvanometer
   const galvanometer = new PhysicalGalvanometer();
 
@@ -280,8 +272,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Dynamic Ambient Thermal Theme on Body & Aura
       updateAmbientThermalTheme(baseC);
 
-      // Update Real-World Living Reality Guide (What to wear, water phase, everyday twin)
-      updateRealWorldGuide(baseC);
+      // Update Dual-Scale Bridge, Molecular Velocity & Thermal Curiosity
+      updateThermalDiscovery(baseC, data.fromScale, data.toScale, data.inputValue, data.resultValue);
 
       // Update Galvanometer Needle
       galvanometer.update(baseC, data.resultValue, getUnitSymbol(data.toScale), data.physicalState);
@@ -388,18 +380,42 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function updateRealWorldGuide(celsius) {
-    if (!window.RealWorldThermalContext) return;
-    const ctx = window.RealWorldThermalContext.getContext(celsius);
-    if (realityIcon) realityIcon.textContent = ctx.icon;
-    if (realityTitle) {
-      realityTitle.textContent = ctx.title;
-      realityTitle.style.color = ctx.color;
-    }
-    if (rcWearText) rcWearText.textContent = ctx.wear;
-    if (rcWaterText) rcWaterText.textContent = ctx.water;
-    if (rcTwinText) rcTwinText.textContent = ctx.twin;
-    if (rcSafetyText) rcSafetyText.textContent = ctx.safety;
+  function updateThermalDiscovery(celsius, fromScale, toScale, fromVal, toVal) {
+    if (!window.ThermalDiscoveryEngine) return;
+
+    // 1. Dual-Scale Ruler & Ratio Bridge
+    const bridge = window.ThermalDiscoveryEngine.getBridgeMetadata(fromScale, toScale, fromVal, toVal);
+    const bridgeRatioTag = document.getElementById('bridgeRatioTag');
+    const bridgeFormulaChip = document.getElementById('bridgeFormulaChip');
+    const rulerFromLabel = document.getElementById('rulerFromLabel');
+    const rulerFromValue = document.getElementById('rulerFromValue');
+    const rulerFromMarker = document.getElementById('rulerFromMarker');
+    const rulerToLabel = document.getElementById('rulerToLabel');
+    const rulerToValue = document.getElementById('rulerToValue');
+    const rulerToMarker = document.getElementById('rulerToMarker');
+
+    if (bridgeRatioTag) bridgeRatioTag.textContent = bridge.ratioText;
+    if (bridgeFormulaChip) bridgeFormulaChip.textContent = bridge.formulaChip;
+    if (rulerFromLabel) rulerFromLabel.textContent = `FROM (${getUnitSymbol(fromScale)})`;
+    if (rulerFromValue) rulerFromValue.textContent = `${Number(fromVal).toFixed(2)} ${getUnitSymbol(fromScale)}`;
+    if (rulerFromMarker) rulerFromMarker.style.left = `${bridge.fromPct.toFixed(1)}%`;
+    if (rulerToLabel) rulerToLabel.textContent = `TO (${getUnitSymbol(toScale)})`;
+    if (rulerToValue) rulerToValue.textContent = `${Number(toVal).toFixed(2)} ${getUnitSymbol(toScale)}`;
+    if (rulerToMarker) rulerToMarker.style.left = `${bridge.toPct.toFixed(1)}%`;
+
+    // 2. Molecular Speedometer (v_rms)
+    const speed = window.ThermalDiscoveryEngine.getMolecularSpeed(celsius);
+    const molecularSpeedValue = document.getElementById('molecularSpeedValue');
+    const molecularSpeedKmh = document.getElementById('molecularSpeedKmh');
+    if (molecularSpeedValue) molecularSpeedValue.textContent = speed.mps;
+    if (molecularSpeedKmh) molecularSpeedKmh.textContent = speed.subLabel;
+
+    // 3. Dynamic Curiosity Trivia
+    const trivia = window.ThermalDiscoveryEngine.getCuriosityTrivia(celsius);
+    const triviaContent = document.getElementById('triviaContent');
+    const triviaTag = document.getElementById('triviaTag');
+    if (triviaContent) triviaContent.textContent = trivia.text;
+    if (triviaTag) triviaTag.textContent = trivia.tag;
   }
 
   function renderDerivation(derivation) {

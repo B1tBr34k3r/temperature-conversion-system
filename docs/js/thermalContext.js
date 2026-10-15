@@ -1,146 +1,162 @@
 /**
- * Real-World Thermal Context & Living Reality Engine
- * Translates abstract temperatures into everyday human experiences:
- * - What to wear
- * - Water & food physical phase
- * - Real-world object comparison (Coffee, Fridge, Pizza Oven, Ice Cream, etc.)
- * - Health & safety exposure limit
+ * Thermal Discovery & Molecular Kinetics Engine
+ * Calculates real physical thermal kinetics and dynamic scientific trivia:
+ * - Molecular kinetic velocity (v_rms of air molecules in m/s & km/h)
+ * - Dual-scale conversion ratio and zero-shift bridge
+ * - Dynamic scientific & historical discovery trivia
  * Authors: Prakhar Harne & Naman Shrivastav
  */
 
-class RealWorldThermalContext {
-  static getContext(celsius) {
+class ThermalDiscoveryEngine {
+  /**
+   * Calculate root-mean-square molecular velocity (v_rms) for atmospheric air (N2/O2 mix)
+   * Formula: v_rms = sqrt(3 * R * T / M) where M = 0.02897 kg/mol, R = 8.3145 J/(mol*K)
+   */
+  static getMolecularSpeed(celsius) {
+    const kelvin = Math.max(0, celsius + 273.15);
+    if (kelvin === 0) {
+      return {
+        mps: 0,
+        kmh: 0,
+        mach: '0.0',
+        label: '0 m/s',
+        subLabel: 'Absolute zero (molecular motion ceases)'
+      };
+    }
+
+    // 3 * 8.3145 / 0.02897 = ~861.01
+    const vMps = Math.sqrt(861.01 * kelvin);
+    const vKmh = vMps * 3.6;
+    const mach = (vMps / 343).toFixed(1);
+
+    return {
+      mps: Math.round(vMps),
+      kmh: Math.round(vKmh).toLocaleString(),
+      mach: mach,
+      label: `${Math.round(vMps)} m/s`,
+      subLabel: `~${Math.round(vKmh).toLocaleString()} km/h (Mach ${mach})`
+    };
+  }
+
+  /**
+   * Calculate alignment ruler percentages and ratio bridge metadata
+   */
+  static getBridgeMetadata(fromScale, toScale, fromVal, toVal) {
+    const fVal = parseFloat(fromVal) || 0;
+    const tVal = parseFloat(toVal) || 0;
+
+    // Formulas and unit ratios
+    let ratioText = '1:1 ratio';
+    let formulaChip = 'Direct translation';
+
+    if (fromScale === 'C' && toScale === 'F') {
+      ratioText = '1°C = 1.8000°F (9/5)';
+      formulaChip = '°F = (°C × 1.8) + 32';
+    } else if (fromScale === 'F' && toScale === 'C') {
+      ratioText = '1°F = 0.5556°C (5/9)';
+      formulaChip = '°C = (°F - 32) ÷ 1.8';
+    } else if (fromScale === 'C' && toScale === 'K') {
+      ratioText = '1°C = 1.0000 K (1:1)';
+      formulaChip = 'K = °C + 273.15';
+    } else if (fromScale === 'K' && toScale === 'C') {
+      ratioText = '1 K = 1.0000°C (1:1)';
+      formulaChip = '°C = K - 273.15';
+    } else if (fromScale === 'F' && toScale === 'K') {
+      ratioText = '1°F = 0.5556 K';
+      formulaChip = 'K = (°F - 32) × 5/9 + 273.15';
+    } else if (fromScale === 'K' && toScale === 'F') {
+      ratioText = '1 K = 1.8000°F';
+      formulaChip = '°F = (K - 273.15) × 1.8 + 32';
+    } else {
+      ratioText = `Multi-Scale Translation (${fromScale} → ${toScale})`;
+      formulaChip = `${toScale} = ƒ(${fromScale})`;
+    }
+
+    // Normalized ruler marker position (clamped 4% to 96%)
+    // Normalized around common human-experienced range: -50 to 250
+    const fromClamped = Math.max(-50, Math.min(250, fVal));
+    const fromPct = 4 + ((fromClamped - (-50)) / 300) * 92;
+
+    const toClamped = Math.max(-50, Math.min(482, tVal));
+    const toPct = 4 + ((toClamped - (-50)) / 532) * 92;
+
+    return {
+      ratioText,
+      formulaChip,
+      fromPct: Math.max(4, Math.min(96, fromPct)),
+      toPct: Math.max(4, Math.min(96, toPct))
+    };
+  }
+
+  /**
+   * Dynamic curiosity trivia based on thermodynamic temperature bracket
+   */
+  static getCuriosityTrivia(celsius) {
     if (celsius <= -200) {
       return {
-        title: 'Deep Space & Liquid Nitrogen',
-        wear: 'Pressurized Space Suit',
-        water: 'Rock-Hard Cryo Crystal',
-        twin: 'Liquid Nitrogen (-196°C) / Deep Space',
-        safety: 'Instant flash-freezing in seconds',
-        icon: '🚀',
-        color: '#38bdf8'
+        tag: 'CRYOGENIC PHYSICS',
+        text: 'At -196°C, atmospheric nitrogen turns into a boiling liquid. Oxygen condenses into a pale magnetic blue fluid at -183°C!'
       };
     }
-    if (celsius <= -50) {
+    if (celsius <= -45) {
       return {
-        title: 'Polar Deep Freeze',
-        wear: 'Thermal Arctic Parka & Face Mask',
-        water: 'Rock-Solid Frozen Ice',
-        twin: 'Dry Ice (-78.5°C) / Antarctic Winter (-89°C)',
-        safety: 'Exposed skin freezes in under 2 minutes',
-        icon: '🧊',
-        color: '#0ea5e9'
+        tag: 'SOLID-STATE THERMAL',
+        text: 'Dry ice (solid carbon dioxide) sublimates straight from solid into gas at -78.5°C without ever melting into a liquid at normal pressure.'
       };
     }
-    if (celsius <= -15) {
+    if (celsius <= -35) {
       return {
-        title: 'Severe Sub-Zero Winter',
-        wear: 'Heavy Puffer Jacket, Gloves & Beanie',
-        water: 'Hard Ice & Packed Snow',
-        twin: 'Deep Kitchen Freezer (-18°C)',
-        safety: 'Frostbite risk after 15 mins of exposure',
-        icon: '❄️',
-        color: '#06b6d4'
+        tag: 'MATHEMATICAL HARMONY',
+        text: '-40° is the magic number where Celsius and Fahrenheit scales are completely identical: exactly -40°C = -40°F.'
       };
     }
     if (celsius <= 0) {
       return {
-        title: 'Freezing Threshold / Snow Weather',
-        wear: 'Winter Coat, Scarf & Boots',
-        water: 'Water Freezing Point (Turns into Ice)',
-        twin: 'Ice Skating Rink / Fresh Snow Falling',
-        safety: 'Hypothermia risk with prolonged exposure',
-        icon: '⛄',
-        color: '#2dd4bf'
+        tag: 'SUPERCOOLING SECRETS',
+        text: 'Ultra-pure water lacking airborne dust particles can stay liquid down to -40°C before flash-crystallizing into solid ice within milliseconds.'
       };
     }
-    if (celsius <= 15) {
+    if (celsius <= 10) {
       return {
-        title: 'Chilly Autumn / Early Spring',
-        wear: 'Hoodie, Sweater or Light Jacket',
-        water: 'Cold Refreshing Liquid',
-        twin: 'Chilled Milk in Refrigerator (~4°C)',
-        safety: 'Comfortable & safe with a warm layer',
-        icon: '🍂',
-        color: '#14b8a6'
+        tag: 'WATER DENSITY ANOMALY',
+        text: 'Water reaches its peak density at exactly 4.0°C (39.2°F). Because of this, ice floats and lakes freeze top-down, keeping aquatic life alive at the bottom!'
       };
     }
     if (celsius <= 26) {
       return {
-        title: 'Ideal Room Temperature',
-        wear: 'Casual T-Shirt & Shorts / Jeans',
-        water: 'Room-Temperature Drinking Water',
-        twin: 'Comfortable Air-Conditioned Bedroom (22°C)',
-        safety: 'Perfect human biological comfort zone',
-        icon: '🛋️',
-        color: '#10b981'
+        tag: 'HISTORICAL DISCOVERY',
+        text: 'In 1742, Anders Celsius originally made 0° the boiling point of water and 100° the freezing point! Carl Linnaeus inverted it after Celsius passed away.'
       };
     }
-    if (celsius <= 36) {
+    if (celsius <= 42) {
       return {
-        title: 'Warm & Sunny Summer',
-        wear: 'Light T-Shirt, Sunglasses & Cap',
-        water: 'Warm Relaxing Bath Water',
-        twin: 'Sunny Beach Day in Summer',
-        safety: 'Drink plenty of water to avoid heat fatigue',
-        icon: '🏖️',
-        color: '#f59e0b'
+        tag: 'BIOLOGICAL METABOLISM',
+        text: 'A resting human body constantly burns cellular energy to maintain 37°C (98.6°F), radiating ~100 Watts of thermal power—just like a vintage light bulb!'
       };
     }
-    if (celsius <= 40) {
+    if (celsius <= 75) {
       return {
-        title: 'Human Body Core Temp / Fever',
-        wear: 'Breathable clothes, rest in shade',
-        water: 'Hot Spa / Jacuzzi (~38°C)',
-        twin: 'Healthy Human Body (37°C) or Mild Fever',
-        safety: 'Heat exhaustion danger with heavy activity',
-        icon: '🏃',
-        color: '#f97316'
+        tag: 'MOLECULAR GASTRONOMY',
+        text: 'At 62°C, egg-white ovotransferrin protein denatures into soft custard, whereas the rich yolk proteins stay silky and runny until reaching 68°C.'
       };
     }
-    if (celsius <= 65) {
+    if (celsius <= 130) {
       return {
-        title: 'Extreme Heatwave / Desert Sun',
-        wear: 'UV-blocking linen, stay indoors in AC',
-        water: 'Very Hot Household Tap Water',
-        twin: 'Death Valley Record High (56.7°C)',
-        safety: 'Dangerous heatstroke within 30 minutes',
-        icon: '🏜️',
-        color: '#ea580c'
+        tag: 'ATMOSPHERIC PRESSURE',
+        text: 'While water boils at 100°C at sea level, on the summit of Mount Everest (8,848m), thin air pressure drops the boiling point to just 68°C (154°F)!'
       };
     }
-    if (celsius <= 99) {
+    if (celsius <= 220) {
       return {
-        title: 'Scalding Hot / Fresh Coffee & Tea',
-        wear: 'Caution: Thermal insulation gloves',
-        water: 'Steaming Near-Boiling Liquid',
-        twin: 'Freshly Brewed Hot Coffee (~85°C)',
-        safety: 'Causes second-degree burns in under 3 seconds',
-        icon: '☕',
-        color: '#ef4444'
-      };
-    }
-    if (celsius <= 250) {
-      return {
-        title: 'Water Boiling / Kitchen Baking',
-        wear: 'Heavy Silicone Oven Mitts',
-        water: 'Vigorously Boiling Water & Scalding Steam',
-        twin: 'Baking Cake / Pizza Oven (~200°C)',
-        safety: 'Instant third-degree steam burns on contact',
-        icon: '🍕',
-        color: '#dc2626'
+        tag: 'THE MAILLARD REACTION',
+        text: 'Between 140°C and 165°C, sugars and amino acids chemically recombine, creating the savory aromatic crusts on baked bread, pizza, and roasted coffee.'
       };
     }
     return {
-      title: 'Incandescent Forge & Stellar Heat',
-      wear: 'Full Proximity Firefighter Heat Shield',
-      water: 'Completely Vaporized Gas',
-      twin: 'Molten Lava (~1000°C) / Solar Surface',
-      safety: 'Instant cremation / matter vaporizes',
-      icon: '🌋',
-      color: '#b91c1c'
+      tag: 'INCANDESCENT RADIATION',
+      text: 'Above 525°C (the Draper point), all solid objects begin emitting visible thermal radiation, glowing from faint cherry-red up to brilliant white!'
     };
   }
 }
 
-window.RealWorldThermalContext = RealWorldThermalContext;
+window.ThermalDiscoveryEngine = ThermalDiscoveryEngine;

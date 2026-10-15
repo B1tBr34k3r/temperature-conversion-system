@@ -1,7 +1,7 @@
 {
-  "name": "sdms",
+  "name": "thermacraft",
   "version": "1.0.0",
-  "description": "A modern, high-precision scientific temperature conversion web application designed for students, researchers, and engineers. Built with standard web technologies (HTML5, CSS3, ES6+ JavaScript), this system delivers accurate bidirectional conversions across the three primary thermodynamic scales: **Celsius (°C)**, **Fahrenheit (°F)**, and **Kelvin (K)**, with strict enforcement of thermodynamic physical limits and stabilization against IEEE 754 floating-point drift.",
+  "description": "ThermaCraft • The Friendly Temperature Studio. A tactile, multi-scale temperature explorer, conversion bridge, and living comfort laboratory.",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",

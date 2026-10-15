@@ -672,126 +672,244 @@ body.crt-active::after {
   font-weight: 700;
 }
 
-/* Real-World Living Reality Guide */
-.reality-guide-block {
-  background: var(--deck-inset);
-  border: 1px solid #1f2735;
-  border-radius: 10px;
-  padding: 0.85rem 1rem;
+/* ==========================================================================
+   CENTER COLUMN: DUAL-SCALE CONVERSION BRIDGE & MOLECULAR KINETICS
+   ========================================================================== */
+.bridge-discovery-block {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  transition: all 0.3s ease;
+  gap: 0.65rem;
 }
 
-.reality-header {
+/* 1. Scale Conversion Bridge Card */
+.scale-bridge-card {
+  background: var(--deck-inset);
+  border: 1px solid #1f2735;
+  border-radius: 9px;
+  padding: 0.75rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.bridge-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
-  padding-bottom: 0.5rem;
 }
 
-.reality-header-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.reality-avatar {
-  font-size: 1.85rem;
-  line-height: 1;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
-  animation: bounce-subtle 1.8s infinite ease-in-out;
-}
-
-@keyframes bounce-subtle {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-3px) scale(1.06); }
-}
-
-.reality-main-label {
-  display: block;
+.bridge-title {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   font-weight: 700;
-  color: #64748b;
-  letter-spacing: 0.05em;
+  color: #8da2be;
+  letter-spacing: 0.04em;
 }
 
-.reality-title-text {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: 0.01em;
-  transition: color 0.3s ease;
-}
-
-.reality-badge {
+.bridge-ratio-badge {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  padding: 0.2rem 0.55rem;
+  color: #ff9f1c;
+  background: rgba(255, 159, 28, 0.12);
+  border: 1px solid rgba(255, 159, 28, 0.35);
+  padding: 0.15rem 0.5rem;
   border-radius: 4px;
 }
 
-.reality-cards-grid {
+.dual-ruler-track {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background: #10141d;
+  border: 1px solid #1e2636;
+  border-radius: 7px;
+  padding: 0.6rem 0.75rem;
+}
+
+.ruler-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 100px;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.ruler-scale-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.ruler-bar {
+  position: relative;
+  height: 8px;
+  background: #171d29;
+  border: 1px solid #2b374a;
+  border-radius: 4px;
+}
+
+.ruler-bar.target-bar .ruler-pip {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+.ruler-pip {
+  position: absolute;
+  top: -3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2px solid #ffffff;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px #38bdf8;
+  transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ruler-readout {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  text-align: right;
+}
+
+.bridge-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.1rem 0;
+}
+
+.bridge-connector-line {
+  flex: 1;
+  height: 1px;
+  border-top: 1px dashed #2d3b50;
+}
+
+.bridge-formula-chip {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  background: #19202c;
+  border: 1px solid #2e394b;
+  padding: 0.12rem 0.55rem;
+  border-radius: 9999px;
+}
+
+/* 2. Molecular Speedometer & Discovery Grid */
+.discovery-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.65rem;
 }
 
-@media (max-width: 600px) {
-  .reality-cards-grid {
+@media (max-width: 650px) {
+  .discovery-grid {
     grid-template-columns: 1fr;
   }
 }
 
-.reality-card {
-  background: #10141c;
-  border: 1px solid #1f2838;
+.discovery-card {
+  background: #10141d;
+  border: 1px solid #1e2636;
   border-radius: 8px;
-  padding: 0.65rem 0.75rem;
+  padding: 0.65rem 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
   transition: all 0.2s ease;
 }
 
-.reality-card:hover {
-  background: #151a24;
-  border-color: #3b495f;
+.discovery-card:hover {
+  background: #151b26;
+  border-color: #344359;
   transform: translateY(-1px);
 }
 
-.rc-header {
+.dc-header {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
-.rc-icon {
-  font-size: 0.9rem;
+.dc-icon {
+  font-size: 1rem;
 }
 
-.rc-title {
+.dc-title {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.64rem;
   font-weight: 700;
-  color: #718096;
+  color: #8da2be;
   letter-spacing: 0.04em;
 }
 
-.rc-content {
-  font-family: var(--font-ui);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #f1f5f9;
+.dc-main-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-top: 0.1rem;
+}
+
+.stat-number {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #38bdf8;
+  line-height: 1;
+}
+
+.stat-unit {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.stat-sub {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f59e0b;
+  margin-top: -0.1rem;
+}
+
+.dc-desc {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  color: #64748b;
   line-height: 1.35;
+}
+
+.math-sym {
+  font-family: var(--font-mono);
+  color: #cbd5e1;
+}
+
+.dc-trivia-text {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: #e2e8f0;
+  line-height: 1.4;
+  margin-top: 0.15rem;
+  flex: 1;
+}
+
+.dc-trivia-badge {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  margin-top: 0.2rem;
 }
 
 /* Paper Audit Proof Window */

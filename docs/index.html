@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TC-800 Lab Workstation • Scientific Temperature Calibrator</title>
+  <title>ThermaCraft • The Friendly Temperature Studio</title>
   <link rel="stylesheet" href="css/hud.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,10 +20,10 @@
     <!-- Top System Nav & Telemetry Strip -->
     <header class="workstation-header">
       <div class="header-left">
-        <div class="brand-insignia">TC-800</div>
+        <div class="brand-insignia">TC</div>
         <div class="brand-titles">
-          <h1 class="main-title">THERMAL CALIBRATION WORKSTATION</h1>
-          <span class="sub-title">FULL-SCALE MULTI-VECTOR LABORATORY ENGINE • MITS GWALIOR (SDMS #5683)</span>
+          <h1 class="main-title">THERMACRAFT • FRIENDLY TEMPERATURE STUDIO</h1>
+          <span class="sub-title">A FRIENDLY, TACTILE MULTI-SCALE EXPLORER & CONVERTER • MITS GWALIOR (SDMS #5683)</span>
         </div>
       </div>
 
@@ -214,56 +214,75 @@
           </div>
         </div>
 
-        <!-- INTUITIVE REAL-WORLD LIVING REALITY GUIDE (Replacing Oscilloscope) -->
-        <div class="reality-guide-block">
-          <div class="reality-header">
-            <div class="reality-header-left">
-              <span id="realityIcon" class="reality-avatar">🍕</span>
-              <div>
-                <span class="reality-main-label">REAL-WORLD HUMAN CONTEXT</span>
-                <div id="realityTitle" class="reality-title-text">Water Boiling / Kitchen Baking</div>
+        <!-- DUAL-SCALE ALIGNMENT BRIDGE & MOLECULAR KINETICS (Brand New, Zero Redundancy) -->
+        <div class="bridge-discovery-block">
+          
+          <!-- 1. Dual-Scale Alignment Ruler & Ratio Bridge -->
+          <div class="scale-bridge-card">
+            <div class="bridge-header">
+              <span class="bridge-title">DUAL-SCALE CONVERSION BRIDGE</span>
+              <span id="bridgeRatioTag" class="bridge-ratio-badge">1°C = 1.8000°F (9/5)</span>
+            </div>
+
+            <div class="dual-ruler-track">
+              <!-- Source Ruler -->
+              <div class="ruler-row">
+                <span id="rulerFromLabel" class="ruler-scale-tag">FROM (°C)</span>
+                <div class="ruler-bar">
+                  <div id="rulerFromMarker" class="ruler-pip" style="left: 50%;"></div>
+                </div>
+                <span id="rulerFromValue" class="ruler-readout">100.00 °C</span>
+              </div>
+
+              <!-- Visual Bridge Connector -->
+              <div class="bridge-link-row">
+                <div class="bridge-connector-line"></div>
+                <span id="bridgeFormulaChip" class="bridge-formula-chip">°F = (°C × 1.8) + 32</span>
+                <div class="bridge-connector-line"></div>
+              </div>
+
+              <!-- Target Ruler -->
+              <div class="ruler-row">
+                <span id="rulerToLabel" class="ruler-scale-tag">TO (°F)</span>
+                <div class="ruler-bar target-bar">
+                  <div id="rulerToMarker" class="ruler-pip target-pip" style="left: 65%;"></div>
+                </div>
+                <span id="rulerToValue" class="ruler-readout">212.00 °F</span>
               </div>
             </div>
-            <span class="reality-badge">EVERYDAY REALITY</span>
           </div>
 
-          <div class="reality-cards-grid">
-            <!-- 1. What to Wear -->
-            <div class="reality-card">
-              <div class="rc-header">
-                <span class="rc-icon">👕</span>
-                <span class="rc-title">WHAT WOULD YOU WEAR?</span>
+          <!-- 2. Molecular Speedometer & Thermal Curiosity Flashcard -->
+          <div class="discovery-grid">
+            <!-- Molecular Velocity Meter -->
+            <div class="discovery-card velocity-card">
+              <div class="dc-header">
+                <span class="dc-icon">💨</span>
+                <span class="dc-title">AIR MOLECULAR VELOCITY</span>
               </div>
-              <div id="rcWearText" class="rc-content">Heavy Silicone Oven Mitts</div>
+              <div class="dc-main-stat">
+                <span id="molecularSpeedValue" class="stat-number">576</span>
+                <span class="stat-unit">m/s</span>
+              </div>
+              <div id="molecularSpeedKmh" class="stat-sub">~2,075 km/h (Mach 1.7)</div>
+              <div class="dc-desc">
+                Average root-mean-square speed (<span class="math-sym">v<sub>rms</sub></span>) of air molecules (<span class="math-sym">N<sub>2</sub> / O<sub>2</sub></span>) zooming at this temperature.
+              </div>
             </div>
 
-            <!-- 2. Water / Food Phase -->
-            <div class="reality-card">
-              <div class="rc-header">
-                <span class="rc-icon">💧</span>
-                <span class="rc-title">WATER & MATTER STATE</span>
+            <!-- Dynamic Curiosity Flashcard -->
+            <div class="discovery-card trivia-card">
+              <div class="dc-header">
+                <span class="dc-icon">💡</span>
+                <span class="dc-title">THERMAL CURIOSITY</span>
               </div>
-              <div id="rcWaterText" class="rc-content">Vigorously Boiling Water & Scalding Steam</div>
-            </div>
-
-            <!-- 3. Real-World Comparison -->
-            <div class="reality-card">
-              <div class="rc-header">
-                <span class="rc-icon">☕</span>
-                <span class="rc-title">EVERYDAY TWIN OBJECT</span>
+              <div id="triviaContent" class="dc-trivia-text">
+                While water boils at 100°C at sea level, on Mount Everest (8,848m), lower air pressure drops the boiling point to just 68°C (154°F)!
               </div>
-              <div id="rcTwinText" class="rc-content">Baking Cake / Pizza Oven (~200°C)</div>
-            </div>
-
-            <!-- 4. Health & Survival -->
-            <div class="reality-card">
-              <div class="rc-header">
-                <span class="rc-icon">⚠️</span>
-                <span class="rc-title">HUMAN HEALTH & SAFETY</span>
-              </div>
-              <div id="rcSafetyText" class="rc-content">Instant third-degree steam burns on contact</div>
+              <div id="triviaTag" class="dc-trivia-badge">ATMOSPHERIC PRESSURE</div>
             </div>
           </div>
+
         </div>
 
         <!-- Step-by-Step Educational Proof Ticker -->
@@ -281,10 +300,10 @@
         </div>
       </section>
 
-      <!-- RIGHT COLUMN: Human Comfort Tachometer, Everyday Landmarks, and Primary Scales -->
+      <!-- RIGHT COLUMN: Living Comfort Gauge, Everyday Landmarks, and Primary Scales -->
       <section class="grid-card right-deck">
         <div class="card-bar">
-          <span class="bar-title">HUMAN COMFORT & LIVING TACHOMETER</span>
+          <span class="bar-title">LIVING COMFORT GAUGE</span>
           <span id="gaugeTierBadge" class="tier-pill">BOILING / STEAM (≥100°C)</span>
         </div>
 
