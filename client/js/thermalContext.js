@@ -9,48 +9,171 @@
 
 class ThermalDiscoveryEngine {
   /**
-   * Calculate pure temperature-related Heat Intensity Level
-   * Measures thermal energy relative to water's 0°C freezing and 100°C boiling thresholds
+   * Natural & Cosmic Thermal Twin Engine
+   * Dynamically pairs any temperature with its real-world physical, planetary,
+   * or cosmic environment counterpart across nature and science.
+   */
+  static getThermalTwin(celsius) {
+    const kelvin = Math.max(0, celsius + 273.15);
+
+    if (celsius <= -270) {
+      return {
+        icon: '🌌',
+        name: 'Boomerang Nebula & Cosmic Void',
+        badge: 'Coldest Natural Place',
+        phase: '⚡ Absolute Zero Floor (1 K)',
+        desc: `At ${kelvin.toFixed(1)} K, rapidly expanding gases make this nebula colder than the cosmic microwave background (2.7 K).`
+      };
+    }
+    if (celsius <= -180) {
+      return {
+        icon: '🪐',
+        name: 'Titan & Pluto Cryogenic Seas',
+        badge: 'Outer Solar System',
+        phase: '❄️ Liquid Nitrogen & Methane',
+        desc: `At ${celsius.toFixed(0)}°C, nitrogen condenses into tranquil liquid rivers across Saturn's moon Titan beneath an orange organic haze.`
+      };
+    }
+    if (celsius <= -80) {
+      return {
+        icon: '❄️',
+        name: 'Vostok Station, Antarctica',
+        badge: 'Earth Surface Record',
+        phase: '🧊 Brittle Hexagonal Ice Matrix',
+        desc: 'Recorded at -89.2°C in 1983. Human breath freezes mid-air with an audible whisper called "the whisper of the stars".'
+      };
+    }
+    if (celsius <= -35) {
+      return {
+        icon: '🏔️',
+        name: 'Siberian Oymyakon / Yakutsk',
+        badge: 'Inhabited Frozen Frontier',
+        phase: '🧊 Solid Sub-Zero Permafrost',
+        desc: 'At -40°C (= -40°F), metal bonds to skin, vehicle engines run 24/7, and thrown boiling water instantly flashes into snow.'
+      };
+    }
+    if (celsius < 0) {
+      return {
+        icon: '🍦',
+        name: 'Glacial Crevasse & Deep Freeze',
+        badge: 'Terrestrial Cryosphere',
+        phase: '🧊 Rigid Crystalline Ice',
+        desc: `At ${celsius.toFixed(1)}°C, liquid water locks into crystal lattices, halting bacterial decay and forming continental glaciers.`
+      };
+    }
+    if (celsius === 0) {
+      return {
+        icon: '🧊',
+        name: 'Glacial Melt & Ice Equilibrium',
+        badge: 'Thermodynamic Baseline',
+        phase: '⚖️ Zero Phase-Shift Line',
+        desc: 'The exact physical boundary where ice absorbs 334 J/g latent heat to liquefy. Calibrated as 0° on the Celsius metric scale.'
+      };
+    }
+    if (celsius <= 15) {
+      return {
+        icon: '🌲',
+        name: 'Limestone Cave & Wine Cellar',
+        badge: 'Subterranean Ambient',
+        phase: '💧 Dense Liquid Condensate',
+        desc: `At ${celsius.toFixed(1)}°C, deep limestone caves stay constant year-round, historically used across Europe for aging cheeses and wines.`
+      };
+    }
+    if (celsius <= 26) {
+      return {
+        icon: '🌸',
+        name: 'Temperate Earth Biosphere',
+        badge: 'Golden Living Zone',
+        phase: '✨ Ideal Biological Equilibrium',
+        desc: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), this is the optimal sweet spot for human comfort, photosynthesis, and liquid water vitality.`
+      };
+    }
+    if (celsius <= 42) {
+      return {
+        icon: '🫀',
+        name: 'Living Mammalian Warm Core',
+        badge: 'Homeostatic Metabolism',
+        phase: '🧬 Active Folded Enzymes',
+        desc: `At ${celsius.toFixed(1)}°C, warm-blooded enzymes fold with nanometer precision. A rise past 42°C triggers cellular heat-shock.`
+      };
+    }
+    if (celsius <= 60) {
+      return {
+        icon: '🏜️',
+        name: 'Death Valley Furnace Creek',
+        badge: 'Earth Record Heatwave',
+        phase: '☀️ Scorching Arid Atmosphere',
+        desc: 'Earth ambient air peaked at 56.7°C (134°F) in 1913. Ground surface rocks easily soar past 90°C, hot enough to cook food.'
+      };
+    }
+    if (celsius <= 85) {
+      return {
+        icon: '☕',
+        name: 'Yellowstone Prismatic Springs',
+        badge: 'Hydrothermal Extremophiles',
+        phase: '♨️ Near-Boiling Convection',
+        desc: `At ${celsius.toFixed(1)}°C, vibrant hyperthermal archaea thrive. Also marks the optimal temperature to brew artisan coffee without scorching.`
+      };
+    }
+    if (celsius <= 100) {
+      return {
+        icon: '♨️',
+        name: 'Sea-Level Steam Transition',
+        badge: 'Water Boiling Frontier',
+        phase: '🔥 1,600× Steam Vaporization',
+        desc: `At ${celsius.toFixed(1)}°C (1 atm), water expands 1,600 times into steam—the thermodynamic driver of the Industrial Revolution.`
+      };
+    }
+    if (celsius <= 250) {
+      return {
+        icon: '🍕',
+        name: 'Wood Pizza Hearth & Mercury Dusk',
+        badge: 'Kiln Pyrolysis & Planet Crust',
+        phase: '🔥 Maillard Crust Caramelization',
+        desc: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), sugars and amino acids crisp pizza crusts; matches dusk regolith on planet Mercury.`
+      };
+    }
+    if (celsius <= 500) {
+      return {
+        icon: '🪐',
+        name: 'Crushing Surface of Planet Venus',
+        badge: 'Planetary Greenhouse Hell',
+        phase: '🧪 Molten Lead & Tin Pools',
+        desc: `At ${celsius.toFixed(1)}°C under 90 atm of CO₂, rocks glow faint red in darkness and metallic lead puddles naturally on the surface.`
+      };
+    }
+    if (celsius <= 1300) {
+      return {
+        icon: '🌋',
+        name: 'Kilauea Basaltic Lava Flow',
+        badge: 'Molten Mantle Silicate',
+        phase: '🌋 Glowing Orange-Yellow Magma',
+        desc: `Basalt erupts at ${celsius.toFixed(0)}°C, glowing orange-yellow and paving new continental crust directly on tectonic plate edges.`
+      };
+    }
+    if (celsius <= 2000) {
+      return {
+        icon: '🏭',
+        name: 'Industrial Blast Smelting Furnace',
+        badge: 'Metallurgic Smelting Point',
+        phase: '⚡ Liquefied White-Hot Iron',
+        desc: `At ${celsius.toFixed(0)}°C, pure iron breaks its crystalline lattice into dazzling white molten liquid for industrial steel fabrication.`
+      };
+    }
+    return {
+      icon: '☀️',
+      name: 'Solar Photosphere Surface',
+      badge: 'Stellar Plasma Fusion',
+      phase: '⚡ Ionized Incandescent Plasma',
+      desc: `At ${celsius.toFixed(0)}°C (${kelvin.toFixed(0)} K), atoms shed electrons into incandescent plasma, radiating the yellow light powering our solar system.`
+    };
+  }
+
+  /**
+   * Backward compatibility alias
    */
   static getHeatIntensity(celsius) {
-    const kelvin = Math.max(0, celsius + 273.15);
-    let value = '';
-    let unit = '';
-    let sub = '';
-    let desc = '';
-
-    if (celsius <= -273.15) {
-      value = '0 K';
-      unit = 'ABSOLUTE ZERO';
-      sub = '0 K thermodynamic ground state';
-      desc = 'The absolute physical floor of the universe: thermal atomic motion is completely absent.';
-    } else if (celsius < 0) {
-      value = `${Math.abs(celsius).toFixed(1)}°`;
-      unit = 'BELOW FREEZE';
-      sub = `▼ ${Math.abs(celsius).toFixed(1)}°C below 0°C freezing`;
-      desc = `Sub-zero solid ice range: ${kelvin.toFixed(1)} K total thermal energy above absolute zero.`;
-    } else if (celsius === 0) {
-      value = '0%';
-      unit = 'FREEZING LINE';
-      sub = 'Exact ice melting equilibrium';
-      desc = 'Fundamental thermodynamic boundary between liquid water and solid ice (273.15 K).';
-    } else if (celsius <= 100) {
-      const pct = Math.round(celsius);
-      const toBoil = (100 - celsius).toFixed(1);
-      value = `${pct}%`;
-      unit = celsius === 100 ? 'BOILING REACHED' : 'OF BOILING';
-      sub = celsius === 100 ? 'Vigorous steam phase transition' : `▲ +${celsius.toFixed(1)}°C above 0°C (${toBoil}°C to boil)`;
-      desc = `Thermal intensity on the 0°C to 100°C water scale • ${kelvin.toFixed(1)} K absolute thermal energy.`;
-    } else {
-      const mult = (celsius / 100).toFixed(1);
-      const pastBoil = (celsius - 100).toFixed(1);
-      value = `${mult}×`;
-      unit = 'BOILING POINT';
-      sub = `▲ +${pastBoil}°C past water vaporization`;
-      desc = `Superheated thermal intensity: ${mult} times water boiling temperature • ${kelvin.toFixed(1)} K energy.`;
-    }
-
-    return { value, unit, sub, desc };
+    return this.getThermalTwin(celsius);
   }
 
   /**

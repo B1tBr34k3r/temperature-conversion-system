@@ -403,17 +403,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (rulerToValue) rulerToValue.textContent = `${Number(toVal).toFixed(2)} ${getUnitSymbol(toScale)}`;
     if (rulerToMarker) rulerToMarker.style.left = `${bridge.toPct.toFixed(1)}%`;
 
-    // 2. Heat Intensity Level (100% Temperature-Related)
-    const heat = window.ThermalDiscoveryEngine.getHeatIntensity(celsius);
-    const heatIntensityValue = document.getElementById('heatIntensityValue');
-    const heatIntensityUnit = document.getElementById('heatIntensityUnit');
-    const heatIntensitySub = document.getElementById('heatIntensitySub');
-    const heatIntensityDesc = document.getElementById('heatIntensityDesc');
+    // 2. Natural & Cosmic Thermal Twin (Dynamic Physical/Cosmic Equivalent)
+    const twin = window.ThermalDiscoveryEngine.getThermalTwin(celsius);
+    const twinIcon = document.getElementById('twinIcon');
+    const twinName = document.getElementById('twinName');
+    const twinBadge = document.getElementById('twinBadge');
+    const twinPhase = document.getElementById('twinPhase');
+    const twinDesc = document.getElementById('twinDesc');
 
-    if (heatIntensityValue) heatIntensityValue.textContent = heat.value;
-    if (heatIntensityUnit) heatIntensityUnit.textContent = heat.unit;
-    if (heatIntensitySub) heatIntensitySub.textContent = heat.sub;
-    if (heatIntensityDesc) heatIntensityDesc.textContent = heat.desc;
+    if (twinIcon) twinIcon.textContent = twin.icon;
+    if (twinName) twinName.textContent = twin.name;
+    if (twinBadge) twinBadge.textContent = twin.badge;
+    if (twinPhase) twinPhase.textContent = twin.phase;
+    if (twinDesc) twinDesc.textContent = twin.desc;
 
     // 3. Dynamic Curiosity Trivia
     const trivia = window.ThermalDiscoveryEngine.getCuriosityTrivia(celsius);
