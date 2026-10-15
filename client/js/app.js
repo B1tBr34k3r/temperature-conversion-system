@@ -1,6 +1,11 @@
 /**
- * Laboratory Bench Instrument Model TC-800 • Master Controller
- * Milestone 3: Full-Stack Integration
+ * Full-Screen TC-800 Laboratory Workstation Controller
+ * Features:
+ * - Thermal Heat-Flux Oscilloscope Waveform Sync
+ * - Smooth Number Roller Odometer Animation
+ * - Thermodynamic Energy Spectrum Marker Animation
+ * - Spring-Physics Analog Galvanometer Needle
+ * - Live System Clock & Uptime Telemetry
  * Authors: Prakhar Harne & Naman Shrivastav
  */
 
@@ -12,13 +17,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fromScale = document.getElementById('fromScale');
   const toScale = document.getElementById('toScale');
   const swapBtn = document.getElementById('swapBtn');
+  const stepUpBtn = document.getElementById('stepUpBtn');
+  const stepDownBtn = document.getElementById('stepDownBtn');
   const convertBtn = document.getElementById('convertBtn');
   const precisionSelect = document.getElementById('precisionSelect');
   const copyBtn = document.getElementById('copyBtn');
   const soundToggleBtn = document.getElementById('soundToggleBtn');
   const crtToggleBtn = document.getElementById('crtToggleBtn');
+  const liveSystemClock = document.getElementById('liveSystemClock');
 
-  // Outputs
+  // Outputs & Visualizers
   const resultDisplay = document.getElementById('resultDisplay');
   const resultUnit = document.getElementById('resultUnit');
   const errorAlert = document.getElementById('errorAlert');
@@ -26,14 +34,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   const formulaEquation = document.getElementById('formulaEquation');
   const formulaTerminal = document.getElementById('formulaTerminal');
   const telemetryGrid = document.getElementById('telemetryGrid');
+  const spectrumMarker = document.getElementById('spectrumMarker');
+  const spectrumLabel = document.getElementById('spectrumLabel');
   const historyTbody = document.getElementById('historyTbody');
+  const dbStatsText = document.getElementById('dbStatsText');
   const clearHistoryBtn = document.getElementById('clearHistoryBtn');
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   const exportJsonBtn = document.getElementById('exportJsonBtn');
 
-  // Initialize Hardware Visualizers: Galvanometer & Particle Chamber
+  // Initialize Instruments: Spring Galvanometer & Heat Flux Oscilloscope
   const galvanometer = new PhysicalGalvanometer();
-  const particleReactor = new ThermalParticleReactor('thermalCanvas');
+  const oscilloscope = new ThermalOscilloscope('oscilloscopeCanvas');
+
+  // Number Rolling Animation State
+  let currentAnimatedNum = 212.0;
+  let numberAnimationId = null;
+
+  // Start Live System Clock
+  setInterval(updateLiveClock, 1000);
+  updateLiveClock();
 
   // Check Backend Server Health
   const health = await window.apiClient.checkHealth();
@@ -42,12 +61,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Load Initial Database History
   refreshHistory();
 
-  // Initial trigger with starting value 100°C -> °F
+  // Initial trigger
   executeConversion(false);
 
   // --- Event Listeners ---
 
-  // Text input with debounce
+  // Live input debounce
   let debounceTimer;
   tempInput.addEventListener('input', () => {
     const val = parseFloat(tempInput.value);
@@ -56,7 +75,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
     }
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => executeConversion(false), 180);
+    debounceTimer = setTimeout(() => executeConversion(false), 160);
+  });
+
+  // Step Up / Down Buttons
+  stepUpBtn.addEventListener('click', () => {
+    let cur = parseFloat(tempInput.value) || 0;
+    cur += 1;
+    tempInput.value = cur;
+    tempSlider.value = Math.max(-273.15, Math.min(500, cur));
+    scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
+    window.instrumentAudio.playSliderTick();
+    executeConversion(false);
+  });
+
+  stepDownBtn.addEventListener('click', () => {
+    let cur = parseFloat(tempInput.value) || 0;
+    cur -= 1;
+    tempInput.value = cur;
+    tempSlider.value = Math.max(-273.15, Math.min(500, cur));
+    scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
+    window.instrumentAudio.playSliderTick();
+    executeConversion(false);
   });
 
   // Continuous Scrubber Slider
@@ -83,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     executeConversion(false);
   });
 
-  // Tactile Invert Swap Lever
+  // Scale Inversion (Swap)
   swapBtn.addEventListener('click', () => {
     const temp = fromScale.value;
     fromScale.value = toScale.value;
@@ -91,22 +131,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     window.instrumentAudio.playRotaryClunk();
     swapBtn.classList.add('rotating');
-    setTimeout(() => swapBtn.classList.remove('rotating'), 300);
+    setTimeout(() => swapBtn.classList.remove('rotating'), 280);
 
     executeConversion(false);
   });
 
-  // Transmute / Convert Button Click
+  // Master Transmute Click
   convertBtn.addEventListener('click', () => {
     window.instrumentAudio.playTransmute();
     executeConversion(true);
   });
 
-  // Bench Preset Chips
-  document.querySelectorAll('.preset-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const val = chip.getAttribute('data-val');
-      const scale = chip.getAttribute('data-scale');
+  // Benchmark Preset Chips
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.getAttribute('data-val');
+      const scale = btn.getAttribute('data-scale');
 
       tempInput.value = val;
       fromScale.value = scale;
@@ -118,14 +158,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-  // Audio Toggle
+  // Sound Toggle
   soundToggleBtn.addEventListener('click', () => {
     const isEnabled = window.instrumentAudio.toggleSound();
     soundToggleBtn.classList.toggle('active', isEnabled);
-    soundToggleBtn.querySelector('.toggle-text').textContent = isEnabled ? 'RELAY CLICKS: ON' : 'AUDIO: MUTED';
+    soundToggleBtn.querySelector('.toggle-text').textContent = isEnabled ? 'RELAYS: ON' : 'AUDIO: MUTED';
   });
 
-  // Phosphor CRT Scanlines Toggle
+  // CRT Scanlines Toggle
   crtToggleBtn.addEventListener('click', () => {
     document.body.classList.toggle('crt-active');
     crtToggleBtn.classList.toggle('active');
@@ -140,13 +180,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     navigator.clipboard.writeText(`${text} ${unit}`).then(() => {
       window.instrumentAudio.playRelayClick(2200);
-      const span = copyBtn.querySelector('span');
-      span.textContent = 'COPIED TO CLIPBOARD';
-      setTimeout(() => span.textContent = 'COPY RESULT', 1600);
+      copyBtn.textContent = 'COPIED!';
+      setTimeout(() => copyBtn.textContent = 'COPY VALUE', 1500);
     });
   });
 
-  // Database Purge & Export
+  // Database Purge & Export Actions
   clearHistoryBtn.addEventListener('click', async () => {
     window.instrumentAudio.playRelayClick(400);
     if (confirm('Purge all historical telemetry from SQLite database?')) {
@@ -186,28 +225,33 @@ document.addEventListener('DOMContentLoaded', async () => {
       errorAlert.classList.remove('active');
       tempInput.classList.remove('input-invalid');
 
-      resultDisplay.textContent = data.resultValue;
+      // Animate Numbers rolling smoothly
+      const targetNumeric = parseFloat(data.resultValue);
+      animateNumberRoll(targetNumeric, precisionSelect.value);
       resultUnit.textContent = getUnitSymbol(data.toScale);
 
-      // Base Celsius for physical simulation
+      // Base Celsius for physical visualizers
       const baseC = getCelsiusEquivalent(data.inputValue, data.fromScale);
 
       // Dynamic Ambient Thermal Theme on Body & Aura
       updateAmbientThermalTheme(baseC);
 
-      // Update Kinetic Brownian Molecular Simulation
-      particleReactor.setTemperature(baseC);
+      // Update Oscilloscope Waveform harmonics
+      oscilloscope.setTemperature(baseC);
 
-      // Update Galvanometer Needle & Liquid Mercury Tube
+      // Update Galvanometer Needle
       galvanometer.update(baseC, data.resultValue, getUnitSymbol(data.toScale), data.physicalState);
+
+      // Update Thermodynamic Spectrum Position
+      updateSpectrumMarker(baseC, data.physicalState.label);
 
       // Update Step-by-Step Derivation Trace
       renderDerivation(data.derivation);
 
-      // Update 8-Scale Multi-Vector Tiles
+      // Update 8-Scale Multi-Vector Grid
       renderTelemetryRadar(data.allScalesTelemetry);
 
-      // If user clicked execute, refresh database table
+      // Refresh database table if user triggered explicit save
       if (isExplicit) {
         refreshHistory();
       }
@@ -221,6 +265,64 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  // Smooth Number Rolling Animation (Odometer Effect)
+  function animateNumberRoll(targetVal, precisionSetting) {
+    if (isNaN(targetVal)) {
+      resultDisplay.textContent = '--';
+      return;
+    }
+
+    if (numberAnimationId) cancelAnimationFrame(numberAnimationId);
+
+    const startVal = currentAnimatedNum;
+    const diff = targetVal - startVal;
+    const duration = 280; // ms
+    const startTime = performance.now();
+
+    function step(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      currentAnimatedNum = startVal + diff * ease;
+
+      const p = precisionSetting === 'raw' ? 4 : parseInt(precisionSetting, 10);
+      resultDisplay.textContent = currentAnimatedNum.toFixed(isNaN(p) ? 4 : p);
+
+      if (progress < 1) {
+        numberAnimationId = requestAnimationFrame(step);
+      } else {
+        currentAnimatedNum = targetVal;
+        const finalP = precisionSetting === 'raw' ? 4 : parseInt(precisionSetting, 10);
+        resultDisplay.textContent = targetVal.toFixed(isNaN(finalP) ? 4 : finalP);
+      }
+    }
+
+    numberAnimationId = requestAnimationFrame(step);
+  }
+
+  // Update Thermodynamic Spectrum Position
+  function updateSpectrumMarker(celsius, label) {
+    if (!spectrumMarker || !spectrumLabel) return;
+    // Map -273.15°C to +3000°C onto 0% to 100%
+    const kelvin = celsius + 273.15;
+    let percent = 0;
+    if (kelvin <= 0) {
+      percent = 2;
+    } else if (kelvin <= 273.15) {
+      percent = 2 + (kelvin / 273.15) * 33; // 2% to 35%
+    } else if (kelvin <= 373.15) {
+      percent = 35 + ((kelvin - 273.15) / 100) * 20; // 35% to 55%
+    } else if (kelvin <= 2000) {
+      percent = 55 + ((kelvin - 373.15) / 1626.85) * 25; // 55% to 80%
+    } else {
+      percent = Math.min(98, 80 + ((kelvin - 2000) / 4000) * 18);
+    }
+
+    spectrumMarker.style.left = `${percent.toFixed(1)}%`;
+    spectrumLabel.textContent = `${celsius.toFixed(1)}°C // ${label.toUpperCase()}`;
+  }
+
   function clearOutputs() {
     errorAlert.textContent = '';
     errorAlert.classList.remove('active');
@@ -228,7 +330,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     resultDisplay.textContent = '--';
     resultUnit.textContent = '';
     formulaEquation.textContent = 'Awaiting input magnitude...';
-    formulaTerminal.innerHTML = '<div class="trace-line header-trace">// ENTER VALUE TO INITIALIZE AUDIT TRACE.</div>';
+    formulaTerminal.innerHTML = '<div class="audit-line meta">// ENTER VALUE TO INITIALIZE AUDIT TRACE.</div>';
   }
 
   function updateAmbientThermalTheme(celsius) {
@@ -246,10 +348,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!derivation) return;
     formulaEquation.textContent = derivation.formula;
     formulaTerminal.innerHTML = `
-      <div class="trace-line header-trace">// PHYSICAL TRANSFORMATION MATRIX:</div>
+      <div class="audit-line meta">// TRANSLATION ALGORITHM EXECUTION TRACE:</div>
       ${derivation.steps.map((s, idx) => `
-        <div class="trace-line ${idx === derivation.steps.length - 1 ? 'highlight' : ''}">
-          <span class="bullet">${idx + 1}.</span> ${s}
+        <div class="audit-line ${idx === derivation.steps.length - 1 ? 'highlight' : ''}">
+          <span class="step-num">${idx + 1}.</span> ${s}
         </div>
       `).join('')}
     `;
@@ -258,8 +360,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderTelemetryRadar(telemetry) {
     if (!telemetry || Object.keys(telemetry).length === 0) return;
     telemetryGrid.innerHTML = Object.values(telemetry).map(item => `
-      <div class="vector-tile" data-scale="${item.scale}">
-        <span class="v-label">${item.name} (${item.symbol})</span>
+      <div class="v-card" data-scale="${item.scale}">
+        <span class="v-name">${item.name} (${item.symbol})</span>
         <span class="v-val">${item.value}</span>
       </div>
     `).join('');
@@ -267,19 +369,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function refreshHistory() {
     const list = await window.apiClient.getHistory();
+    if (dbStatsText) {
+      dbStatsText.textContent = `DATABASE: ${list ? list.length : 0} RECORDS STORED`;
+    }
+
     if (!list || list.length === 0) {
-      historyTbody.innerHTML = `<tr><td colspan="7" class="empty-cell">No SQLite database telemetry recorded yet.</td></tr>`;
+      historyTbody.innerHTML = `<tr><td colspan="7" class="empty-state">No SQLite database telemetry recorded yet.</td></tr>`;
       return;
     }
 
     historyTbody.innerHTML = list.slice(0, 15).map(item => `
       <tr>
         <td style="font-family: var(--font-mono); font-weight: 700; color: #ff9f1c;">#${item.id}</td>
-        <td style="font-family: var(--font-mono); color: #94a3b8;">${new Date(item.timestamp).toLocaleTimeString()}</td>
+        <td style="font-family: var(--font-mono); color: #8da2be;">${new Date(item.timestamp).toLocaleTimeString()}</td>
         <td><strong style="color: #ffffff;">${item.inputValue}</strong> ${getUnitSymbol(item.fromScale)}</td>
         <td style="font-family: var(--font-mono); color: #64748b;">${getUnitSymbol(item.fromScale)} → ${getUnitSymbol(item.toScale)}</td>
         <td><strong style="color: #ffb703; font-family: var(--font-mono); font-size: 0.95rem;">${Number(item.resultValue).toFixed(item.precisionSetting === 'raw' ? 4 : item.precisionSetting)}</strong> ${getUnitSymbol(item.toScale)}</td>
-        <td><span style="background: #1e2634; border: 1px solid #334155; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.72rem; color: #cbd5e1;">${item.physicalState || 'Normal'}</span></td>
+        <td><span style="background: #19202c; border: 1px solid #2d3748; padding: 0.15rem 0.5rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.7rem; color: #cbd5e1;">${item.physicalState || 'Normal'}</span></td>
         <td><button class="tactile-mini-btn btn-load" data-val="${item.inputValue}" data-from="${item.fromScale}" data-to="${item.toScale}">RECALL</button></td>
       </tr>
     `).join('');
@@ -300,12 +406,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function updateServerStatus(health) {
     if (health && health.status === 'OPTIMAL') {
-      serverStatusBadge.innerHTML = '<span class="pill-dot"></span><span class="pill-label">SQLITE ENGINE: ACTIVE (WAL)</span>';
+      serverStatusBadge.innerHTML = '<span class="pill-dot"></span><span class="pill-label">SQLITE ENGINE ACTIVE</span>';
       serverStatusBadge.style.color = '#10b981';
     } else {
-      serverStatusBadge.innerHTML = '<span class="pill-dot" style="background:#f59e0b; box-shadow:0 0 8px #f59e0b;"></span><span class="pill-label">CLIENT RESILIENCY FALLBACK</span>';
+      serverStatusBadge.innerHTML = '<span class="pill-dot" style="background:#f59e0b; box-shadow:0 0 8px #f59e0b;"></span><span class="pill-label">OFFLINE FALLBACK ACTIVE</span>';
       serverStatusBadge.style.color = '#f59e0b';
     }
+  }
+
+  function updateLiveClock() {
+    if (!liveSystemClock) return;
+    const now = new Date();
+    liveSystemClock.textContent = now.toTimeString().split(' ')[0] + ' UTC';
   }
 
   function getUnitSymbol(scale) {
