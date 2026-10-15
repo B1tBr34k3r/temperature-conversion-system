@@ -9,7 +9,7 @@ import os
 def create_report():
     doc = docx.Document()
 
-    # 1-inch margins all around
+    # 1-inch margins all around (Standard Academic & Corporate Specifications)
     for section in doc.sections:
         section.top_margin = Inches(1.0)
         section.bottom_margin = Inches(1.0)
@@ -36,6 +36,27 @@ def create_report():
             tcMar.append(node)
         tcPr.append(tcMar)
 
+    def keep_table_on_single_page(table):
+        """
+        Enforces OpenXML rules so the table renders completely on 1 single page:
+        1. cantSplit on every row: prevents any individual row from splitting across a page.
+        2. tblHeader on row 0: repeats header cleanly if ever required.
+        3. keep_with_next on all paragraphs of all rows except the last row:
+           glues all rows of the table together so Word will never break the table
+           across page boundaries.
+        """
+        for r_idx, row in enumerate(table.rows):
+            trPr = row._tr.get_or_add_trPr()
+            trPr.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
+            if r_idx == 0:
+                trPr.append(parse_xml(f'<w:tblHeader {nsdecls("w")}/>'))
+            
+            # Glue all rows together (except the last row)
+            if r_idx < len(table.rows) - 1:
+                for cell in row.cells:
+                    for p in cell.paragraphs:
+                        p.paragraph_format.keep_with_next = True
+
     def add_heading_1(text):
         p = doc.add_paragraph()
         p.paragraph_format.space_before = Pt(18)
@@ -60,10 +81,12 @@ def create_report():
         run.font.color.rgb = RGBColor(0x25, 0x63, 0xEB)
         return p
 
-    def add_para(text, bold_prefix=None, space_after=6):
+    def add_para(text, bold_prefix=None, space_after=6, keep_with_next=False):
         p = doc.add_paragraph()
         p.paragraph_format.space_after = Pt(space_after)
         p.paragraph_format.line_spacing = 1.15
+        if keep_with_next:
+            p.paragraph_format.keep_with_next = True
         if bold_prefix:
             r_pre = p.add_run(bold_prefix)
             r_pre.font.bold = True
@@ -100,6 +123,9 @@ def create_report():
         )
         tcPr.append(borders)
         
+        trPr = tbl.rows[0]._tr.get_or_add_trPr()
+        trPr.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
+        
         cp = cell.paragraphs[0]
         cp.paragraph_format.space_after = Pt(2)
         r1 = cp.add_run(f"⚡ {title}: ")
@@ -107,7 +133,7 @@ def create_report():
         r1.font.color.rgb = RGBColor(0x1E, 0x3A, 0x8A)
         r2 = cp.add_run(text)
         r2.font.color.rgb = RGBColor(0x1F, 0x29, 0x37)
-        doc.add_paragraph().paragraph_format.space_after = Pt(6)
+        doc.add_paragraph().paragraph_format.space_after = Pt(4)
 
     def add_image_figure(img_path, caption, width=Inches(6.2)):
         if os.path.exists(img_path):
@@ -127,10 +153,10 @@ def create_report():
             r_cap.font.color.rgb = RGBColor(0x4B, 0x55, 0x63)
 
     # =========================================================
-    # DOCUMENT COVER / TITLE
+    # DOCUMENT COVER / TITLE (PAGE 1)
     # =========================================================
     p_title = doc.add_paragraph()
-    p_title.paragraph_format.space_before = Pt(20)
+    p_title.paragraph_format.space_before = Pt(16)
     p_title.paragraph_format.space_after = Pt(2)
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r = p_title.add_run("THERMACRAFT • TEMPERATURE CONVERSION SYSTEM")
@@ -140,16 +166,17 @@ def create_report():
     r.font.color.rgb = RGBColor(0x1E, 0x3A, 0x8A)
 
     p_sub = doc.add_paragraph()
-    p_sub.paragraph_format.space_after = Pt(14)
+    p_sub.paragraph_format.space_after = Pt(12)
     p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r_sub = p_sub.add_run("Milestone 3: Implementation, Development & Tactile Studio Delivery")
     r_sub.font.size = Pt(13)
     r_sub.font.bold = True
     r_sub.font.color.rgb = RGBColor(0x25, 0x63, 0xEB)
 
-    # Metadata Table
+    # Metadata Table (Kept together on 1 page)
     meta_table = doc.add_table(rows=9, cols=2)
     meta_table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    meta_widths = [Inches(2.2), Inches(4.3)]
     meta_data = [
         ("Project Title:", "ThermaCraft • High-Precision Multi-Scale Workstation"),
         ("Milestone Phase:", "Milestone 3: Implementation / Development"),
@@ -164,12 +191,12 @@ def create_report():
     for idx, (label, val) in enumerate(meta_data):
         row = meta_table.rows[idx]
         cell_lbl, cell_val = row.cells[0], row.cells[1]
-        cell_lbl.width = Inches(2.3)
-        cell_val.width = Inches(4.2)
+        cell_lbl.width = meta_widths[0]
+        cell_val.width = meta_widths[1]
         set_cell_background(cell_lbl, "F1F5F9")
         set_cell_background(cell_val, "F8FAFC")
-        set_cell_margins(cell_lbl, 55, 55, 100, 100)
-        set_cell_margins(cell_val, 55, 55, 100, 100)
+        set_cell_margins(cell_lbl, 50, 50, 90, 90)
+        set_cell_margins(cell_val, 50, 50, 90, 90)
         
         p0 = cell_lbl.paragraphs[0]
         p0.paragraph_format.space_after = Pt(0)
@@ -184,16 +211,21 @@ def create_report():
         r1.font.size = Pt(9.5)
         r1.font.color.rgb = RGBColor(0x0F, 0x17, 0x2A)
 
-    doc.add_paragraph().paragraph_format.space_after = Pt(12)
+    keep_table_on_single_page(meta_table)
+
+    doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
     # Milestone 3 Objective Callout
     add_callout(
         "Milestone 3 Core Deliverables Fulfillment",
-        "Milestone 3 successfully converts the architectural specifications into an operational, production-grade software system satisfying all four prescribed deliverables: (1) Modular Source Code (client, server, services, config); (2) Front-End and Back-End Integration via RESTful API; (3) SQLite Database Implementation with WAL persistence; and (4) Version Control Repository synchronized with GitHub and deployed live to GitHub Pages."
+        "Milestone 3 successfully converts architectural specifications into an operational, production-grade software system satisfying all four prescribed deliverables: (1) Modular Source Code (client, server, services, config); (2) Front-End and Back-End Integration via RESTful API; (3) SQLite Database Implementation with WAL persistence; and (4) Version Control Repository synchronized with GitHub and deployed live to GitHub Pages."
     )
 
+    # Page Break after Cover
+    doc.add_page_break()
+
     # =========================================================
-    # 1. EXECUTIVE SUMMARY & ARCHITECTURAL EVOLUTION
+    # 1. EXECUTIVE SUMMARY & ARCHITECTURAL EVOLUTION (PAGE 2)
     # =========================================================
     add_heading_1("1. Executive Summary & Full-Stack Evolution")
     add_para(
@@ -216,16 +248,21 @@ def create_report():
     add_para(
         "The software architecture follows a strict 3-tier enterprise pattern ensuring separation of concerns, high throughput, and fault tolerance. Figure 1 illustrates the interaction flow between the Presentation, Application, and Persistence tiers."
     )
-    add_image_figure('diagrams/milestone3_architecture.png', "Figure 1: Full-Stack Integrated 3-Tier System Architecture (Milestone 3)")
+    add_image_figure('diagrams/milestone3_architecture.png', "Figure 1: Full-Stack Integrated 3-Tier System Architecture (Milestone 3)", width=Inches(5.8))
+
+    # Page Break so Codebase Structure Table begins cleanly on a single page
+    doc.add_page_break()
 
     add_heading_2("2.1 Module-Wise Source Code Organization")
     add_para(
-        "The codebase is decomposed into cohesive, isolated modules reflecting modern software engineering principles:"
+        "The codebase is decomposed into cohesive, isolated modules reflecting modern software engineering principles. Table 1 details each core module and its architectural responsibility:",
+        keep_with_next=True
     )
     
-    # Codebase Structure Table
+    # Codebase Structure Table (Kept together on 1 single page)
     code_tbl = doc.add_table(rows=9, cols=3)
     code_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+    code_widths = [Inches(2.2), Inches(1.5), Inches(2.8)]
     c_headers = ["Module / File", "Component Role", "Primary Responsibilities"]
     c_rows = [
         ("server/server.js", "Server Entry Point", "Configures Express, CORS, static asset streaming, and API routing"),
@@ -239,8 +276,9 @@ def create_report():
     ]
     for c_idx, h_text in enumerate(c_headers):
         cell = code_tbl.rows[0].cells[c_idx]
+        cell.width = code_widths[c_idx]
         set_cell_background(cell, "1E3A8A")
-        set_cell_margins(cell, 70, 70, 90, 90)
+        set_cell_margins(cell, 60, 60, 80, 80)
         p = cell.paragraphs[0]
         r = p.add_run(h_text)
         r.font.bold = True
@@ -252,8 +290,9 @@ def create_report():
         bg = "F8FAFC" if r_idx % 2 == 0 else "FFFFFF"
         for c_idx, text in enumerate([col0, col1, col2]):
             cell = row.cells[c_idx]
+            cell.width = code_widths[c_idx]
             set_cell_background(cell, bg)
-            set_cell_margins(cell, 55, 55, 80, 80)
+            set_cell_margins(cell, 45, 45, 75, 75)
             p = cell.paragraphs[0]
             r = p.add_run(text)
             r.font.size = Pt(8.5)
@@ -262,7 +301,11 @@ def create_report():
                 r.font.bold = True
                 r.font.color.rgb = RGBColor(0x1E, 0x40, 0xAF)
 
+    keep_table_on_single_page(code_tbl)
     doc.add_paragraph().paragraph_format.space_after = Pt(8)
+
+    # Page Break before Database Section
+    doc.add_page_break()
 
     # =========================================================
     # 3. DATABASE IMPLEMENTATION & SCHEMA DESIGN
@@ -276,7 +319,7 @@ def create_report():
     add_para(
         "All conversion telemetry, timestamps, input parameters, converted outputs, mathematical formulas, and environmental milestones are stored in the conversions table, as illustrated in Figure 2."
     )
-    add_image_figure('diagrams/db_schema_er.png', "Figure 2: SQLite Database Schema & Entity-Relationship Architecture")
+    add_image_figure('diagrams/db_schema_er.png', "Figure 2: SQLite Database Schema & Entity-Relationship Architecture", width=Inches(6.0))
 
     add_heading_2("3.2 Performance Optimization & WAL Mode")
     add_para(
@@ -285,17 +328,22 @@ def create_report():
     add_bullet(" An index on timestamp DESC optimizes recent history queries (/api/history) and analytical aggregation.", "Temporal Indexing (idx_conversions_timestamp):")
     add_bullet(" A compound index on (from_scale, to_scale) accelerates vector analytics and popular scale computation.", "Scale Vector Indexing (idx_conversions_scales):")
 
+    # Page Break before REST API Section
+    doc.add_page_break()
+
     # =========================================================
     # 4. RESTFUL API SPECIFICATION & INTEGRATION
     # =========================================================
     add_heading_1("4. RESTful API Specification & Integration Layer")
     add_para(
-        "The frontend communicates with the backend asynchronously through JSON-encoded HTTP REST requests. The API surface provides the following endpoints:"
+        "The frontend communicates with the backend asynchronously through JSON-encoded HTTP REST requests. Table 2 details the complete RESTful endpoint specification:",
+        keep_with_next=True
     )
 
-    # API Table
+    # API Table (Kept together on 1 single page)
     api_tbl = doc.add_table(rows=7, cols=4)
     api_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+    api_widths = [Inches(0.9), Inches(1.3), Inches(1.7), Inches(2.6)]
     a_headers = ["HTTP Method", "Endpoint", "Payload / Query", "Response Payload Description"]
     a_rows = [
         ("POST", "/api/convert", "{ value, fromScale, toScale, precision }", "Returns converted value, derivation steps, thermal tier, and 8-scale radar"),
@@ -307,8 +355,9 @@ def create_report():
     ]
     for c_idx, h_text in enumerate(a_headers):
         cell = api_tbl.rows[0].cells[c_idx]
+        cell.width = api_widths[c_idx]
         set_cell_background(cell, "1E3A8A")
-        set_cell_margins(cell, 70, 70, 80, 80)
+        set_cell_margins(cell, 60, 60, 75, 75)
         p = cell.paragraphs[0]
         r = p.add_run(h_text)
         r.font.bold = True
@@ -320,8 +369,9 @@ def create_report():
         bg = "F8FAFC" if r_idx % 2 == 0 else "FFFFFF"
         for c_idx, text in enumerate([col0, col1, col2, col3]):
             cell = row.cells[c_idx]
+            cell.width = api_widths[c_idx]
             set_cell_background(cell, bg)
-            set_cell_margins(cell, 55, 55, 70, 70)
+            set_cell_margins(cell, 45, 45, 65, 65)
             p = cell.paragraphs[0]
             r = p.add_run(text)
             r.font.size = Pt(8.5)
@@ -329,7 +379,11 @@ def create_report():
                 r.font.name = 'Consolas'
                 r.font.bold = True
 
+    keep_table_on_single_page(api_tbl)
     doc.add_paragraph().paragraph_format.space_after = Pt(8)
+
+    # Page Break before Workstation Showcase Section
+    doc.add_page_break()
 
     # =========================================================
     # 5. THERMACRAFT TACTILE WORKSTATION & USER EXPERIENCE
@@ -338,7 +392,7 @@ def create_report():
     add_para(
         "To elevate the user experience beyond conventional static academic wireframes and obscure scientific meters, Milestone 3 delivers the ThermaCraft Workstation. Designed with an artisanal milled metal and luminescent phosphor aesthetic, it connects abstract thermodynamic numbers to relatable real-world experiences."
     )
-    add_image_figure('diagrams/github_pages_live.png', "Figure 3: Live ThermaCraft Tactile Workstation in Active Operation (100°C Converted to 212°F)")
+    add_image_figure('diagrams/github_pages_live.png', "Figure 3: Live ThermaCraft Tactile Workstation in Active Operation (100°C Converted to 212°F)", width=Inches(5.8))
 
     add_heading_2("5.1 Core Interactive Workstation Components")
     add_bullet(" A synchronized side-by-side visual ruler that graphically maps input magnitude to the target scale with live animated pips, exact scale ratio multipliers (1°C = 1.8000°F), and baseline shift chips (+32°F).", "1. Dual-Scale Conversion Bridge:")
@@ -348,19 +402,24 @@ def create_report():
     add_bullet(" Highlights the Big Three global scales (Celsius, Fahrenheit, Kelvin) with an expandable drawer exploring 5 historical antique scales (Rankine, Delisle, Newton, Réaumur, Rømer) with concise historical notes.", "5. Primary Essentials & Antique Scales Drawer:")
     add_bullet(" Synthesizes tactile mechanical relay clicks, rotary switch clunks, and analog hums dynamically using the Web Audio API without requiring any external audio assets.", "6. Synthesized Mechanical Sound Design:")
 
-    add_image_figure('diagrams/sdms_thumbnail.png', "Figure 4: ThermaCraft High-Resolution Architectural Console Showcase Poster")
+    add_image_figure('diagrams/sdms_thumbnail.png', "Figure 4: ThermaCraft High-Resolution Architectural Console Showcase Poster", width=Inches(5.8))
+
+    # Page Break before Verification Section
+    doc.add_page_break()
 
     # =========================================================
     # 6. QUALITY ASSURANCE & AUTOMATED VERIFICATION
     # =========================================================
     add_heading_1("6. Automated Verification & Quality Assurance Suite")
     add_para(
-        "A rigorous automated test suite was constructed in tests/backend.test.js covering all layers of the software system. All 43 test assertions executed with a 100% pass rate."
+        "A rigorous automated test suite was constructed in tests/backend.test.js covering all layers of the software system. Table 3 presents the verification breakdown where all 43 assertions passed with 100% success:",
+        keep_with_next=True
     )
 
-    # Test Results Table
+    # Test Results Table (Kept together on 1 single page)
     test_tbl = doc.add_table(rows=7, cols=4)
     test_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+    test_widths = [Inches(1.8), Inches(1.8), Inches(1.5), Inches(1.4)]
     t_headers = ["Test Suite Category", "Scope / Condition Tested", "Validation Metric", "Status"]
     t_rows = [
         ("Multi-Scale Mathematical Accuracy", "All 8 scales (C, F, K, R, De, N, Re, Ro) benchmarks", "Numerical tolerance <= 1e-4", "PASSED (16/16)"),
@@ -372,8 +431,9 @@ def create_report():
     ]
     for c_idx, h_text in enumerate(t_headers):
         cell = test_tbl.rows[0].cells[c_idx]
+        cell.width = test_widths[c_idx]
         set_cell_background(cell, "1E3A8A")
-        set_cell_margins(cell, 70, 70, 80, 80)
+        set_cell_margins(cell, 60, 60, 75, 75)
         p = cell.paragraphs[0]
         r = p.add_run(h_text)
         r.font.bold = True
@@ -385,8 +445,9 @@ def create_report():
         bg = "F8FAFC" if r_idx % 2 == 0 else "FFFFFF"
         for c_idx, text in enumerate([col0, col1, col2, col3]):
             cell = row.cells[c_idx]
+            cell.width = test_widths[c_idx]
             set_cell_background(cell, bg)
-            set_cell_margins(cell, 55, 55, 80, 80)
+            set_cell_margins(cell, 45, 45, 75, 75)
             p = cell.paragraphs[0]
             r = p.add_run(text)
             r.font.size = Pt(8.5)
@@ -394,6 +455,7 @@ def create_report():
                 r.font.bold = True
                 r.font.color.rgb = RGBColor(0x15, 0x80, 0x3D)
 
+    keep_table_on_single_page(test_tbl)
     doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
     # =========================================================
