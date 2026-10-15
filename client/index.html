@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ThermaCraft • Temperature Conversion System</title>
-  <link rel="stylesheet" href="css/hud.css?v=4.0">
+  <link rel="stylesheet" href="css/hud.css?v=5.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Cabinet+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
@@ -248,22 +248,42 @@
 
           <!-- 2. Molecular Speedometer & Thermal Curiosity Flashcard -->
           <div class="discovery-grid">
-            <!-- Practical Living & Comfort Advisor -->
-            <div class="discovery-card practical-living-card">
+            <!-- EVERYDAY MATTER & SUBSTANCE SCANNER (Zero Redundancy) -->
+            <div class="discovery-card practical-living-card matter-scanner-card">
               <div class="dc-header">
-                <span id="advisorIcon" class="dc-icon">🫖</span>
-                <span class="dc-title">PRACTICAL LIVING ADVISOR</span>
-                <span id="advisorBadge" class="dc-badge">100°C BOILING POINT</span>
+                <span id="advisorIcon" class="dc-icon">🔬</span>
+                <span class="dc-title">EVERYDAY MATTER SCANNER</span>
+                <span id="advisorBadge" class="dc-badge">100°C BOILING TRANSITION</span>
               </div>
-              <div class="advisor-main">
-                <div id="advisorHeadline" class="advisor-headline">Boiling Water for Cooking</div>
-                <div id="advisorClothing" class="advisor-clothing">🧤 Silicone kitchen mitts; keep face clear of steam vents</div>
+              <div class="matter-headline-wrap">
+                <div id="advisorHeadline" class="matter-headline">The Steam Frontier: 1,600× Phase Explosion</div>
               </div>
-              <div id="advisorImpact" class="dc-desc">
-                Active rolling boil with energetic steam. Water at sea level cannot get hotter than this.
+
+              <!-- 4-Item Real-World Transformation Matrix -->
+              <div class="matter-matrix">
+                <div class="matter-row">
+                  <span class="matter-tag">🍫 CHOCOLATE & BUTTER</span>
+                  <span id="matterChoc" class="matter-state">Severe burning; smoking caramelized cocoa solids</span>
+                </div>
+                <div class="matter-row">
+                  <span class="matter-tag">📱 PHONE & TECH BATTERY</span>
+                  <span id="matterPhone" class="matter-state">Immediate hardware destruction & safety venting</span>
+                </div>
+                <div class="matter-row">
+                  <span class="matter-tag">💧 WATER & STEAM VAPOR</span>
+                  <span id="matterWater" class="matter-state">Violent rolling boil: 1L water creates 1,600L steam!</span>
+                </div>
+                <div class="matter-row">
+                  <span class="matter-tag">🍳 KITCHEN & CULINARY</span>
+                  <span id="matterFood" class="matter-state">Pasta boiling, starch gel & 99.9% germ sanitization</span>
+                </div>
               </div>
+
+              <div id="advisorClothing" style="display:none;"></div>
+              <div id="advisorImpact" style="display:none;"></div>
+
               <div id="advisorTip" class="advisor-tip">
-                💡 Ideal for boiling pasta, blanching veggies, sanitizing kitchenware, and sterilizing water.
+                💡 Liquid water at sea level CANNOT exceed 100°C! Any extra heat energy added does not make the liquid hotter—it is absorbed as latent heat to vaporize water into steam!
               </div>
             </div>
 
@@ -512,10 +532,10 @@
   </div>
 
   <!-- Client JavaScript Modules -->
-  <script src="js/audio.js?v=4.0"></script>
-  <script src="js/thermalContext.js?v=4.0"></script>
-  <script src="js/gauge.js?v=4.0"></script>
-  <script src="js/api.js?v=4.0"></script>
-  <script src="js/app.js?v=4.0"></script>
+  <script src="js/audio.js?v=5.0"></script>
+  <script src="js/thermalContext.js?v=5.0"></script>
+  <script src="js/gauge.js?v=5.0"></script>
+  <script src="js/api.js?v=5.0"></script>
+  <script src="js/app.js?v=5.0"></script>
 </body>
 </html>

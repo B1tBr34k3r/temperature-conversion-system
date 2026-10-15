@@ -13,156 +13,171 @@ class ThermalDiscoveryEngine {
    * Translates any temperature into actionable, real-world human advice:
    * What it feels like, recommended clothing/safety, and practical everyday tips.
    */
-  static getPracticalLivingAdvice(celsius) {
+  /**
+   * Everyday Matter & Substance Scanner
+   * Simulates in real-time how everyday things transform at this exact temperature:
+   * 1. 🍫 Chocolate & Butter (solid snap, softening, or melting puddle)
+   * 2. 📱 Smartphone & Battery (lithium efficiency, cold drain, or thermal shutdown)
+   * 3. 💧 Water & Physical State (ice crystals, fluid, or 1,600x steam expansion)
+   * 4. 🍳 Food & Kitchen Chemistry (freezing, yeast proofing, egg proteins, or Maillard browning)
+   * Plus a fascinating everyday thermal science insight!
+   */
+  static getEverydayMatterState(celsius) {
     const c = typeof celsius === 'number' ? (isNaN(celsius) ? 0 : celsius) : (parseFloat(celsius) || 0);
 
-    if (c <= -40) {
+    if (c <= -20) {
       return {
-        icon: '🥶',
-        headline: 'Extreme Sub-Zero Freeze',
-        badge: 'DANGEROUS FROSTBITE',
-        clothing: '🧥 Heavy Arctic parka, snow boots, thermal balaclava & mittens',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), bare skin suffers frostbite within 5 minutes. Car batteries fail and tires stiffen.`,
-        tip: '💡 Never touch bare metal outdoors; always carry insulated emergency blankets.'
-      };
-    }
-    if (c <= -10) {
-      return {
-        icon: '❄️',
-        headline: 'Deep Sub-Zero Winter',
-        badge: 'FREEZING COLD',
-        clothing: '🧤 Thick winter coat, fleece layers, thermal socks, beanie & gloves',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), breath fogs heavily; ice and snow stay rock-hard without melting.`,
-        tip: '💡 Standard home food freezers operate at -18°C (0°F) to preserve groceries for months.'
+        icon: '🧊',
+        badge: 'DEEP CRYOGENIC FREEZE',
+        headline: 'Extreme Cold: Shatterable Solids & Frozen Battery',
+        chocolate: 'Rock-hard & brittle; shatters like glass',
+        phone: 'Severe cold-drain: drops 40%+ instantly; LCD lags',
+        water: 'Glacial crystalline ice block',
+        food: 'Microbial activity completely halted; safe indefinitely',
+        tip: '💡 In extreme sub-zero weather, lithium-ion chemical reactions slow down so drastically that phones shut down even when battery shows 50%!'
       };
     }
     if (c < 0) {
       return {
-        icon: '🧊',
-        headline: 'Freezing Winter Weather',
-        badge: 'ICE HAZARD',
-        clothing: '🧥 Winter jacket, warm sweater, scarf & insulated footwear',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), rain turns to sleet and puddles freeze into slippery black ice on roads.`,
-        tip: '💡 Spread rock salt on walkways to melt ice, and protect outdoor garden plants from frost.'
+        icon: '❄️',
+        badge: 'SUB-ZERO FREEZING',
+        headline: 'Freezer Cold: Frozen Ice & Hardened Butter',
+        chocolate: 'Chilled firm; butter impossible to spread',
+        phone: 'Chassis icy; battery drains ~20% faster than normal',
+        water: 'Solid ice; puddles and sidewalks freeze solid',
+        food: 'Standard home freezer range (-18°C); preserves groceries',
+        tip: '💡 Commercial ice cream freezers stay strictly at -18°C (0°F)—cold enough to stop bacterial replication without creating crunchy ice shards.'
       };
     }
-    if (Math.abs(c) < 0.05) {
+    if (Math.abs(c) < 0.1) {
       return {
         icon: '🧊',
-        headline: 'Water Freezing Point',
-        badge: '0°C FREEZE POINT',
-        clothing: '🧤 Warm winter coat, trousers, and insulated gloves',
-        impact: 'The exact freezing threshold where liquid water crystallizes into solid ice (32°F / 273.15 K).',
-        tip: '💡 Water pipes can freeze and burst; leave faucets dripping slightly during freeze warnings.'
+        badge: '0°C PHASE EQUILIBRIUM',
+        headline: 'The Freezing Threshold: Ice Meets Water',
+        chocolate: 'Hard cold snap; butter requires pre-warming',
+        phone: 'Chilled battery; safe operation, avoid moisture condensation',
+        water: 'Exact thermodynamic boundary: liquid water turns to ice',
+        food: 'Refrigerator baseline: keeps dairy fresh without freezing milk',
+        tip: '💡 Water is one of the only liquids on Earth that expands when freezing (becoming 9% less dense), which is why ice floats and preserves life beneath frozen lakes!'
       };
     }
-    if (c <= 14) {
+    if (c <= 15) {
       return {
         icon: '🍂',
-        headline: 'Chilly Autumn / Spring Day',
-        badge: 'BRISK & COOL',
-        clothing: '🧥 Light jacket, hoodie, warm knit sweater, or windbreaker',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), crisp outdoor air feels refreshing for walking or jogging, but chilly if sitting.`,
-        tip: '💡 Natural food pantries and cellars maintain ~10°C–12°C to naturally preserve produce and wine.'
+        badge: 'CHILLED CRISP CLIMATE',
+        headline: 'Chilly Climate: Crisp Solids & Slow Ferment',
+        chocolate: 'Firm butter; crisp chocolate snap with zero melting',
+        phone: 'Cool optimal operation; zero thermal throttling risk',
+        water: 'Refreshing cold drinking liquid',
+        food: 'Natural pantry preserve; slow yeast and sourdough proof',
+        tip: '💡 Extra virgin olive oil naturally turns cloudy and thick below 10°C (50°F) because its healthy fatty acids solidify before water does!'
       };
     }
     if (c <= 25) {
       return {
         icon: '🛋️',
-        headline: 'Comfortable Living Room',
-        badge: 'OPTIMAL COMFORT',
-        clothing: '👕 T-shirt, jeans, light comfortable indoor clothing',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), this is the golden comfort zone for human focus, studying, and restful sleep.`,
-        tip: '💡 Keep home thermostats set around 21°C–23°C (70°F–73°F) for maximum comfort and energy efficiency.'
+        badge: 'OPTIMAL LIVING EQUILIBRIUM',
+        headline: 'Golden Comfort: Spreadable Butter & Peak Tech',
+        chocolate: 'Butter is perfectly soft & spreadable; chocolate snaps dry',
+        phone: '100% peak battery lifespan and CPU processing speed',
+        water: 'Comfortable room-temperature drinking fluid',
+        food: 'Bread yeast proofs smoothly; red wine optimum aroma',
+        tip: '💡 20°C–22°C (68°F–72°F) is the international laboratory standard because common household materials neither melt, sweat, nor freeze in this zone.'
       };
     }
-    if (c <= 32) {
+    if (c <= 33) {
       return {
         icon: '☀️',
-        headline: 'Warm Summer Weather',
-        badge: 'WARM & PLEASANT',
-        clothing: '🩳 Shorts, short-sleeve shirt, sandals or light sneakers',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), pleasant warm weather for swimming, beaches, and outdoor summer fun.`,
-        tip: '💡 Drink extra water during outdoor activities and apply sunscreen (SPF 30+) if in direct sun.'
+        badge: 'WARM SUMMER WARMTH',
+        headline: 'Summer Warmth: Softening Fats & Rising Heat',
+        chocolate: 'Butter begins melting into oil; chocolate softens on touch',
+        phone: 'Chassis warm; battery charges slower to prevent degradation',
+        water: 'Warm tepid water; high natural evaporation',
+        food: 'Rapid dough rising; milk and dairy spoil quickly if left out',
+        tip: '💡 Coconut oil has a precise melting point at 24°C (76°F)—it stays a firm white spread in winter, but liquefies into a clear golden oil in summer!'
       };
     }
-    if (c <= 38) {
+    if (c <= 39) {
       return {
-        icon: '🏃',
-        headline: 'Body Temperature / Sweltering Heat',
-        badge: 'SWELTERING HEAT',
-        clothing: '🕶️ Loose breathable cotton clothing, sun hat & sunglasses',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), normal human body core is 37°C. Ambient air feels heavy and causes sweating.`,
-        tip: '💡 Seek shade during afternoon hours (12 PM–4 PM) and keep hydrated with electrolytes.'
-      };
-    }
-    if (c <= 50) {
-      return {
-        icon: '🥵',
-        headline: 'Dangerous Extreme Heatwave',
-        badge: 'HEATSTROKE WARNING',
-        clothing: '⛱️ Stay indoors in air conditioning; loose UV protective gear outdoors',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), asphalt burns bare skin, and high humidity risks heat exhaustion.`,
-        tip: '💡 Never leave children or pets inside parked vehicles—car interiors heat up to lethal levels within minutes.'
+        icon: '🍫',
+        badge: 'BODY & CHOCOLATE MELT',
+        headline: '34°C–37°C: Chocolate Melts & Body Equilibrium',
+        chocolate: 'Chocolate liquefies in hand (melts at 34°C); butter is yellow oil',
+        phone: 'Thermal throttling kicks in; brightness dims to reduce heat',
+        water: 'Warm bath temperature; matching human internal core',
+        food: 'Lukewarm water optimal for yeast bloom (hotter kills it)',
+        tip: '💡 Cocoa butter is chemically unique: it melts at exactly 34°C (93°F)—just 3°C below human body heat—creating chocolate\'s signature "melts on your tongue" sensation!'
       };
     }
     if (c <= 70) {
       return {
         icon: '🚿',
-        headline: 'Hot Tap Water / Steamy Dishwater',
-        badge: 'HOT LIQUID',
-        clothing: '⚠️ Caution: Handle with care; too hot for prolonged skin contact',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), hot domestic water can cause painful scalds in under 3 seconds.`,
-        tip: '💡 Set residential water heaters to 49°C–50°C (120°F) to prevent accidental household burns.'
-      };
-    }
-    if (c <= 90) {
-      return {
-        icon: '☕',
-        headline: 'Freshly Brewed Hot Coffee & Tea',
-        badge: 'HOT BEVERAGE',
-        clothing: '☕ Insulated mug; hold by cup handle or heat sleeve only',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), standard serving temperature for piping-hot coffee, tea, and soups.`,
-        tip: '💡 Allow coffee to cool for 2–3 minutes (down to ~65°C) to taste delicate aromas without burning your tongue.'
+        badge: 'SCALDING HOT LIQUID',
+        headline: 'Hot Liquids: Protein Denaturation & Scalds',
+        chocolate: 'Melted liquid fondue; separated cocoa butter',
+        phone: 'Overheating warning! Auto-lockdown to prevent battery bulge',
+        water: 'Steamy domestic hot water; scalds skin in 3 seconds at 60°C',
+        food: 'Egg whites set into soft custard at 62°C (delicate sous-vide)',
+        tip: '💡 In gourmet cooking, egg whites coagulate into tender jelly at 62°C, but yolks remain runny until 68°C—which is how chefs make the perfect sous-vide poached egg!'
       };
     }
     if (c < 99.5) {
       return {
-        icon: '🫖',
-        headline: 'Near-Boiling / Simmering Broth',
-        badge: 'SIMMERING WATER',
-        clothing: '🧤 Kitchen mitts recommended; watch for rising hot steam',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), gentle bubbles form at the base—ideal for delicate poaching, soups, and green teas.`,
-        tip: '💡 Simmering (85°C–95°C) cooks tender proteins evenly without tearing delicate meats.'
+        icon: '☕',
+        badge: 'HOT BEVERAGE ZONE',
+        headline: 'Steaming Hot: Coffee Extraction & Simmering',
+        chocolate: 'Boiling liquid fats; scorched cocoa aromas',
+        phone: 'Hardware hazard: soldered circuits and battery delaminate',
+        water: 'Near-boiling steamy fluid; gentle simmer bubbles at the base',
+        food: 'Golden barista window for espresso & pour-over coffee (90°C–96°C)',
+        tip: '💡 Coffee brewed above 96°C extracts harsh bitter tannins, while below 88°C it tastes sour and flat. 90°C–93°C is the golden extraction sweet spot!'
       };
     }
     if (c <= 105) {
       return {
         icon: '🫖',
-        headline: 'Boiling Water for Cooking',
-        badge: '100°C BOILING POINT',
-        clothing: '🧤 Silicone kitchen mitts; keep face clear of steam vents',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), active rolling boil with energetic steam. Water at sea level cannot get hotter than this.`,
-        tip: '💡 Ideal for boiling pasta, blanching veggies, sanitizing kitchenware, and sterilizing water.'
+        badge: '100°C BOILING TRANSITION',
+        headline: 'The Steam Frontier: 1,600× Phase Explosion',
+        chocolate: 'Severe burning; smoking caramelized cocoa solids',
+        phone: 'Immediate hardware destruction & battery safety venting',
+        water: 'Violent rolling boil: 1 liter of water creates 1,600 liters of steam!',
+        food: 'Boiling pasta, starch gelatinization, and 99.9% germ sanitization',
+        tip: '💡 Liquid water at sea level CANNOT exceed 100°C! Any extra heat energy added does not make the liquid hotter—it is absorbed as latent heat to vaporize water into steam!'
       };
     }
     if (c <= 250) {
       return {
         icon: '🍕',
-        headline: 'Hot Baking & Roasting Oven',
-        badge: 'BAKING TEMPERATURE',
-        clothing: '🧤 Heavy-duty heat-resistant oven mitts required',
-        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), typical oven temperature for baking pizza, crispy bread, and roasting chicken.`,
-        tip: '💡 This heat triggers the Maillard reaction, producing golden-brown crusts and delicious savory aromas.'
+        badge: 'BAKING & CARAMELIZATION',
+        headline: 'Oven Heat: The Maillard Reaction & Crisp Crusts',
+        chocolate: 'Pyrolyzed & charred; smoke point surpassed',
+        phone: 'Tin-lead solder softens; plastics liquefy completely',
+        water: 'Zero liquid water possible; high-velocity superheated dry steam',
+        food: 'The Maillard reaction: sugars and amino acids crisp pizza crusts',
+        tip: '💡 The mouth-watering aroma of toasted bread, seared pizza crusts, and roasted coffee is produced by the Maillard reaction, which accelerates between 140°C and 165°C!'
       };
     }
     return {
       icon: '🔥',
-      headline: 'Extreme Stovetop Flame & Fire',
-      badge: 'OPEN FLAME HAZARD',
-      clothing: '🧯 Fire safety equipment & high-temperature shields',
-      impact: `At ${c.toFixed(0)}°C (${((c * 1.8) + 32).toFixed(0)}°F), temperatures far exceed cooking. Paper ignites at 233°C; aluminium melts at 660°C.`,
-      tip: '💡 Kitchen gas burner flames reach 1,000°C+; keep an ABC-rated kitchen fire extinguisher readily accessible.'
+      badge: 'INCANDESCENT FLAME HAZARD',
+      headline: 'Open Flame: Spontaneous Combustion & Magma',
+      chocolate: 'Charred pure carbon residue and ash',
+      phone: 'Vaporized circuits and melted aluminum chassis',
+      water: 'Dissociated superheated gas and ionizing plasma',
+      food: 'Paper spontaneously ignites at 233°C (451°F); wood pyrolyzes',
+      tip: '💡 At 525°C (the Draper point), all solid objects on Earth begin glowing with visible red light, transitioning from invisible infrared into visible optical radiation!'
+    };
+  }
+
+  /**
+   * Practical Living Advice (Enriched & Backward Compatible)
+   */
+  static getPracticalLivingAdvice(celsius) {
+    const matter = this.getEverydayMatterState(celsius);
+    return {
+      ...matter,
+      clothing: `🍫 ${matter.chocolate} • 📱 ${matter.phone}`,
+      impact: `💧 ${matter.water} • 🍳 ${matter.food}`
     };
   }
 

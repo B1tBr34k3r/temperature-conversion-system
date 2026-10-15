@@ -414,22 +414,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.warn('Bridge metadata calculation notice:', e);
     }
 
-    // 2. Practical Living & Everyday Comfort Advisor
+    // 2. Everyday Matter & Substance Scanner (Zero Redundancy)
     try {
-      const advice = window.ThermalDiscoveryEngine.getPracticalLivingAdvice(numC);
+      const matter = window.ThermalDiscoveryEngine.getEverydayMatterState ? window.ThermalDiscoveryEngine.getEverydayMatterState(numC) : window.ThermalDiscoveryEngine.getPracticalLivingAdvice(numC);
       const advisorIcon = document.getElementById('advisorIcon');
       const advisorHeadline = document.getElementById('advisorHeadline');
       const advisorBadge = document.getElementById('advisorBadge');
-      const advisorClothing = document.getElementById('advisorClothing');
-      const advisorImpact = document.getElementById('advisorImpact');
       const advisorTip = document.getElementById('advisorTip');
 
-      if (advisorIcon) advisorIcon.textContent = advice.icon;
-      if (advisorHeadline) advisorHeadline.textContent = advice.headline;
-      if (advisorBadge) advisorBadge.textContent = advice.badge;
-      if (advisorClothing) advisorClothing.textContent = advice.clothing;
-      if (advisorImpact) advisorImpact.textContent = advice.impact;
-      if (advisorTip) advisorTip.textContent = advice.tip;
+      const matterChoc = document.getElementById('matterChoc');
+      const matterPhone = document.getElementById('matterPhone');
+      const matterWater = document.getElementById('matterWater');
+      const matterFood = document.getElementById('matterFood');
+
+      const advisorClothing = document.getElementById('advisorClothing');
+      const advisorImpact = document.getElementById('advisorImpact');
+
+      if (advisorIcon) advisorIcon.textContent = matter.icon;
+      if (advisorHeadline) advisorHeadline.textContent = matter.headline;
+      if (advisorBadge) advisorBadge.textContent = matter.badge;
+      if (advisorTip) advisorTip.textContent = matter.tip;
+
+      if (matterChoc && matter.chocolate) matterChoc.textContent = matter.chocolate;
+      if (matterPhone && matter.phone) matterPhone.textContent = matter.phone;
+      if (matterWater && matter.water) matterWater.textContent = matter.water;
+      if (matterFood && matter.food) matterFood.textContent = matter.food;
+
+      // Legacy fallback
+      if (advisorClothing && matter.clothing) advisorClothing.textContent = matter.clothing;
+      if (advisorImpact && matter.impact) advisorImpact.textContent = matter.impact;
 
       const advCard = document.querySelector('.practical-living-card');
       if (advCard) {
@@ -438,7 +451,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         advCard.classList.add('pulse-update');
       }
     } catch (e) {
-      console.warn('Practical living advice calculation notice:', e);
+      console.warn('Everyday matter scanner calculation notice:', e);
     }
 
     // 3. Dynamic Curiosity Trivia
