@@ -73,8 +73,8 @@ temperature-conversion-system/
 │   │   └── hud.css                   # Artisanal Milled Metal & Phosphor Styling
 │   └── js/
 │       ├── audio.js                  # Mechanical Relay & Analog Synthesizer
-│       ├── particles.js              # Kinetic Brownian Convection Engine
-│       ├── gauge.js                  # Spring-Physics Galvanometer & Liquid Tube
+│       ├── gauge.js                  # Damped Spring-Physics Comfort Tachometer
+│       ├── thermalContext.js         # Heat Intensity Engine & Thermal Curiosity
 │       ├── api.js                    # REST API Client with Offline Fallback
 │       └── app.js                    # Master Console Controller
 ├── server/                           # Express.js REST Backend
