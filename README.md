@@ -1,59 +1,54 @@
-# Temperature Conversion System
+# Quantum Thermal HUD • Temperature Conversion System
 
-A modern, high-precision scientific temperature conversion web application designed for students, researchers, and engineers. Built with standard web technologies (HTML5, CSS3, ES6+ JavaScript), this system delivers accurate bidirectional conversions across the three primary thermodynamic scales: **Celsius (°C)**, **Fahrenheit (°F)**, and **Kelvin (K)**, with strict enforcement of thermodynamic physical limits and stabilization against IEEE 754 floating-point drift.
-
----
-
-## ✨ Features
-
-- **High-Precision Conversion Engine:** Computes conversions across Celsius, Fahrenheit, and Kelvin with scalable decimal precision (2, 4, 6, 8 decimal places, or full raw precision) and IEEE 754 floating-point stabilization.
-- **Thermodynamic Limit Enforcement:** Enforces Absolute Zero physical boundaries ($-273.15^\circ\text{C}$, $-459.67^\circ\text{F}$, $0\text{ K}$) and prevents physically impossible temperature entries.
-- **Step-by-Step Mathematical Explanations:** Dynamically breaks down each calculation into human-readable intermediate mathematical steps for educational clarity.
-- **Thermal Milestone Indicators:** Real-time environmental feedback classifying entered temperatures (Absolute Zero, Freezing, Ambient/Room Temp, Human Body Temp, Boiling Point, Superheated).
-- **Session & LocalStorage History:** Logs conversion history with timestamps and status indicators, featuring automatic in-memory fallback for private/sandboxed browser environments.
-- **Interactive Utility Controls:** One-click scale inversion (swap), quick physical preset chips ($0^\circ\text{C}$, $100^\circ\text{C}$, $37^\circ\text{C}$, $0\text{ K}$), and clipboard copying.
-- **Zero External Dependencies:** Built entirely with vanilla client-side web technologies. Runs locally in any modern browser without build tools or package managers.
+A modern, high-precision scientific temperature conversion and thermal telemetry application built for students, researchers, and engineers. Engineered with a full-stack 3-tier architecture—combining a futuristic **Cyber-HUD** front-end, a modular **Express.js REST API**, and a high-performance **SQLite 3** relational database with Write-Ahead Logging (WAL mode).
 
 ---
 
-## 📐 Scientific Conversion Model
+## ✨ System Features
 
-The conversion engine utilizes canonical thermodynamic transformation models:
-
-| From Scale | To Scale | Mathematical Formulation |
-| :--- | :--- | :--- |
-| **Celsius** | **Fahrenheit** | $F = (C \times \frac{9}{5}) + 32$ |
-| **Fahrenheit** | **Celsius** | $C = (F - 32) \times \frac{5}{9}$ |
-| **Celsius** | **Kelvin** | $K = C + 273.15$ |
-| **Kelvin** | **Celsius** | $C = K - 273.15$ |
-| **Fahrenheit** | **Kelvin** | $K = (F - 32) \times \frac{5}{9} + 273.15$ |
-| **Kelvin** | **Fahrenheit** | $F = (K - 273.15) \times \frac{9}{5} + 32$ |
+- **8-Scale Scientific Engine:** Accurate transformations across all primary thermodynamic and historical scales:
+  - **Celsius (°C)**, **Fahrenheit (°F)**, **Kelvin (K)**
+  - **Rankine (°R)**, **Delisle (°De)**, **Newton (°N)**
+  - **Réaumur (°Ré)**, **Rømer (°Rø)**
+- **Thermodynamic Limit Enforcement:** Enforces Absolute Zero lower boundaries ($-273.15^\circ\text{C}$, $-459.67^\circ\text{F}$, $0\text{ K}$, $0^\circ\text{R}$) with physical validation checks.
+- **Kinetic Molecular Reactor (Canvas 2D):** A real-time molecular Brownian motion simulation that physically reacts to temperature: particles freeze into crystalline lattices at cryogenic temperatures and accelerate into high-energy plasma states at elevated temperatures.
+- **Holographic Radial Gauge:** Dynamic SVG dial displaying thermodynamic excitation levels and classified environmental thermal tiers (Absolute Zero, Cryogenic, Ambient, Biological, Boiling, Magma, Plasma).
+- **8-Scale Simultaneous Telemetry Radar:** Projects entered temperatures across all 8 scales simultaneously for side-by-side scientific comparison.
+- **Synthesized Sci-Fi Audio FX:** Generates holographic laser chirps, quantum swap chimes, and alert klaxons synthesized in real time via the **Web Audio API** (zero external audio files).
+- **Embedded SQLite 3 Database:** Logs conversions with temporal indexing, providing analytical telemetry, historical review, and one-click **CSV/JSON export**.
+- **Retro CRT Scanline Mode:** Optional retro-futuristic CRT filter for an authentic command-center dashboard experience.
 
 ---
 
-## 🏗️ Architecture & UML Models
+## 🏗️ Full-Stack 3-Tier Architecture
 
-The application implements a decoupled, client-side MVC-inspired architecture divided into distinct layers:
+The system implements a decoupled client-server-database architecture:
 
-1. **Presentation Layer:** Semantic HTML5 and responsive CSS3 UI with ARIA accessibility.
-2. **Business & Validation Logic:** 
-   - `InputValidator`: Multi-stage parsing, finite real number check, and thermodynamic lower-bound enforcement.
-   - `TemperatureConverter`: Direct transformation routines with scaled epsilon rounding.
-   - `FormulaExplainer`: Dynamic derivation and physical classification generation.
-3. **Persistence Layer:**
-   - `StorageManager`: Resilient local storage persistence with automatic quota detection and in-memory fallback.
+```
+┌────────────────────────────────────────────────────────┐
+│      PRESENTATION TIER: Futuristic Cyber-HUD UI        │
+│  HTML5 • CSS3 Glassmorphism • Canvas 2D • Web Audio    │
+└───────────────────────────┬────────────────────────────┘
+                            │ HTTP / JSON REST API
+┌───────────────────────────▼────────────────────────────┐
+│      APPLICATION SERVER TIER: Express.js REST API      │
+│  ConversionService (8 Scales) • ValidationService      │
+└───────────────────────────┬────────────────────────────┘
+                            │ Native Synchronous SQL & WAL
+┌───────────────────────────▼────────────────────────────┐
+│         PERSISTENCE TIER: Embedded SQLite 3 DB         │
+│  Indexed 'conversions' Table • Temporal Analytics      │
+└────────────────────────────────────────────────────────┘
+```
 
-### System Architecture
-![System Architecture](diagrams/system_architecture.png)
+### Full-Stack Architecture
+![Full-Stack Architecture](diagrams/milestone3_architecture.png)
 
-### Use Case Diagram
-![Use Case Diagram](diagrams/use_case_diagram.png)
+### Database Schema (SQLite 3)
+![Database Schema](diagrams/db_schema_er.png)
 
-### Class Diagram
-![Class Diagram](diagrams/class_diagram.png)
-
-### Sequence Diagram
-![Sequence Diagram](diagrams/sequence_diagram.png)
+### Live Cyber-HUD Command Deck
+![Live Cyber-HUD](diagrams/milestone3_live_hud.png)
 
 ---
 
@@ -61,65 +56,78 @@ The application implements a decoupled, client-side MVC-inspired architecture di
 
 ```
 temperature-conversion-system/
-├── diagrams/
-│   ├── use_case_diagram.png          # UML Use Case Diagram
-│   ├── class_diagram.png             # UML Class Diagram
-│   ├── sequence_diagram.png          # UML Sequence Diagram
-│   └── system_architecture.png       # Layered Architecture Diagram
-├── prototype/
-│   ├── index.html                    # Interactive Web Application UI
-│   ├── styles.css                    # Responsive Styling & Layout
-│   ├── converter.js                  # Core Modules (Validator, Converter, Storage)
-│   ├── tests.html                    # In-Browser Visual Unit Test Runner
-│   └── test_runner.js                # Command-Line Automated Unit Tests
-├── build_milestone_2_report.py       # Automated Report Generator Script
-├── generate_diagrams.py              # Matplotlib UML Generator Script
+├── client/                           # Futuristic Cyber-HUD Frontend
+│   ├── index.html                    # Quantum Command Deck Layout
+│   ├── css/
+│   │   └── hud.css                   # Glassmorphism & Cyberpunk Neon Styling
+│   └── js/
+│       ├── audio.js                  # Web Audio API Synthesizer
+│       ├── particles.js              # Kinetic Molecular Brownian Simulation
+│       ├── gauge.js                  # Holographic Radial SVG Gauge
+│       ├── api.js                    # REST API Client with Offline Fallback
+│       └── app.js                    # Master UI Controller
+├── server/                           # Express.js REST Backend
+│   ├── config/
+│   │   └── db.js                     # SQLite 3 Database & WAL Setup
+│   ├── services/
+│   │   ├── conversionService.js      # 8-Scale Scientific Engine
+│   │   ├── validationService.js      # Thermodynamic Limits Checker
+│   │   └── historyService.js         # Persistence & Export Logic
+│   ├── routes/
+│   │   └── api.js                    # REST Endpoints
+│   └── server.js                     # Server Entry Point
+├── diagrams/                         # Architectural & UML Diagrams
+├── tests/
+│   └── backend.test.js               # Automated Verification Suite (43 Tests)
+├── package.json                      # Node.js Dependencies & Scripts
 └── README.md                         # Project Documentation
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quickstart Guide
 
-### 1. Run the Web Application
-No installation or server setup is required:
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/B1tBr34k3r/temperature-conversion-system.git
-   ```
-2. Open `prototype/index.html` directly in your web browser (Chrome, Firefox, Safari, Edge).
+### Prerequisites
+- **Node.js** (v18.0 or newer recommended, v26.8+ tested)
+- **npm** (included with Node.js)
 
-### 2. Run Automated Verification Tests
+### 1. Installation
+Clone the repository and install dependencies:
+```bash
+git clone https://github.com/B1tBr34k3r/temperature-conversion-system.git
+cd temperature-conversion-system
+npm install
+```
 
-- **In the Browser:** Open `prototype/tests.html` to run interactive visual assertions.
-- **From Command Line (Node.js):**
-  ```bash
-  node prototype/test_runner.js
-  ```
+### 2. Launch the System
+Start the integrated server:
+```bash
+npm start
+```
+Open your browser and navigate to:
+```
+http://localhost:3000
+```
 
----
-
-## 🧪 Quality Assurance & Test Matrix
-
-The project includes an automated test suite comprising 30 assertions covering:
-- **Input Validation:** Rejection of empty strings, whitespace, malformed tokens, and non-numeric characters.
-- **Physical Boundary Enforcement:** Acceptance of exact Absolute Zero ($-273.15^\circ\text{C}$, $-459.67^\circ\text{F}$, $0\text{ K}$) and strict rejection of sub-Absolute Zero values.
-- **Scientific Reference Benchmarks:** Freezing points, boiling points, and intersection convergence ($-40^\circ\text{C} = -40^\circ\text{F}$).
-- **Round-Trip Symmetry:** Reversible mathematical transformations ($C \rightarrow F \rightarrow C$ and $C \rightarrow K \rightarrow C$) with zero precision loss ($\le 10^{-9}$).
-
----
-
-## 🗺️ Project Roadmap
-
-- [x] **Milestone 1:** Requirement Analysis & Architectural Design.
-- [x] **Milestone 2:** Core Module Implementation, Floating-Point Precision, Thermodynamic Validation & Prototyping.
-- [ ] **Milestone 3:** Advanced Modular Scales (Rankine, Delisle, Réaumur) & History Export (CSV/JSON).
-- [ ] **Milestone 4:** Data Visualization (Live Comparison Graphs & Canvas Charts).
-- [ ] **Milestone 5:** Progressive Web App (PWA) Offline Support & Production Packaging.
+### 3. Run Automated Tests
+Execute the automated test suite covering all 8 scales, thermodynamic bounds, and SQLite transactions:
+```bash
+npm test
+```
 
 ---
 
-## 👥 Authors
+## 🧪 Automated Verification Suite
+
+The system includes 43 automated unit and integration assertions:
+- **8-Scale Accuracy:** Freezing, boiling, and convergence benchmarks validated within $\le 10^{-4}$ tolerance.
+- **Thermodynamic Limits:** Absolute Zero lower boundaries verified across all scales.
+- **Syntactic Validation:** Rejection of empty strings, non-numeric tokens, and infinity values.
+- **Database Transactions:** Insertions, chronological queries, analytics, and VACUUM verified with zero data corruption.
+
+---
+
+## 👥 Authors & Credits
 
 - **Prakhar Harne**
 - **Naman Shrivastav**

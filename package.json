@@ -1,0 +1,26 @@
+{
+  "name": "sdms",
+  "version": "1.0.0",
+  "description": "A modern, high-precision scientific temperature conversion web application designed for students, researchers, and engineers. Built with standard web technologies (HTML5, CSS3, ES6+ JavaScript), this system delivers accurate bidirectional conversions across the three primary thermodynamic scales: **Celsius (°C)**, **Fahrenheit (°F)**, and **Kelvin (K)**, with strict enforcement of thermodynamic physical limits and stabilization against IEEE 754 floating-point drift.",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node tests/backend.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/B1tBr34k3r/temperature-conversion-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/B1tBr34k3r/temperature-conversion-system/issues"
+  },
+  "homepage": "https://github.com/B1tBr34k3r/temperature-conversion-system#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0"
+  }
+}
