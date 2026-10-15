@@ -403,12 +403,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (rulerToValue) rulerToValue.textContent = `${Number(toVal).toFixed(2)} ${getUnitSymbol(toScale)}`;
     if (rulerToMarker) rulerToMarker.style.left = `${bridge.toPct.toFixed(1)}%`;
 
-    // 2. Molecular Speedometer (v_rms)
-    const speed = window.ThermalDiscoveryEngine.getMolecularSpeed(celsius);
-    const molecularSpeedValue = document.getElementById('molecularSpeedValue');
-    const molecularSpeedKmh = document.getElementById('molecularSpeedKmh');
-    if (molecularSpeedValue) molecularSpeedValue.textContent = speed.mps;
-    if (molecularSpeedKmh) molecularSpeedKmh.textContent = speed.subLabel;
+    // 2. Heat Intensity Level (100% Temperature-Related)
+    const heat = window.ThermalDiscoveryEngine.getHeatIntensity(celsius);
+    const heatIntensityValue = document.getElementById('heatIntensityValue');
+    const heatIntensityUnit = document.getElementById('heatIntensityUnit');
+    const heatIntensitySub = document.getElementById('heatIntensitySub');
+    const heatIntensityDesc = document.getElementById('heatIntensityDesc');
+
+    if (heatIntensityValue) heatIntensityValue.textContent = heat.value;
+    if (heatIntensityUnit) heatIntensityUnit.textContent = heat.unit;
+    if (heatIntensitySub) heatIntensitySub.textContent = heat.sub;
+    if (heatIntensityDesc) heatIntensityDesc.textContent = heat.desc;
 
     // 3. Dynamic Curiosity Trivia
     const trivia = window.ThermalDiscoveryEngine.getCuriosityTrivia(celsius);

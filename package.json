@@ -1,7 +1,7 @@
 {
   "name": "thermacraft",
   "version": "1.0.0",
-  "description": "ThermaCraft • The Friendly Temperature Studio. A tactile, multi-scale temperature explorer, conversion bridge, and living comfort laboratory.",
+  "description": "ThermaCraft • Temperature Conversion System. A tactile multi-scale explorer, dual-scale conversion bridge, and living comfort laboratory.",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",

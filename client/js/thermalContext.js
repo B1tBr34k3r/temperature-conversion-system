@@ -1,7 +1,7 @@
 /**
- * Thermal Discovery & Molecular Kinetics Engine
- * Calculates real physical thermal kinetics and dynamic scientific trivia:
- * - Molecular kinetic velocity (v_rms of air molecules in m/s & km/h)
+ * Thermal Discovery & Heat Intensity Engine
+ * Calculates pure temperature-related physical metrics and dynamic scientific trivia:
+ * - Heat Intensity Level (Water scale percentage, boiling multiplier, and baseline distance)
  * - Dual-scale conversion ratio and zero-shift bridge
  * - Dynamic scientific & historical discovery trivia
  * Authors: Prakhar Harne & Naman Shrivastav
@@ -9,33 +9,48 @@
 
 class ThermalDiscoveryEngine {
   /**
-   * Calculate root-mean-square molecular velocity (v_rms) for atmospheric air (N2/O2 mix)
-   * Formula: v_rms = sqrt(3 * R * T / M) where M = 0.02897 kg/mol, R = 8.3145 J/(mol*K)
+   * Calculate pure temperature-related Heat Intensity Level
+   * Measures thermal energy relative to water's 0°C freezing and 100°C boiling thresholds
    */
-  static getMolecularSpeed(celsius) {
+  static getHeatIntensity(celsius) {
     const kelvin = Math.max(0, celsius + 273.15);
-    if (kelvin === 0) {
-      return {
-        mps: 0,
-        kmh: 0,
-        mach: '0.0',
-        label: '0 m/s',
-        subLabel: 'Absolute zero (molecular motion ceases)'
-      };
+    let value = '';
+    let unit = '';
+    let sub = '';
+    let desc = '';
+
+    if (celsius <= -273.15) {
+      value = '0 K';
+      unit = 'ABSOLUTE ZERO';
+      sub = '0 K thermodynamic ground state';
+      desc = 'The absolute physical floor of the universe: thermal atomic motion is completely absent.';
+    } else if (celsius < 0) {
+      value = `${Math.abs(celsius).toFixed(1)}°`;
+      unit = 'BELOW FREEZE';
+      sub = `▼ ${Math.abs(celsius).toFixed(1)}°C below 0°C freezing`;
+      desc = `Sub-zero solid ice range: ${kelvin.toFixed(1)} K total thermal energy above absolute zero.`;
+    } else if (celsius === 0) {
+      value = '0%';
+      unit = 'FREEZING LINE';
+      sub = 'Exact ice melting equilibrium';
+      desc = 'Fundamental thermodynamic boundary between liquid water and solid ice (273.15 K).';
+    } else if (celsius <= 100) {
+      const pct = Math.round(celsius);
+      const toBoil = (100 - celsius).toFixed(1);
+      value = `${pct}%`;
+      unit = celsius === 100 ? 'BOILING REACHED' : 'OF BOILING';
+      sub = celsius === 100 ? 'Vigorous steam phase transition' : `▲ +${celsius.toFixed(1)}°C above 0°C (${toBoil}°C to boil)`;
+      desc = `Thermal intensity on the 0°C to 100°C water scale • ${kelvin.toFixed(1)} K absolute thermal energy.`;
+    } else {
+      const mult = (celsius / 100).toFixed(1);
+      const pastBoil = (celsius - 100).toFixed(1);
+      value = `${mult}×`;
+      unit = 'BOILING POINT';
+      sub = `▲ +${pastBoil}°C past water vaporization`;
+      desc = `Superheated thermal intensity: ${mult} times water boiling temperature • ${kelvin.toFixed(1)} K energy.`;
     }
 
-    // 3 * 8.3145 / 0.02897 = ~861.01
-    const vMps = Math.sqrt(861.01 * kelvin);
-    const vKmh = vMps * 3.6;
-    const mach = (vMps / 343).toFixed(1);
-
-    return {
-      mps: Math.round(vMps),
-      kmh: Math.round(vKmh).toLocaleString(),
-      mach: mach,
-      label: `${Math.round(vMps)} m/s`,
-      subLabel: `~${Math.round(vKmh).toLocaleString()} km/h (Mach ${mach})`
-    };
+    return { value, unit, sub, desc };
   }
 
   /**

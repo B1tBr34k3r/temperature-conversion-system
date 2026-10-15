@@ -1,6 +1,6 @@
-# ThermaCraft • The Friendly Temperature Studio
+# ThermaCraft • Temperature Conversion System
 
-A warm, friendly, and tactile scientific temperature studio designed for students, educators, and curious minds. Built with an approachable **analog-digital instrument aesthetic**—combining a physical bench-studio interface, an **Express.js REST API**, an embedded **SQLite 3** relational database engine operating with Write-Ahead Logging (WAL mode), and a **100% standalone zero-dependency mode for GitHub Pages**.
+A high-precision, tactile scientific temperature conversion studio designed for students, educators, and curious minds. Built with an approachable **analog-digital instrument aesthetic**—combining a physical bench-studio interface, an **Express.js REST API**, an embedded **SQLite 3** relational database engine operating with Write-Ahead Logging (WAL mode), and a **100% standalone zero-dependency mode for GitHub Pages**.
 
 🔗 **Live Public Web Application:** [https://b1tbr34k3r.github.io/temperature-conversion-system/](https://b1tbr34k3r.github.io/temperature-conversion-system/)
 
@@ -8,10 +8,10 @@ A warm, friendly, and tactile scientific temperature studio designed for student
 
 ## ✨ Studio Features & Human-Centric Design
 
-- **Dual-Scale Conversion Bridge & Molecular Kinetics (Zero Redundancy):**
+- **Dual-Scale Conversion Bridge & Heat Intensity (Zero Redundancy):**
   - **Dual-Scale Alignment Ruler:** A synchronized side-by-side visual ruler that graphically maps input magnitude to the target scale with live animated pips, exact scale ratio multipliers (e.g. $1^\circ\text{C} = 1.8000^\circ\text{F}$), and baseline shift chips ($+32^\circ\text{F}$).
-  - **Molecular Velocity Speedometer ($v_{rms}$):** Computes the true physical root-mean-square kinetic velocity of atmospheric nitrogen & oxygen molecules at any temperature—revealing that room-temperature air molecules are zooming at over $1,800\text{ km/h}$ ($512\text{ m/s}$)!
-  - **Dynamic Thermal Curiosity Flashcards:** Temperature-triggered scientific and historical gems: from the reason water boils at just $68^\circ\text{C}$ on Mount Everest, to Anders Celsius's original inverted 1742 scale, to the Maillard reaction that browns pizza crusts.
+  - **Heat Intensity Level Meter:** A purely temperature-based metric measuring thermal position relative to water's fundamental phase transitions ($0^\circ\text{C}$ freezing to $100^\circ\text{C}$ boiling)—displaying exact boiling percentages (e.g., $22\%$ at room temp, $85\%$ in hot coffee), superheated boiling multipliers ($2.0\times$ in pizza ovens), and absolute Kelvin thermal energy.
+  - **Dynamic Thermal Curiosity Flashcards:** Temperature-triggered scientific and historical gems: from why water boils at just $68^\circ\text{C}$ on Mount Everest, to Anders Celsius's original inverted 1742 scale, to the Maillard reaction that browns baked goods.
 
 - **Living Comfort & Everyday Relatability:**
   - **Living Comfort Gauge:** Damped spring-physics analog needle dynamically sweeps across intuitive everyday comfort zones: Freezing ($< 0^\circ\text{C}$), Living Comfort ($15\text{--}26^\circ\text{C}$), Summer Heat ($27\text{--}50^\circ\text{C}$), and Scalding/Boiling ($> 50^\circ\text{C}$).
