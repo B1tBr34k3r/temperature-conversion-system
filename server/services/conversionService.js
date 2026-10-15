@@ -185,22 +185,31 @@ class ConversionService {
       return { label: 'Dry Ice Sublimation Point (-78.5°C)', tier: 'sub-zero', icon: '❄️', color: '#06b6d4' };
     }
     if (celsiusValue < 0) {
-      return { label: 'Sub-Zero Freezing', tier: 'freeze', icon: '❄️💧', color: '#22d3ee' };
+      return { label: 'Sub-Zero Freezing (<0°C)', tier: 'freeze', icon: '❄️💧', color: '#22d3ee' };
     }
     if (celsiusValue === 0) {
       return { label: 'Water Freezing Point (0°C / 32°F)', tier: 'equilibrium', icon: '🧊', color: '#10b981' };
     }
-    if (celsiusValue > 0 && celsiusValue < 20) {
-      return { label: 'Cool / Chilly Ambient', tier: 'ambient-cool', icon: '🧥', color: '#14b8a6' };
+    if (celsiusValue > 0 && celsiusValue < 18) {
+      return { label: 'Cool / Chilly Ambient (0–18°C)', tier: 'ambient-cool', icon: '🧥', color: '#14b8a6' };
     }
-    if (celsiusValue >= 20 && celsiusValue <= 25) {
-      return { label: 'Standard Room Temperature (20–25°C)', tier: 'ambient', icon: '🛋️', color: '#10b981' };
+    if (celsiusValue >= 18 && celsiusValue <= 26) {
+      return { label: 'Comfort Living Zone (18–26°C)', tier: 'ambient', icon: '🛋️', color: '#10b981' };
     }
-    if (celsiusValue >= 36.5 && celsiusValue <= 37.5) {
-      return { label: 'Human Body Temperature (~37°C)', tier: 'bio-heat', icon: '🏃', color: '#f59e0b' };
+    if (celsiusValue > 26 && celsiusValue < 36.5) {
+      return { label: 'Warm Summer Weather (26–36°C)', tier: 'warm', icon: '☀️', color: '#f59e0b' };
     }
-    if (celsiusValue >= 100 && celsiusValue < 500) {
-      return { label: 'Water Boiling Point / Steam (≥100°C)', tier: 'thermal-high', icon: '🔥💨', color: '#f97316' };
+    if (celsiusValue >= 36.5 && celsiusValue <= 38.5) {
+      return { label: 'Human Body Temperature (~37°C)', tier: 'bio-heat', icon: '🏃', color: '#f97316' };
+    }
+    if (celsiusValue > 38.5 && celsiusValue < 100) {
+      return { label: 'Hot Domestic Water & Beverages (39–99°C)', tier: 'hot-drink', icon: '☕🚿', color: '#f97316' };
+    }
+    if (celsiusValue >= 100 && celsiusValue <= 105) {
+      return { label: 'Water Boiling Point / Steam (100°C)', tier: 'thermal-high', icon: '🫖🔥', color: '#ef4444' };
+    }
+    if (celsiusValue > 105 && celsiusValue < 500) {
+      return { label: 'Baking & Industrial Heat (105–500°C)', tier: 'thermal-high', icon: '🍕🔥', color: '#ef4444' };
     }
     if (celsiusValue >= 500 && celsiusValue < 5500) {
       return { label: 'Incandescent Heat / Molten Metal', tier: 'magma', icon: '🌋', color: '#ef4444' };

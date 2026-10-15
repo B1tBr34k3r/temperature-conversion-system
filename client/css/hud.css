@@ -903,6 +903,21 @@ body.theme-boil .thermal-aura {
   margin-top: 0.1rem;
 }
 
+.practical-living-card.pulse-update {
+  animation: card-flash 0.35s ease-out;
+}
+
+@keyframes card-flash {
+  0% {
+    border-color: #38bdf8;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+  }
+  100% {
+    border-color: #1e2636;
+    box-shadow: none;
+  }
+}
+
 .dc-badge {
   font-family: var(--font-mono);
   font-size: 0.58rem;

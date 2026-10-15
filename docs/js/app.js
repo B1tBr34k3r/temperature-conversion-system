@@ -64,16 +64,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // --- Event Listeners ---
 
-  // Live input debounce
+  // Live input handler with ultra-fast 40ms debounce
   let debounceTimer;
-  tempInput.addEventListener('input', () => {
+  function handleInputLive() {
     const val = parseFloat(tempInput.value);
     if (!isNaN(val)) {
       tempSlider.value = Math.max(-273.15, Math.min(500, val));
       scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
     }
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => executeConversion(false), 160);
+    debounceTimer = setTimeout(() => executeConversion(false), 40);
+  }
+
+  tempInput.addEventListener('input', handleInputLive);
+  tempInput.addEventListener('change', handleInputLive);
+  tempInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+      clearTimeout(debounceTimer);
+      executeConversion(true);
+    } else {
+      handleInputLive();
+    }
   });
 
   // Step Up / Down Buttons
@@ -98,12 +109,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // Continuous Scrubber Slider
-  tempSlider.addEventListener('input', () => {
+  function handleSliderLive() {
     tempInput.value = tempSlider.value;
     scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
     window.instrumentAudio.playSliderTick();
     executeConversion(false);
-  });
+  }
+  tempSlider.addEventListener('input', handleSliderLive);
+  tempSlider.addEventListener('change', handleSliderLive);
 
   // Scale dropdown changes
   fromScale.addEventListener('change', () => {
@@ -375,48 +388,69 @@ document.addEventListener('DOMContentLoaded', async () => {
   function updateThermalDiscovery(celsius, fromScale, toScale, fromVal, toVal) {
     if (!window.ThermalDiscoveryEngine) return;
 
-    // 1. Dual-Scale Ruler & Ratio Bridge
-    const bridge = window.ThermalDiscoveryEngine.getBridgeMetadata(fromScale, toScale, fromVal, toVal);
-    const bridgeRatioTag = document.getElementById('bridgeRatioTag');
-    const bridgeFormulaChip = document.getElementById('bridgeFormulaChip');
-    const rulerFromLabel = document.getElementById('rulerFromLabel');
-    const rulerFromValue = document.getElementById('rulerFromValue');
-    const rulerFromMarker = document.getElementById('rulerFromMarker');
-    const rulerToLabel = document.getElementById('rulerToLabel');
-    const rulerToValue = document.getElementById('rulerToValue');
-    const rulerToMarker = document.getElementById('rulerToMarker');
+    const numC = typeof celsius === 'number' ? (isNaN(celsius) ? 0 : celsius) : (parseFloat(celsius) || 0);
 
-    if (bridgeRatioTag) bridgeRatioTag.textContent = bridge.ratioText;
-    if (bridgeFormulaChip) bridgeFormulaChip.textContent = bridge.formulaChip;
-    if (rulerFromLabel) rulerFromLabel.textContent = `FROM (${getUnitSymbol(fromScale)})`;
-    if (rulerFromValue) rulerFromValue.textContent = `${Number(fromVal).toFixed(2)} ${getUnitSymbol(fromScale)}`;
-    if (rulerFromMarker) rulerFromMarker.style.left = `${bridge.fromPct.toFixed(1)}%`;
-    if (rulerToLabel) rulerToLabel.textContent = `TO (${getUnitSymbol(toScale)})`;
-    if (rulerToValue) rulerToValue.textContent = `${Number(toVal).toFixed(2)} ${getUnitSymbol(toScale)}`;
-    if (rulerToMarker) rulerToMarker.style.left = `${bridge.toPct.toFixed(1)}%`;
+    // 1. Dual-Scale Ruler & Ratio Bridge
+    try {
+      const bridge = window.ThermalDiscoveryEngine.getBridgeMetadata(fromScale, toScale, fromVal, toVal);
+      const bridgeRatioTag = document.getElementById('bridgeRatioTag');
+      const bridgeFormulaChip = document.getElementById('bridgeFormulaChip');
+      const rulerFromLabel = document.getElementById('rulerFromLabel');
+      const rulerFromValue = document.getElementById('rulerFromValue');
+      const rulerFromMarker = document.getElementById('rulerFromMarker');
+      const rulerToLabel = document.getElementById('rulerToLabel');
+      const rulerToValue = document.getElementById('rulerToValue');
+      const rulerToMarker = document.getElementById('rulerToMarker');
+
+      if (bridgeRatioTag) bridgeRatioTag.textContent = bridge.ratioText;
+      if (bridgeFormulaChip) bridgeFormulaChip.textContent = bridge.formulaChip;
+      if (rulerFromLabel) rulerFromLabel.textContent = `FROM (${getUnitSymbol(fromScale)})`;
+      if (rulerFromValue) rulerFromValue.textContent = `${Number(fromVal).toFixed(2)} ${getUnitSymbol(fromScale)}`;
+      if (rulerFromMarker) rulerFromMarker.style.left = `${bridge.fromPct.toFixed(1)}%`;
+      if (rulerToLabel) rulerToLabel.textContent = `TO (${getUnitSymbol(toScale)})`;
+      if (rulerToValue) rulerToValue.textContent = `${Number(toVal).toFixed(2)} ${getUnitSymbol(toScale)}`;
+      if (rulerToMarker) rulerToMarker.style.left = `${bridge.toPct.toFixed(1)}%`;
+    } catch (e) {
+      console.warn('Bridge metadata calculation notice:', e);
+    }
 
     // 2. Practical Living & Everyday Comfort Advisor
-    const advice = window.ThermalDiscoveryEngine.getPracticalLivingAdvice(celsius);
-    const advisorIcon = document.getElementById('advisorIcon');
-    const advisorHeadline = document.getElementById('advisorHeadline');
-    const advisorBadge = document.getElementById('advisorBadge');
-    const advisorClothing = document.getElementById('advisorClothing');
-    const advisorImpact = document.getElementById('advisorImpact');
-    const advisorTip = document.getElementById('advisorTip');
+    try {
+      const advice = window.ThermalDiscoveryEngine.getPracticalLivingAdvice(numC);
+      const advisorIcon = document.getElementById('advisorIcon');
+      const advisorHeadline = document.getElementById('advisorHeadline');
+      const advisorBadge = document.getElementById('advisorBadge');
+      const advisorClothing = document.getElementById('advisorClothing');
+      const advisorImpact = document.getElementById('advisorImpact');
+      const advisorTip = document.getElementById('advisorTip');
 
-    if (advisorIcon) advisorIcon.textContent = advice.icon;
-    if (advisorHeadline) advisorHeadline.textContent = advice.headline;
-    if (advisorBadge) advisorBadge.textContent = advice.badge;
-    if (advisorClothing) advisorClothing.textContent = advice.clothing;
-    if (advisorImpact) advisorImpact.textContent = advice.impact;
-    if (advisorTip) advisorTip.textContent = advice.tip;
+      if (advisorIcon) advisorIcon.textContent = advice.icon;
+      if (advisorHeadline) advisorHeadline.textContent = advice.headline;
+      if (advisorBadge) advisorBadge.textContent = advice.badge;
+      if (advisorClothing) advisorClothing.textContent = advice.clothing;
+      if (advisorImpact) advisorImpact.textContent = advice.impact;
+      if (advisorTip) advisorTip.textContent = advice.tip;
+
+      const advCard = document.querySelector('.practical-living-card');
+      if (advCard) {
+        advCard.classList.remove('pulse-update');
+        void advCard.offsetWidth; // trigger reflow
+        advCard.classList.add('pulse-update');
+      }
+    } catch (e) {
+      console.warn('Practical living advice calculation notice:', e);
+    }
 
     // 3. Dynamic Curiosity Trivia
-    const trivia = window.ThermalDiscoveryEngine.getCuriosityTrivia(celsius);
-    const triviaContent = document.getElementById('triviaContent');
-    const triviaTag = document.getElementById('triviaTag');
-    if (triviaContent) triviaContent.textContent = trivia.text;
-    if (triviaTag) triviaTag.textContent = trivia.tag;
+    try {
+      const trivia = window.ThermalDiscoveryEngine.getCuriosityTrivia(numC);
+      const triviaContent = document.getElementById('triviaContent');
+      const triviaTag = document.getElementById('triviaTag');
+      if (triviaContent) triviaContent.textContent = trivia.text;
+      if (triviaTag) triviaTag.textContent = trivia.tag;
+    } catch (e) {
+      console.warn('Curiosity trivia calculation notice:', e);
+    }
   }
 
   function renderDerivation(derivation) {

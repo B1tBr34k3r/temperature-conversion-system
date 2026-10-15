@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ThermaCraft Thumbnail</title>
+  <title>ThermaCraft Workstation Thumbnail</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Cabinet+Grotesk:wght@800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&family=Cabinet+Grotesk:wght@800;900&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -15,68 +15,77 @@
     body {
       width: 1280px;
       height: 720px;
-      background: radial-gradient(circle at 20% 30%, #172133 0%, #0a0d14 60%, #05070a 100%);
+      background: radial-gradient(circle at 18% 25%, #131b29 0%, #090c14 65%, #040609 100%);
       font-family: 'Space Grotesk', -apple-system, sans-serif;
       color: #f1f5f9;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 3.5rem 4.5rem;
+      padding: 3rem 4rem;
       position: relative;
       overflow: hidden;
     }
-    /* Ambient Neon Glow Blobs */
+
+    /* Ambient Glow Spots */
     .glow-amber {
       position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
-      top: -150px;
-      right: -100px;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.16) 0%, transparent 68%);
+      top: -160px;
+      right: -80px;
       pointer-events: none;
     }
     .glow-cyan {
       position: absolute;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
-      bottom: -150px;
-      left: 100px;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.13) 0%, transparent 70%);
+      bottom: -160px;
+      left: 60px;
       pointer-events: none;
     }
-    /* Grid Mesh Overlay */
+
+    /* Precision Blueprint Grid */
     .grid-mesh {
       position: absolute;
       inset: 0;
       background-image: 
-        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 36px 36px;
       pointer-events: none;
     }
 
-    /* Left Brand Content */
+    /* LEFT BRAND COLUMN */
     .brand-col {
-      max-width: 540px;
+      width: 510px;
       z-index: 2;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.15rem;
     }
     .badge-pill {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 0.4rem 0.9rem;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 0.4rem 0.95rem;
       border-radius: 9999px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: #38bdf8;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       width: fit-content;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
     }
     .insignia-title-row {
       display: flex;
@@ -84,30 +93,30 @@
       gap: 1.25rem;
     }
     .insignia {
-      width: 64px;
-      height: 64px;
+      width: 66px;
+      height: 66px;
       background: linear-gradient(135deg, #f59e0b, #d97706);
-      border-radius: 14px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 900;
       color: #0b0f19;
-      box-shadow: 0 0 35px rgba(245, 158, 11, 0.4);
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.45);
     }
     h1.title {
-      font-size: 4rem;
+      font-size: 4.1rem;
       font-weight: 900;
       letter-spacing: -0.04em;
-      background: linear-gradient(180deg, #ffffff 20%, #cbd5e1 100%);
+      background: linear-gradient(180deg, #ffffff 30%, #cbd5e1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1;
     }
     p.tagline {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       color: #94a3b8;
       line-height: 1.5;
       font-weight: 500;
@@ -115,52 +124,60 @@
     .pills-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
-      margin-top: 0.5rem;
+      gap: 0.55rem;
+      margin-top: 0.35rem;
     }
     .pill {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
-      padding: 0.4rem 0.8rem;
+      padding: 0.42rem 0.85rem;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.8rem;
       font-weight: 600;
       color: #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
     }
     .meta-sub {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #64748b;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
+      line-height: 1.4;
     }
 
-    /* Right Preview Window */
-    .preview-col {
+    /* RIGHT WORKSTATION CONSOLE COLUMN */
+    .console-col {
+      width: 630px;
       z-index: 2;
-      width: 580px;
-      height: 480px;
-      position: relative;
-    }
-    .mockup-window {
-      width: 100%;
-      height: 100%;
-      background: #0f141f;
-      border: 1.5px solid rgba(56, 189, 248, 0.3);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 40px rgba(56, 189, 248, 0.15);
-      position: relative;
       display: flex;
       flex-direction: column;
     }
-    .window-header {
-      background: #151b28;
+    .workstation-frame {
+      background: #0d121c;
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 18px;
+      box-shadow: 0 25px 65px -15px rgba(0, 0, 0, 0.9), 0 0 45px rgba(56, 189, 248, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Ribbon */
+    .frame-header {
+      background: #141b27;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0.75rem 1.2rem;
+      padding: 0.8rem 1.25rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
+    }
+    .frame-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
     }
     .dot {
       width: 10px;
@@ -170,17 +187,263 @@
     .dot-red { background: #ef4444; }
     .dot-yellow { background: #f59e0b; }
     .dot-green { background: #10b981; }
-    .window-title {
+    .frame-title {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: #8da2be;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.04em;
       margin-left: 0.5rem;
     }
-    .mockup-img {
-      width: 100%;
-      height: calc(100% - 36px);
-      object-fit: cover;
-      object-position: top center;
+    .status-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .badge-dot-green {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+    }
+
+    /* Frame Body */
+    .frame-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    /* 1. Grand Luminescent Digital Screen */
+    .screen-block {
+      background: radial-gradient(circle at 50% 30%, #0d1e15 0%, #07110c 70%, #040907 100%);
+      border: 1.5px solid rgba(16, 185, 129, 0.4);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      box-shadow: inset 0 0 25px rgba(16, 185, 129, 0.15), 0 0 20px rgba(16, 185, 129, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: relative;
+    }
+    .screen-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #6ee7b7;
+      letter-spacing: 0.04em;
+    }
+    .vector-tag {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .screen-primary {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+    .phosphor-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: #34d399;
+      text-shadow: 0 0 25px rgba(52, 211, 153, 0.65);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .phosphor-unit {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f59e0b;
+      text-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+    }
+    .screen-bot-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #a7f3d0;
+    }
+    .formula-tag {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+
+    /* 2. Dual-Scale Conversion Bridge */
+    .bridge-block {
+      background: #111724;
+      border: 1px solid #1e283b;
+      border-radius: 12px;
+      padding: 0.9rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .bridge-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bridge-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.05em;
+    }
+    .ratio-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+    }
+    .ruler-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .ruler-scale {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      width: 75px;
+    }
+    .ruler-track {
+      flex: 1;
+      height: 12px;
+      background: #192233;
+      border: 1px solid #2d3b52;
+      border-radius: 6px;
+      position: relative;
+    }
+    .ruler-pip {
+      position: absolute;
+      top: -3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #38bdf8;
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 0 10px #38bdf8;
+      transform: translateX(-50%);
+    }
+    .ruler-pip.target {
+      background: #f59e0b;
+      box-shadow: 0 0 10px #f59e0b;
+    }
+    .ruler-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      width: 85px;
+      text-align: right;
+    }
+
+    /* 3. Advisor & Scale Badges Row */
+    .bot-deck {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 0.75rem;
+    }
+    .advisor-mini-card {
+      background: #111724;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 10px;
+      padding: 0.75rem 0.95rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .adv-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .adv-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      margin-left: auto;
+    }
+    .adv-headline {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #f1f5f9;
+    }
+    .adv-tip {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    .scales-card {
+      background: #111724;
+      border: 1px solid #1e283b;
+      border-radius: 10px;
+      padding: 0.75rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .scales-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.05em;
+    }
+    .scales-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .scale-chip {
+      background: #1a2336;
+      border: 1px solid #2d3b52;
+      border-radius: 4px;
+      padding: 0.15rem 0.45rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+    .scale-chip.primary {
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.1);
     }
   </style>
 </head>
@@ -189,10 +452,10 @@
   <div class="glow-cyan"></div>
   <div class="grid-mesh"></div>
 
-  <!-- Left Column -->
+  <!-- Left Branding & Identity Column -->
   <div class="brand-col">
     <div class="badge-pill">
-      <span>●</span> SCIENTIFIC TEMPERATURE WORKSTATION
+      <span class="badge-dot"></span> SCIENTIFIC TEMPERATURE WORKSTATION
     </div>
 
     <div class="insignia-title-row">
@@ -201,32 +464,113 @@
     </div>
 
     <p class="tagline">
-      High-precision multi-scale temperature explorer, dual-scale conversion bridge, and tactile living comfort workstation.
+      Tactile multi-scale temperature explorer, dual-scale conversion bridge, and living comfort laboratory workstation.
     </p>
 
     <div class="pills-grid">
       <div class="pill">🌡️ 8 Thermodynamic Scales</div>
       <div class="pill">🌉 Dual-Scale Bridge</div>
       <div class="pill">🛋️ Practical Living Advisor</div>
-      <div class="pill">💾 SQLite 3 Engine</div>
+      <div class="pill">💾 SQLite Telemetry Repository</div>
       <div class="pill">🔊 Web Audio Haptics</div>
     </div>
 
     <div class="meta-sub">
-      64-Bit Double Precision Telemetry • 100% Zero-Dependency Web Architecture
+      IEEE 754 64-Bit Double Precision • 100% Zero-Dependency Standalone & REST Architecture
     </div>
   </div>
 
-  <!-- Right Mockup Column -->
-  <div class="preview-col">
-    <div class="mockup-window">
-      <div class="window-header">
-        <div class="dot dot-red"></div>
-        <div class="dot dot-yellow"></div>
-        <div class="dot dot-green"></div>
-        <span class="window-title">thermacraft.app • Temperature Studio</span>
+  <!-- Right Workstation Console Column (Clean, Uncropped, High-Tech) -->
+  <div class="console-col">
+    <div class="workstation-frame">
+      
+      <!-- Top Window Bar -->
+      <div class="frame-header">
+        <div class="frame-header-left">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+          <span class="frame-title">THERMACRAFT TC-800 LAB CONSOLE</span>
+        </div>
+        <div class="status-badge">
+          <span class="badge-dot-green"></span> SQLITE ENGINE ACTIVE
+        </div>
       </div>
-      <img src="github_pages_live.png" class="mockup-img" alt="ThermaCraft Console">
+
+      <!-- Frame Body Showcase -->
+      <div class="frame-body">
+        
+        <!-- 1. Luminescent CRT Emission Screen -->
+        <div class="screen-block">
+          <div class="screen-top-meta">
+            <span>INPUT: 100.00 °C (WATER BOILING POINT)</span>
+            <span class="vector-tag">°C ➔ °F VECTOR</span>
+          </div>
+
+          <div class="screen-primary">
+            <span class="phosphor-num">212.0000</span>
+            <span class="phosphor-unit">°F</span>
+          </div>
+
+          <div class="screen-bot-meta">
+            <span>64-BIT IEEE-754 DOUBLE PRECISION</span>
+            <span class="formula-tag">°F = (°C × 1.8) + 32</span>
+          </div>
+        </div>
+
+        <!-- 2. Dual-Scale Alignment Ruler & Ratio Bridge -->
+        <div class="bridge-block">
+          <div class="bridge-head">
+            <span class="bridge-label">DUAL-SCALE CONVERSION BRIDGE</span>
+            <span class="ratio-badge">1°C = 1.8000°F (9/5 RATIO)</span>
+          </div>
+
+          <div class="ruler-row">
+            <span class="ruler-scale">FROM (°C)</span>
+            <div class="ruler-track">
+              <div class="ruler-pip" style="left: 55%;"></div>
+            </div>
+            <span class="ruler-val">100.00 °C</span>
+          </div>
+
+          <div class="ruler-row">
+            <span class="ruler-scale">TO (°F)</span>
+            <div class="ruler-track">
+              <div class="ruler-pip target" style="left: 70%;"></div>
+            </div>
+            <span class="ruler-val">212.00 °F</span>
+          </div>
+        </div>
+
+        <!-- 3. Advisor & Scales Bottom Deck -->
+        <div class="bot-deck">
+          <div class="advisor-mini-card">
+            <div class="adv-title-row">
+              <span style="font-size: 1rem;">🫖</span>
+              <span class="adv-headline">Practical Living Advisor</span>
+              <span class="adv-badge">BOILING POINT</span>
+            </div>
+            <div class="adv-tip">
+              Active rolling boil at sea level. Use silicone mitts; ideal for pasta, tea & sterilization.
+            </div>
+          </div>
+
+          <div class="scales-card">
+            <span class="scales-title">SUPPORTED SCALES</span>
+            <div class="scales-chips">
+              <span class="scale-chip primary">°C</span>
+              <span class="scale-chip primary">°F</span>
+              <span class="scale-chip primary">K</span>
+              <span class="scale-chip">°R</span>
+              <span class="scale-chip">°De</span>
+              <span class="scale-chip">°N</span>
+              <span class="scale-chip">°Ré</span>
+              <span class="scale-chip">°Rø</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </body>

@@ -14,133 +14,145 @@ class ThermalDiscoveryEngine {
    * What it feels like, recommended clothing/safety, and practical everyday tips.
    */
   static getPracticalLivingAdvice(celsius) {
-    if (celsius <= -40) {
+    const c = typeof celsius === 'number' ? (isNaN(celsius) ? 0 : celsius) : (parseFloat(celsius) || 0);
+
+    if (c <= -40) {
       return {
         icon: '🥶',
         headline: 'Extreme Sub-Zero Freeze',
         badge: 'DANGEROUS FROSTBITE',
         clothing: '🧥 Heavy Arctic parka, snow boots, thermal balaclava & mittens',
-        impact: `At ${celsius.toFixed(1)}°C, bare skin suffers frostbite within 5 minutes. Car batteries fail and tires stiffen.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), bare skin suffers frostbite within 5 minutes. Car batteries fail and tires stiffen.`,
         tip: '💡 Never touch bare metal outdoors; always carry insulated emergency blankets.'
       };
     }
-    if (celsius <= -10) {
+    if (c <= -10) {
       return {
         icon: '❄️',
         headline: 'Deep Sub-Zero Winter',
         badge: 'FREEZING COLD',
         clothing: '🧤 Thick winter coat, fleece layers, thermal socks, beanie & gloves',
-        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), breath fogs heavily; ice and snow stay rock-hard without melting.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), breath fogs heavily; ice and snow stay rock-hard without melting.`,
         tip: '💡 Standard home food freezers operate at -18°C (0°F) to preserve groceries for months.'
       };
     }
-    if (celsius < 0) {
+    if (c < 0) {
       return {
         icon: '🧊',
         headline: 'Freezing Winter Weather',
         badge: 'ICE HAZARD',
         clothing: '🧥 Winter jacket, warm sweater, scarf & insulated footwear',
-        impact: `At ${celsius.toFixed(1)}°C, rain turns to sleet and puddles freeze into slippery black ice on roads.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), rain turns to sleet and puddles freeze into slippery black ice on roads.`,
         tip: '💡 Spread rock salt on walkways to melt ice, and protect outdoor garden plants from frost.'
       };
     }
-    if (celsius === 0) {
+    if (Math.abs(c) < 0.05) {
       return {
         icon: '🧊',
         headline: 'Water Freezing Point',
         badge: '0°C FREEZE POINT',
         clothing: '🧤 Warm winter coat, trousers, and insulated gloves',
-        impact: 'The exact freezing threshold where liquid water crystallizes into solid ice (32°F).',
+        impact: 'The exact freezing threshold where liquid water crystallizes into solid ice (32°F / 273.15 K).',
         tip: '💡 Water pipes can freeze and burst; leave faucets dripping slightly during freeze warnings.'
       };
     }
-    if (celsius <= 14) {
+    if (c <= 14) {
       return {
         icon: '🍂',
         headline: 'Chilly Autumn / Spring Day',
         badge: 'BRISK & COOL',
         clothing: '🧥 Light jacket, hoodie, warm knit sweater, or windbreaker',
-        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), crisp outdoor air feels refreshing for walking or jogging, but chilly if sitting.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), crisp outdoor air feels refreshing for walking or jogging, but chilly if sitting.`,
         tip: '💡 Natural food pantries and cellars maintain ~10°C–12°C to naturally preserve produce and wine.'
       };
     }
-    if (celsius <= 25) {
+    if (c <= 25) {
       return {
         icon: '🛋️',
         headline: 'Comfortable Living Room',
         badge: 'OPTIMAL COMFORT',
         clothing: '👕 T-shirt, jeans, light comfortable indoor clothing',
-        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), this is the golden comfort zone for human focus, studying, and restful sleep.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), this is the golden comfort zone for human focus, studying, and restful sleep.`,
         tip: '💡 Keep home thermostats set around 21°C–23°C (70°F–73°F) for maximum comfort and energy efficiency.'
       };
     }
-    if (celsius <= 32) {
+    if (c <= 32) {
       return {
         icon: '☀️',
         headline: 'Warm Summer Weather',
         badge: 'WARM & PLEASANT',
         clothing: '🩳 Shorts, short-sleeve shirt, sandals or light sneakers',
-        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), pleasant warm weather for swimming, beaches, and outdoor summer fun.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), pleasant warm weather for swimming, beaches, and outdoor summer fun.`,
         tip: '💡 Drink extra water during outdoor activities and apply sunscreen (SPF 30+) if in direct sun.'
       };
     }
-    if (celsius <= 38) {
+    if (c <= 38) {
       return {
         icon: '🏃',
         headline: 'Body Temperature / Sweltering Heat',
         badge: 'SWELTERING HEAT',
         clothing: '🕶️ Loose breathable cotton clothing, sun hat & sunglasses',
-        impact: `37.0°C (98.6°F) is normal human core body temperature. Outdoors, hot air feels heavy and causes sweating.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), normal human body core is 37°C. Ambient air feels heavy and causes sweating.`,
         tip: '💡 Seek shade during afternoon hours (12 PM–4 PM) and keep hydrated with electrolytes.'
       };
     }
-    if (celsius <= 50) {
+    if (c <= 50) {
       return {
         icon: '🥵',
         headline: 'Dangerous Extreme Heatwave',
         badge: 'HEATSTROKE WARNING',
         clothing: '⛱️ Stay indoors in air conditioning; loose UV protective gear outdoors',
-        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), asphalt burns bare skin, and high humidity risks heat exhaustion.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), asphalt burns bare skin, and high humidity risks heat exhaustion.`,
         tip: '💡 Never leave children or pets inside parked vehicles—car interiors heat up to lethal levels within minutes.'
       };
     }
-    if (celsius <= 70) {
+    if (c <= 70) {
       return {
         icon: '🚿',
         headline: 'Hot Tap Water / Steamy Dishwater',
         badge: 'HOT LIQUID',
         clothing: '⚠️ Caution: Handle with care; too hot for prolonged skin contact',
-        impact: `At ${celsius.toFixed(1)}°C, hot domestic water can cause painful scalds in under 3 seconds.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), hot domestic water can cause painful scalds in under 3 seconds.`,
         tip: '💡 Set residential water heaters to 49°C–50°C (120°F) to prevent accidental household burns.'
       };
     }
-    if (celsius <= 90) {
+    if (c <= 90) {
       return {
         icon: '☕',
         headline: 'Freshly Brewed Hot Coffee & Tea',
         badge: 'HOT BEVERAGE',
         clothing: '☕ Insulated mug; hold by cup handle or heat sleeve only',
-        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), standard serving temperature for piping-hot coffee, tea, and soups.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), standard serving temperature for piping-hot coffee, tea, and soups.`,
         tip: '💡 Allow coffee to cool for 2–3 minutes (down to ~65°C) to taste delicate aromas without burning your tongue.'
       };
     }
-    if (celsius <= 100) {
+    if (c < 99.5) {
+      return {
+        icon: '🫖',
+        headline: 'Near-Boiling / Simmering Broth',
+        badge: 'SIMMERING WATER',
+        clothing: '🧤 Kitchen mitts recommended; watch for rising hot steam',
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), gentle bubbles form at the base—ideal for delicate poaching, soups, and green teas.`,
+        tip: '💡 Simmering (85°C–95°C) cooks tender proteins evenly without tearing delicate meats.'
+      };
+    }
+    if (c <= 105) {
       return {
         icon: '🫖',
         headline: 'Boiling Water for Cooking',
         badge: '100°C BOILING POINT',
         clothing: '🧤 Silicone kitchen mitts; keep face clear of steam vents',
-        impact: 'Active rolling boil with energetic steam. Water at sea level cannot get hotter than this.',
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), active rolling boil with energetic steam. Water at sea level cannot get hotter than this.`,
         tip: '💡 Ideal for boiling pasta, blanching veggies, sanitizing kitchenware, and sterilizing water.'
       };
     }
-    if (celsius <= 250) {
+    if (c <= 250) {
       return {
         icon: '🍕',
         headline: 'Hot Baking & Roasting Oven',
         badge: 'BAKING TEMPERATURE',
         clothing: '🧤 Heavy-duty heat-resistant oven mitts required',
-        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), typical oven temperature for baking pizza, crispy bread, and roasting chicken.`,
+        impact: `At ${c.toFixed(1)}°C (${((c * 1.8) + 32).toFixed(1)}°F), typical oven temperature for baking pizza, crispy bread, and roasting chicken.`,
         tip: '💡 This heat triggers the Maillard reaction, producing golden-brown crusts and delicious savory aromas.'
       };
     }
@@ -149,7 +161,7 @@ class ThermalDiscoveryEngine {
       headline: 'Extreme Stovetop Flame & Fire',
       badge: 'OPEN FLAME HAZARD',
       clothing: '🧯 Fire safety equipment & high-temperature shields',
-      impact: `At ${celsius.toFixed(0)}°C, temperatures far exceed cooking. Paper ignites at 233°C; aluminium melts at 660°C.`,
+      impact: `At ${c.toFixed(0)}°C (${((c * 1.8) + 32).toFixed(0)}°F), temperatures far exceed cooking. Paper ignites at 233°C; aluminium melts at 660°C.`,
       tip: '💡 Kitchen gas burner flames reach 1,000°C+; keep an ABC-rated kitchen fire extinguisher readily accessible.'
     };
   }

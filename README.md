@@ -1,6 +1,8 @@
 # ThermaCraft • Temperature Conversion System
 
-A high-precision, tactile scientific temperature conversion studio designed for students, educators, and curious minds. Built with an approachable **analog-digital instrument aesthetic**—combining a physical bench-studio interface, an **Express.js REST API**, an embedded **SQLite 3** relational database engine operating with Write-Ahead Logging (WAL mode), and a **100% standalone zero-dependency mode for GitHub Pages**.
+![ThermaCraft Workstation Hero Banner](diagrams/sdms_thumbnail.png)
+
+A high-precision, tactile scientific temperature conversion workstation designed for students, educators, and curious minds. Built with an approachable **analog-digital instrument aesthetic**—combining a physical bench-studio interface, an **Express.js REST API**, an embedded **SQLite 3** relational database engine operating with Write-Ahead Logging (WAL mode), and a **100% standalone zero-dependency mode for GitHub Pages**.
 
 🔗 **Live Public Web Application:** [https://b1tbr34k3r.github.io/temperature-conversion-system/](https://b1tbr34k3r.github.io/temperature-conversion-system/)
 
