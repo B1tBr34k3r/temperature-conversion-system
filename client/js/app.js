@@ -165,6 +165,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  // Everyday Living Landmark Click Handlers
+  document.querySelectorAll('.landmark-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c = btn.getAttribute('data-c');
+      if (c === null) return;
+      tempInput.value = c;
+      fromScale.value = 'C';
+      tempSlider.value = Math.max(-273.15, Math.min(500, parseFloat(c)));
+      scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
+      window.instrumentAudio.playRelayClick(1600);
+      executeConversion(true);
+    });
+  });
+
+  // Toggle Historical & Antique Scales Drawer
+  const toggleHistoricalBtn = document.getElementById('toggleHistoricalBtn');
+  const historicalDrawer = document.getElementById('historicalDrawer');
+  const histToggleArrow = document.getElementById('histToggleArrow');
+
+  if (toggleHistoricalBtn && historicalDrawer) {
+    toggleHistoricalBtn.addEventListener('click', () => {
+      const isCollapsed = historicalDrawer.classList.toggle('collapsed');
+      if (histToggleArrow) {
+        histToggleArrow.textContent = isCollapsed ? '▶' : '▼';
+      }
+      window.instrumentAudio.playRotaryClunk();
+    });
+  }
+
   // Sound Toggle
   soundToggleBtn.addEventListener('click', () => {
     const isEnabled = window.instrumentAudio.toggleSound();
@@ -203,12 +232,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   exportCsvBtn.addEventListener('click', () => {
     window.instrumentAudio.playRelayClick(1600);
-    window.location.href = '/api/export/csv';
+    if (window.apiClient && window.apiClient.isOfflineMode) {
+      window.apiClient.downloadCSV();
+    } else {
+      window.location.href = '/api/export/csv';
+    }
   });
 
   exportJsonBtn.addEventListener('click', () => {
     window.instrumentAudio.playRelayClick(1600);
-    window.location.href = '/api/export/json';
+    if (window.apiClient && window.apiClient.isOfflineMode) {
+      window.apiClient.downloadJSON();
+    } else {
+      window.location.href = '/api/export/json';
+    }
   });
 
   // --- Core Execution Logic ---
@@ -380,12 +417,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderTelemetryRadar(telemetry) {
     if (!telemetry || Object.keys(telemetry).length === 0) return;
-    telemetryGrid.innerHTML = Object.values(telemetry).map(item => `
-      <div class="v-card" data-scale="${item.scale}">
-        <span class="v-name">${item.name} (${item.symbol})</span>
-        <span class="v-val">${item.value}</span>
-      </div>
-    `).join('');
+
+    // 1. Update Primary Scales (Celsius, Fahrenheit, Kelvin)
+    const valC = document.getElementById('valPrimaryC');
+    const valF = document.getElementById('valPrimaryF');
+    const valK = document.getElementById('valPrimaryK');
+    if (valC && telemetry.C) valC.textContent = telemetry.C.value;
+    if (valF && telemetry.F) valF.textContent = telemetry.F.value;
+    if (valK && telemetry.K) valK.textContent = telemetry.K.value;
+
+    // 2. Update Historical & Antique Scales Grid
+    const histGrid = document.getElementById('telemetryGrid');
+    if (histGrid) {
+      const histMap = {
+        R: { note: 'Absolute Fahrenheit (1859)' },
+        De: { note: 'Inverted Russian mercury (1732)' },
+        N: { note: "Isaac Newton's oil scale (1701)" },
+        Re: { note: 'French wine scale (1730)' },
+        Ro: { note: 'Danish salt brine scale (1701)' }
+      };
+
+      histGrid.innerHTML = Object.entries(histMap).map(([key, meta]) => {
+        const item = telemetry[key];
+        const val = item ? item.value : '--';
+        const name = item ? item.name : key;
+        const sym = item ? item.symbol : `°${key}`;
+        return `
+          <div class="hist-card" data-scale="${key}">
+            <div class="hc-head"><span class="hc-sym">${sym}</span> ${name}</div>
+            <div class="hc-val">${val}</div>
+            <div class="hc-note">${meta.note}</div>
+          </div>
+        `;
+      }).join('');
+    }
   }
 
   async function refreshHistory() {

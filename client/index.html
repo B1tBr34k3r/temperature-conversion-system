@@ -281,28 +281,28 @@
         </div>
       </section>
 
-      <!-- RIGHT COLUMN: Galvanometer, Thermodynamic Spectrum & 8-Scale Radar -->
+      <!-- RIGHT COLUMN: Human Comfort Tachometer, Everyday Landmarks, and Primary Scales -->
       <section class="grid-card right-deck">
         <div class="card-bar">
-          <span class="bar-title">ANALOG DYNAMICS & SPECTRUM</span>
+          <span class="bar-title">HUMAN COMFORT & LIVING TACHOMETER</span>
           <span id="gaugeTierBadge" class="tier-pill">BOILING / STEAM (≥100°C)</span>
         </div>
 
-        <!-- Wide Spring-Physics Galvanometer -->
+        <!-- Wide Spring-Physics Tachometer Gauge -->
         <div class="galvanometer-card">
           <svg id="galvanometerSvg" class="galvo-svg" viewBox="0 0 300 170">
             <!-- Background Arc -->
             <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#222834" stroke-width="10" stroke-linecap="round"/>
             <path id="dialActiveArc" d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#ff9f1c" stroke-width="10" stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377"/>
             
-            <!-- Dynamic Ticks Group -->
+            <!-- Dynamic Color-Coded Ticks Group -->
             <g id="dialTicks"></g>
 
-            <!-- Text Benchmarks -->
-            <text x="32" y="166" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">ABS-0</text>
-            <text x="110" y="42" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">0°C</text>
-            <text x="190" y="42" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">100°C</text>
-            <text x="268" y="166" fill="#ff4d4d" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">SUPERHEAT</text>
+            <!-- Human-Relatable Benchmarks around Arc -->
+            <text x="36" y="166" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">❄️ FREEZE</text>
+            <text x="150" y="32" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" text-anchor="middle">🛋️ ROOM (22°C)</text>
+            <text x="220" y="55" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">☕ 85°C</text>
+            <text x="264" y="166" fill="#ef4444" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">🔥 200°C+</text>
 
             <!-- Physical Galvanometer Needle (Rotated via JS Spring Physics) -->
             <g id="needleGroup" transform="translate(150, 150) rotate(-65)">
@@ -313,45 +313,144 @@
           </svg>
         </div>
 
-        <!-- Thermodynamic Energy Spectrum Bar with Animated Cursor -->
-        <div class="spectrum-card">
-          <div class="spectrum-header">
-            <span class="micro-label">THERMAL SPECTRUM POSITION</span>
-            <span id="spectrumLabel" class="spectrum-val">100°C // WATER BOILING</span>
+        <!-- Room Temperature Equilibrium Delta Callout -->
+        <div id="roomDeltaText" class="room-delta-bar">
+          ▲ +78.0°C hotter than normal room temp (22°C)
+        </div>
+
+        <!-- EVERYDAY BENCHMARK LANDMARKS (Clickable Presets) -->
+        <div class="landmarks-deck">
+          <div class="section-sub-header">
+            <span class="micro-label">EVERYDAY LIVING BENCHMARKS</span>
+            <span class="micro-badge">CLICK TO TEST</span>
           </div>
-          <div class="spectrum-bar-track">
-            <div class="spectrum-gradient"></div>
-            <!-- Sliding animated pointer -->
-            <div id="spectrumMarker" class="spectrum-marker" style="left: 65%;">
-              <div class="marker-pip"></div>
-              <div class="marker-beam"></div>
-            </div>
-          </div>
-          <div class="spectrum-ticks">
-            <span>0 K</span>
-            <span>77 K</span>
-            <span>273 K</span>
-            <span>373 K</span>
-            <span>1800 K</span>
-            <span>6000 K</span>
+          <div class="landmarks-grid">
+            <button class="landmark-item" data-id="lm-freeze-deep" data-c="-18" type="button">
+              <span class="lm-icon">🍦</span>
+              <div class="lm-info">
+                <span class="lm-name">Ice Cream Freezer</span>
+                <span class="lm-deg">-18°C / -0.4°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-freeze-water" data-c="0" type="button">
+              <span class="lm-icon">🧊</span>
+              <div class="lm-info">
+                <span class="lm-name">Water Freezes / Snow</span>
+                <span class="lm-deg">0°C / 32°F</span>
+              </div>
+            </button>
+            <button class="landmark-item active-landmark" data-id="lm-room" data-c="22" type="button">
+              <span class="lm-icon">🛋️</span>
+              <div class="lm-info">
+                <span class="lm-name">Comfort AC Room</span>
+                <span class="lm-deg">22°C / 71.6°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-body" data-c="37" type="button">
+              <span class="lm-icon">🏃</span>
+              <div class="lm-info">
+                <span class="lm-name">Human Body Core</span>
+                <span class="lm-deg">37°C / 98.6°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-coffee" data-c="85" type="button">
+              <span class="lm-icon">☕</span>
+              <div class="lm-info">
+                <span class="lm-name">Hot Brewed Coffee</span>
+                <span class="lm-deg">85°C / 185°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-boil" data-c="100" type="button">
+              <span class="lm-icon">🫖</span>
+              <div class="lm-info">
+                <span class="lm-name">Boiling Tea Kettle</span>
+                <span class="lm-deg">100°C / 212°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-oven" data-c="200" type="button">
+              <span class="lm-icon">🍕</span>
+              <div class="lm-info">
+                <span class="lm-name">Baking Pizza Oven</span>
+                <span class="lm-deg">200°C / 392°F</span>
+              </div>
+            </button>
           </div>
         </div>
 
-        <!-- 8-Vector Simultaneous Telemetry Tiles -->
-        <div class="vector-tiles-wrap">
-          <div class="vector-tiles-header">
-            <span class="micro-label">8-VECTOR REAL-TIME PROJECTION</span>
+        <!-- ESSENTIAL EVERYDAY SCALES & ANTIQUE DRAWER -->
+        <div class="essential-scales-deck">
+          <div class="section-sub-header">
+            <span class="micro-label">PRIMARY GLOBAL SCALES</span>
+            <span class="micro-badge">3 ESSENTIALS</span>
           </div>
-          <div id="telemetryGrid" class="vector-grid">
-            <div class="v-card" data-scale="C"><span class="v-name">Celsius (°C)</span><span class="v-val">100.0000</span></div>
-            <div class="v-card" data-scale="F"><span class="v-name">Fahrenheit (°F)</span><span class="v-val">212.0000</span></div>
-            <div class="v-card" data-scale="K"><span class="v-name">Kelvin (K)</span><span class="v-val">373.1500</span></div>
-            <div class="v-card" data-scale="R"><span class="v-name">Rankine (°R)</span><span class="v-val">671.6700</span></div>
-            <div class="v-card" data-scale="De"><span class="v-name">Delisle (°De)</span><span class="v-val">0.0000</span></div>
-            <div class="v-card" data-scale="N"><span class="v-name">Newton (°N)</span><span class="v-val">33.0000</span></div>
-            <div class="v-card" data-scale="Re"><span class="v-name">Réaumur (°Ré)</span><span class="v-val">80.0000</span></div>
-            <div class="v-card" data-scale="Ro"><span class="v-name">Rømer (°Rø)</span><span class="v-val">60.0000</span></div>
+
+          <div class="primary-scales-grid">
+            <div class="primary-scale-card c-card" data-scale="C">
+              <div class="psc-top">
+                <span class="psc-symbol">°C</span>
+                <span class="psc-name">Celsius</span>
+              </div>
+              <div class="psc-val" id="valPrimaryC">100.0000</div>
+              <div class="psc-desc">Global everyday & weather</div>
+            </div>
+
+            <div class="primary-scale-card f-card" data-scale="F">
+              <div class="psc-top">
+                <span class="psc-symbol">°F</span>
+                <span class="psc-name">Fahrenheit</span>
+              </div>
+              <div class="psc-val" id="valPrimaryF">212.0000</div>
+              <div class="psc-desc">US & UK daily system</div>
+            </div>
+
+            <div class="primary-scale-card k-card" data-scale="K">
+              <div class="psc-top">
+                <span class="psc-symbol">K</span>
+                <span class="psc-name">Kelvin</span>
+              </div>
+              <div class="psc-val" id="valPrimaryK">373.1500</div>
+              <div class="psc-desc">Absolute physics zero</div>
+            </div>
           </div>
+
+          <!-- Expandable Collapsible Antique Scales -->
+          <div class="historical-toggle-bar">
+            <button id="toggleHistoricalBtn" class="historical-toggle-btn" type="button">
+              <span id="histToggleArrow">▶</span>
+              <span>5 ANTIQUE HISTORICAL SCALES (RANKINE, DELISLE...)</span>
+            </button>
+          </div>
+
+          <div id="historicalDrawer" class="historical-drawer collapsed">
+            <div class="hist-cards-grid" id="telemetryGrid">
+              <div class="hist-card" data-scale="R">
+                <div class="hc-head"><span class="hc-sym">°R</span> Rankine</div>
+                <div class="hc-val" id="valHistR">671.6700</div>
+                <div class="hc-note">Absolute Fahrenheit (1859)</div>
+              </div>
+              <div class="hist-card" data-scale="De">
+                <div class="hc-head"><span class="hc-sym">°De</span> Delisle</div>
+                <div class="hc-val" id="valHistDe">0.0000</div>
+                <div class="hc-note">Inverted Russian mercury (1732)</div>
+              </div>
+              <div class="hist-card" data-scale="N">
+                <div class="hc-head"><span class="hc-sym">°N</span> Newton</div>
+                <div class="hc-val" id="valHistN">33.0000</div>
+                <div class="hc-note">Isaac Newton's oil scale (1701)</div>
+              </div>
+              <div class="hist-card" data-scale="Re">
+                <div class="hc-head"><span class="hc-sym">°Ré</span> Réaumur</div>
+                <div class="hc-val" id="valHistRe">80.0000</div>
+                <div class="hc-note">French wine scale (1730)</div>
+              </div>
+              <div class="hist-card" data-scale="Ro">
+                <div class="hc-head"><span class="hc-sym">°Rø</span> Rømer</div>
+                <div class="hc-val" id="valHistRo">60.0000</div>
+                <div class="hc-note">Danish salt brine scale (1701)</div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 

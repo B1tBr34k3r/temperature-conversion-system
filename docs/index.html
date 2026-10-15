@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TC-800 Lab Workstation • Scientific Temperature Calibrator</title>
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Cabinet+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="theme-ambient">
+
+  <!-- Ambient Heat/Frost Glow Field -->
+  <div class="thermal-aura" id="thermalAura"></div>
+
+  <!-- FULL-SCREEN WORKSTATION VIEWPORT -->
+  <div class="fullscreen-workstation">
+    
+    <!-- Top System Nav & Telemetry Strip -->
+    <header class="workstation-header">
+      <div class="header-left">
+        <div class="brand-insignia">TC-800</div>
+        <div class="brand-titles">
+          <h1 class="main-title">THERMAL CALIBRATION WORKSTATION</h1>
+          <span class="sub-title">FULL-SCALE MULTI-VECTOR LABORATORY ENGINE • MITS GWALIOR (SDMS #5683)</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <!-- Live System Clock & Uptime -->
+        <div class="clock-telemetry">
+          <span class="telemetry-label">SYSTEM TIME:</span>
+          <span id="liveSystemClock" class="telemetry-clock">--:--:-- UTC</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Mechanical Sound Toggle -->
+        <button id="soundToggleBtn" class="tactile-toggle active" title="Toggle Mechanical Audio">
+          <span class="toggle-light"></span>
+          <span class="toggle-text">RELAYS: ON</span>
+        </button>
+
+        <!-- Phosphor CRT Toggle -->
+        <button id="crtToggleBtn" class="tactile-toggle" title="Toggle Cathode Phosphor Scanlines">
+          <span class="toggle-light"></span>
+          <span class="toggle-text">CRT SCANLINES</span>
+        </button>
+
+        <!-- Database Engine Status Pill -->
+        <div id="serverStatusBadge" class="hw-status-pill">
+          <span class="pill-dot"></span>
+          <span class="pill-label">SQLITE ENGINE ACTIVE</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Full-Screen Grid Deck -->
+    <main class="workstation-grid">
+
+      <!-- LEFT COLUMN: Precision Controls & Bench Matrix -->
+      <section class="grid-card control-deck">
+        <div class="card-bar">
+          <span class="bar-title">TRANSMUTATION MATRIX</span>
+          <span class="bar-tag">INPUT VECTOR</span>
+        </div>
+
+        <!-- Input & Scale Selector Controls -->
+        <div class="matrix-inputs">
+          <div class="input-block">
+            <label for="tempInput" class="micro-label">INPUT MAGNITUDE</label>
+            <div class="input-wrap">
+              <input 
+                type="text" 
+                id="tempInput" 
+                class="screen-input" 
+                placeholder="e.g. 100" 
+                value="100" 
+                autocomplete="off" 
+              />
+              <div class="input-stepper">
+                <button id="stepUpBtn" class="stepper-btn" type="button" title="Increment +1">▲</button>
+                <button id="stepDownBtn" class="stepper-btn" type="button" title="Decrement -1">▼</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="scale-selector-pair">
+            <div class="select-block">
+              <label for="fromScale" class="micro-label">SOURCE SCALE</label>
+              <select id="fromScale" class="screen-select">
+                <option value="C" selected>Celsius (°C)</option>
+                <option value="F">Fahrenheit (°F)</option>
+                <option value="K">Kelvin (K)</option>
+                <option value="R">Rankine (°R)</option>
+                <option value="De">Delisle (°De)</option>
+                <option value="N">Newton (°N)</option>
+                <option value="Re">Réaumur (°Ré)</option>
+                <option value="Ro">Rømer (°Rø)</option>
+              </select>
+            </div>
+
+            <div class="swap-block">
+              <button id="swapBtn" class="tactile-swap-btn" type="button" title="Invert Scales (Swap)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8v12M17 20l4-4M17 20l-4-4"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="select-block">
+              <label for="toScale" class="micro-label">TARGET SCALE</label>
+              <select id="toScale" class="screen-select">
+                <option value="C">Celsius (°C)</option>
+                <option value="F" selected>Fahrenheit (°F)</option>
+                <option value="K">Kelvin (K)</option>
+                <option value="R">Rankine (°R)</option>
+                <option value="De">Delisle (°De)</option>
+                <option value="N">Newton (°N)</option>
+                <option value="Re">Réaumur (°Ré)</option>
+                <option value="Ro">Rømer (°Rø)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Continuous Tactile Magnitude Scrubber -->
+        <div class="scrubber-section">
+          <div class="scrub-labels">
+            <span class="scrub-title">CONTINUOUS ANALOG SCRUBBER</span>
+            <span id="scrubValueDisplay" class="scrub-num">100.00</span>
+          </div>
+          <input 
+            type="range" 
+            id="tempSlider" 
+            class="bench-slider" 
+            min="-273.15" 
+            max="500" 
+            step="0.5" 
+            value="100" 
+          />
+        </div>
+
+        <!-- Physical Presets Carousel -->
+        <div class="presets-section">
+          <span class="micro-label">BENCH BENCHMARK PRESETS</span>
+          <div class="preset-badges-grid">
+            <button type="button" class="preset-btn" data-val="0" data-scale="K">
+              <span class="preset-indicator" style="background:#38bdf8;"></span> 0 K (Abs-Zero)
+            </button>
+            <button type="button" class="preset-btn" data-val="-195.79" data-scale="C">
+              <span class="preset-indicator" style="background:#0ea5e9;"></span> Liquid N₂
+            </button>
+            <button type="button" class="preset-btn" data-val="-78.5" data-scale="C">
+              <span class="preset-indicator" style="background:#06b6d4;"></span> Dry Ice
+            </button>
+            <button type="button" class="preset-btn" data-val="0" data-scale="C">
+              <span class="preset-indicator" style="background:#10b981;"></span> 0°C (Ice Point)
+            </button>
+            <button type="button" class="preset-btn" data-val="37" data-scale="C">
+              <span class="preset-indicator" style="background:#f59e0b;"></span> 37°C (Body Temp)
+            </button>
+            <button type="button" class="preset-btn" data-val="100" data-scale="C">
+              <span class="preset-indicator" style="background:#ef4444;"></span> 100°C (Boiling)
+            </button>
+            <button type="button" class="preset-btn" data-val="1538" data-scale="C">
+              <span class="preset-indicator" style="background:#ec4899;"></span> Iron Melting
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Notification Banner -->
+        <div id="errorAlert" class="error-banner"></div>
+
+        <!-- Master Trigger Row -->
+        <div class="action-footer">
+          <div class="precision-housing">
+            <label for="precisionSelect" class="micro-label">DECIMALS</label>
+            <select id="precisionSelect" class="screen-select-mini">
+              <option value="2">2 Decimals</option>
+              <option value="4" selected>4 Decimals</option>
+              <option value="6">6 Decimals</option>
+              <option value="8">8 Decimals</option>
+              <option value="raw">Raw Precision</option>
+            </select>
+          </div>
+
+          <button id="convertBtn" class="master-execute-btn" type="button">
+            <span class="execute-pulse"></span>
+            <span class="execute-text">TRANSMUTE & RECORD TO SQLITE</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- CENTER COLUMN: Grand Digital Luminescent Readout & REAL-WORLD REALITY RADAR -->
+      <section class="grid-card center-deck">
+        <div class="card-bar">
+          <span class="bar-title">DIGITAL EMISSION READOUT</span>
+          <button id="copyBtn" class="tactile-mini-btn" type="button">COPY VALUE</button>
+        </div>
+
+        <!-- Grand Vintage Digital Screen -->
+        <div class="luminescent-screen">
+          <div class="screen-grid-overlay"></div>
+          <div class="screen-primary-row">
+            <span id="resultDisplay" class="phosphor-large">212.0000</span>
+            <span id="resultUnit" class="phosphor-unit-tag">°F</span>
+          </div>
+
+          <div class="screen-secondary-row">
+            <span class="meta-tag">IEEE-754 64-BIT DOUBLE PRECISION</span>
+            <span id="formulaEquation" class="equation-tag">°F = (°C × 9/5) + 32</span>
+          </div>
+        </div>
+
+        <!-- INTUITIVE REAL-WORLD LIVING REALITY GUIDE (Replacing Oscilloscope) -->
+        <div class="reality-guide-block">
+          <div class="reality-header">
+            <div class="reality-header-left">
+              <span id="realityIcon" class="reality-avatar">🍕</span>
+              <div>
+                <span class="reality-main-label">REAL-WORLD HUMAN CONTEXT</span>
+                <div id="realityTitle" class="reality-title-text">Water Boiling / Kitchen Baking</div>
+              </div>
+            </div>
+            <span class="reality-badge">EVERYDAY REALITY</span>
+          </div>
+
+          <div class="reality-cards-grid">
+            <!-- 1. What to Wear -->
+            <div class="reality-card">
+              <div class="rc-header">
+                <span class="rc-icon">👕</span>
+                <span class="rc-title">WHAT WOULD YOU WEAR?</span>
+              </div>
+              <div id="rcWearText" class="rc-content">Heavy Silicone Oven Mitts</div>
+            </div>
+
+            <!-- 2. Water / Food Phase -->
+            <div class="reality-card">
+              <div class="rc-header">
+                <span class="rc-icon">💧</span>
+                <span class="rc-title">WATER & MATTER STATE</span>
+              </div>
+              <div id="rcWaterText" class="rc-content">Vigorously Boiling Water & Scalding Steam</div>
+            </div>
+
+            <!-- 3. Real-World Comparison -->
+            <div class="reality-card">
+              <div class="rc-header">
+                <span class="rc-icon">☕</span>
+                <span class="rc-title">EVERYDAY TWIN OBJECT</span>
+              </div>
+              <div id="rcTwinText" class="rc-content">Baking Cake / Pizza Oven (~200°C)</div>
+            </div>
+
+            <!-- 4. Health & Survival -->
+            <div class="reality-card">
+              <div class="rc-header">
+                <span class="rc-icon">⚠️</span>
+                <span class="rc-title">HUMAN HEALTH & SAFETY</span>
+              </div>
+              <div id="rcSafetyText" class="rc-content">Instant third-degree steam burns on contact</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step-by-Step Educational Proof Ticker -->
+        <div class="paper-audit-container">
+          <div class="audit-header">
+            <span class="audit-title">STEP-BY-STEP CALCULATION AUDIT</span>
+            <span class="audit-spec">ARITHMETIC EXPLANATION</span>
+          </div>
+          <div id="formulaTerminal" class="audit-terminal">
+            <div class="audit-line meta">// EASY TO UNDERSTAND COMPUTATION STEPS:</div>
+            <div class="audit-line"><span class="step-num">1.</span> Multiply input by 1.8 (9/5 ratio): 100 × 1.8 = 180.000000</div>
+            <div class="audit-line"><span class="step-num">2.</span> Add baseline offset constant: 180.000000 + 32 = 212.000000</div>
+            <div class="audit-line highlight"><span class="step-num">3.</span> Final Converted Result: 212.0000 °F</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Human Comfort Tachometer, Everyday Landmarks, and Primary Scales -->
+      <section class="grid-card right-deck">
+        <div class="card-bar">
+          <span class="bar-title">HUMAN COMFORT & LIVING TACHOMETER</span>
+          <span id="gaugeTierBadge" class="tier-pill">BOILING / STEAM (≥100°C)</span>
+        </div>
+
+        <!-- Wide Spring-Physics Tachometer Gauge -->
+        <div class="galvanometer-card">
+          <svg id="galvanometerSvg" class="galvo-svg" viewBox="0 0 300 170">
+            <!-- Background Arc -->
+            <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#222834" stroke-width="10" stroke-linecap="round"/>
+            <path id="dialActiveArc" d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#ff9f1c" stroke-width="10" stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377"/>
+            
+            <!-- Dynamic Color-Coded Ticks Group -->
+            <g id="dialTicks"></g>
+
+            <!-- Human-Relatable Benchmarks around Arc -->
+            <text x="36" y="166" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">❄️ FREEZE</text>
+            <text x="150" y="32" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" text-anchor="middle">🛋️ ROOM (22°C)</text>
+            <text x="220" y="55" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">☕ 85°C</text>
+            <text x="264" y="166" fill="#ef4444" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" text-anchor="middle">🔥 200°C+</text>
+
+            <!-- Physical Galvanometer Needle (Rotated via JS Spring Physics) -->
+            <g id="needleGroup" transform="translate(150, 150) rotate(-65)">
+              <line x1="0" y1="0" x2="0" y2="-118" stroke="#ff3838" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="0" cy="0" r="8" fill="#151922" stroke="#ff3838" stroke-width="2.5"/>
+              <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Room Temperature Equilibrium Delta Callout -->
+        <div id="roomDeltaText" class="room-delta-bar">
+          ▲ +78.0°C hotter than normal room temp (22°C)
+        </div>
+
+        <!-- EVERYDAY BENCHMARK LANDMARKS (Clickable Presets) -->
+        <div class="landmarks-deck">
+          <div class="section-sub-header">
+            <span class="micro-label">EVERYDAY LIVING BENCHMARKS</span>
+            <span class="micro-badge">CLICK TO TEST</span>
+          </div>
+          <div class="landmarks-grid">
+            <button class="landmark-item" data-id="lm-freeze-deep" data-c="-18" type="button">
+              <span class="lm-icon">🍦</span>
+              <div class="lm-info">
+                <span class="lm-name">Ice Cream Freezer</span>
+                <span class="lm-deg">-18°C / -0.4°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-freeze-water" data-c="0" type="button">
+              <span class="lm-icon">🧊</span>
+              <div class="lm-info">
+                <span class="lm-name">Water Freezes / Snow</span>
+                <span class="lm-deg">0°C / 32°F</span>
+              </div>
+            </button>
+            <button class="landmark-item active-landmark" data-id="lm-room" data-c="22" type="button">
+              <span class="lm-icon">🛋️</span>
+              <div class="lm-info">
+                <span class="lm-name">Comfort AC Room</span>
+                <span class="lm-deg">22°C / 71.6°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-body" data-c="37" type="button">
+              <span class="lm-icon">🏃</span>
+              <div class="lm-info">
+                <span class="lm-name">Human Body Core</span>
+                <span class="lm-deg">37°C / 98.6°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-coffee" data-c="85" type="button">
+              <span class="lm-icon">☕</span>
+              <div class="lm-info">
+                <span class="lm-name">Hot Brewed Coffee</span>
+                <span class="lm-deg">85°C / 185°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-boil" data-c="100" type="button">
+              <span class="lm-icon">🫖</span>
+              <div class="lm-info">
+                <span class="lm-name">Boiling Tea Kettle</span>
+                <span class="lm-deg">100°C / 212°F</span>
+              </div>
+            </button>
+            <button class="landmark-item" data-id="lm-oven" data-c="200" type="button">
+              <span class="lm-icon">🍕</span>
+              <div class="lm-info">
+                <span class="lm-name">Baking Pizza Oven</span>
+                <span class="lm-deg">200°C / 392°F</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- ESSENTIAL EVERYDAY SCALES & ANTIQUE DRAWER -->
+        <div class="essential-scales-deck">
+          <div class="section-sub-header">
+            <span class="micro-label">PRIMARY GLOBAL SCALES</span>
+            <span class="micro-badge">3 ESSENTIALS</span>
+          </div>
+
+          <div class="primary-scales-grid">
+            <div class="primary-scale-card c-card" data-scale="C">
+              <div class="psc-top">
+                <span class="psc-symbol">°C</span>
+                <span class="psc-name">Celsius</span>
+              </div>
+              <div class="psc-val" id="valPrimaryC">100.0000</div>
+              <div class="psc-desc">Global everyday & weather</div>
+            </div>
+
+            <div class="primary-scale-card f-card" data-scale="F">
+              <div class="psc-top">
+                <span class="psc-symbol">°F</span>
+                <span class="psc-name">Fahrenheit</span>
+              </div>
+              <div class="psc-val" id="valPrimaryF">212.0000</div>
+              <div class="psc-desc">US & UK daily system</div>
+            </div>
+
+            <div class="primary-scale-card k-card" data-scale="K">
+              <div class="psc-top">
+                <span class="psc-symbol">K</span>
+                <span class="psc-name">Kelvin</span>
+              </div>
+              <div class="psc-val" id="valPrimaryK">373.1500</div>
+              <div class="psc-desc">Absolute physics zero</div>
+            </div>
+          </div>
+
+          <!-- Expandable Collapsible Antique Scales -->
+          <div class="historical-toggle-bar">
+            <button id="toggleHistoricalBtn" class="historical-toggle-btn" type="button">
+              <span id="histToggleArrow">▶</span>
+              <span>5 ANTIQUE HISTORICAL SCALES (RANKINE, DELISLE...)</span>
+            </button>
+          </div>
+
+          <div id="historicalDrawer" class="historical-drawer collapsed">
+            <div class="hist-cards-grid" id="telemetryGrid">
+              <div class="hist-card" data-scale="R">
+                <div class="hc-head"><span class="hc-sym">°R</span> Rankine</div>
+                <div class="hc-val" id="valHistR">671.6700</div>
+                <div class="hc-note">Absolute Fahrenheit (1859)</div>
+              </div>
+              <div class="hist-card" data-scale="De">
+                <div class="hc-head"><span class="hc-sym">°De</span> Delisle</div>
+                <div class="hc-val" id="valHistDe">0.0000</div>
+                <div class="hc-note">Inverted Russian mercury (1732)</div>
+              </div>
+              <div class="hist-card" data-scale="N">
+                <div class="hc-head"><span class="hc-sym">°N</span> Newton</div>
+                <div class="hc-val" id="valHistN">33.0000</div>
+                <div class="hc-note">Isaac Newton's oil scale (1701)</div>
+              </div>
+              <div class="hist-card" data-scale="Re">
+                <div class="hc-head"><span class="hc-sym">°Ré</span> Réaumur</div>
+                <div class="hc-val" id="valHistRe">80.0000</div>
+                <div class="hc-note">French wine scale (1730)</div>
+              </div>
+              <div class="hist-card" data-scale="Ro">
+                <div class="hc-head"><span class="hc-sym">°Rø</span> Rømer</div>
+                <div class="hc-val" id="valHistRo">60.0000</div>
+                <div class="hc-note">Danish salt brine scale (1701)</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FULL-WIDTH BOTTOM DECK: SQLite Database Repository Logs -->
+    <footer class="workstation-bottom-deck">
+      <div class="card-bar">
+        <div class="bottom-bar-title">
+          <span class="bar-title">SQLITE RELATIONAL LOG REPOSITORY</span>
+          <span class="db-stats" id="dbStatsText">DATABASE: 0 RECORDS STORED</span>
+        </div>
+
+        <div class="db-actions">
+          <button id="exportCsvBtn" class="tactile-mini-btn" type="button">EXPORT CSV</button>
+          <button id="exportJsonBtn" class="tactile-mini-btn" type="button">EXPORT JSON</button>
+          <button id="clearHistoryBtn" class="tactile-mini-btn danger" type="button">PURGE DATABASE</button>
+        </div>
+      </div>
+
+      <div class="table-scroll-wrap">
+        <table class="db-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>SYSTEM TIME</th>
+              <th>INPUT VALUE</th>
+              <th>VECTOR</th>
+              <th>TRANSMUTED VALUE</th>
+              <th>THERMAL PHASE</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="historyTbody">
+            <tr>
+              <td colspan="7" class="empty-state">Loading SQLite conversion records...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Client JavaScript Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/thermalContext.js"></script>
+  <script src="js/gauge.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

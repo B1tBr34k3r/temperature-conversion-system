@@ -2,6 +2,9 @@ node_modules/
 *.log
 data/*.db
 data/*.sqlite
+server/data/*.db
+server/data/*.db-wal
+server/data/*.db-shm
 __pycache__/
 *.py[cod]
 *$py.class

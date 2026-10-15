@@ -878,7 +878,7 @@ body.crt-active::after {
 }
 
 /* ==========================================================================
-   RIGHT COLUMN: GALVANOMETER, SPECTRUM & 8-SCALE RADAR
+   RIGHT COLUMN: HUMAN COMFORT TACHOMETER, LANDMARKS & ESSENTIAL SCALES
    ========================================================================== */
 .tier-pill {
   font-family: var(--font-mono);
@@ -894,7 +894,7 @@ body.crt-active::after {
   background: var(--deck-inset);
   border: 1px solid #1f2735;
   border-radius: 8px;
-  padding: 0.65rem 0.5rem;
+  padding: 0.5rem 0.5rem 0.25rem 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -902,144 +902,299 @@ body.crt-active::after {
 
 .galvo-svg {
   width: 100%;
-  max-width: 320px;
-  height: 155px;
+  max-width: 310px;
+  height: 145px;
 }
 
-/* Thermodynamic Spectrum Analyzer Bar */
-.spectrum-card {
-  background: var(--deck-inset);
-  border: 1px solid #1f2735;
-  border-radius: 8px;
-  padding: 0.75rem 0.85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-
-.spectrum-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.spectrum-val {
+/* Room Temperature Equilibrium Delta Callout */
+.room-delta-bar {
+  background: #111620;
+  border: 1px solid #232c3d;
+  border-radius: 6px;
+  padding: 0.4rem 0.65rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #10b981;
+  text-align: center;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
 }
 
-.spectrum-bar-track {
-  position: relative;
-  width: 100%;
-  height: 14px;
-  border-radius: 7px;
-  overflow: visible;
-  background: #11141c;
-  border: 1px solid #283344;
-}
-
-.spectrum-gradient {
-  width: 100%;
-  height: 100%;
-  border-radius: 6px;
-  background: linear-gradient(90deg, 
-    #3b82f6 0%,   /* Abs Zero */
-    #06b6d4 15%,  /* Cryo */
-    #10b981 35%,  /* Freezing */
-    #f59e0b 55%,  /* Room Temp */
-    #ef4444 75%,  /* Boiling */
-    #ec4899 90%,  /* Magma */
-    #a855f7 100%  /* Plasma */
-  );
-  opacity: 0.85;
-}
-
-.spectrum-marker {
-  position: absolute;
-  top: -4px;
-  width: 12px;
-  height: 22px;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
-  transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.marker-pip {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid #ff9f1c;
-  box-shadow: 0 0 10px #ff9f1c;
-}
-
-.marker-beam {
-  width: 2px;
-  height: 12px;
-  background: #ffffff;
-  box-shadow: 0 0 6px #ffffff;
-}
-
-.spectrum-ticks {
+/* Section Sub-Headers */
+.section-sub-header {
   display: flex;
   justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: #64748b;
+  align-items: center;
+  padding: 0 0.15rem;
 }
 
-/* 8-Vector Projection Grid */
-.vector-tiles-wrap {
+.micro-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #8da2be;
+  letter-spacing: 0.04em;
+}
+
+.micro-badge {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: #ff9f1c;
+  background: rgba(255, 159, 28, 0.12);
+  border: 1px solid rgba(255, 159, 28, 0.35);
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+/* Everyday Living Landmarks */
+.landmarks-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.landmarks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.35rem;
+}
+
+.landmark-item {
+  background: #141822;
+  border: 1px solid #242e3f;
+  border-radius: 6px;
+  padding: 0.38rem 0.55rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.landmark-item:hover {
+  background: #1a2230;
+  border-color: #3b4b66;
+  transform: translateY(-1px);
+}
+
+.landmark-item.active-landmark {
+  background: rgba(255, 159, 28, 0.14);
+  border-color: var(--amber-phosphor);
+  box-shadow: 0 0 8px rgba(255, 159, 28, 0.3);
+}
+
+.landmark-item.active-landmark .lm-name {
+  color: #ffb703;
+}
+
+.lm-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lm-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.lm-name {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lm-deg {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* Essential Global Scales Deck */
+.essential-scales-deck {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  margin-top: 0.1rem;
 }
 
-.vector-grid {
+.primary-scales-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.45rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
 }
 
-@media (max-width: 600px) {
-  .vector-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.v-card {
-  background: var(--deck-inset);
-  border: 1px solid #1f2735;
-  border-radius: 6px;
-  padding: 0.45rem 0.65rem;
+.primary-scale-card {
+  background: #131722;
+  border: 1px solid #222b3a;
+  border-radius: 7px;
+  padding: 0.5rem 0.6rem;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
   transition: all 0.2s ease;
 }
 
-.v-card:hover {
-  background: #161c26;
-  border-color: #3b475c;
-  transform: translateY(-1px);
+.primary-scale-card:hover {
+  border-color: #3c4b63;
+  background: #181e2b;
 }
 
-.v-name {
+.primary-scale-card.c-card {
+  border-top: 3px solid #38bdf8;
+}
+
+.primary-scale-card.f-card {
+  border-top: 3px solid #f59e0b;
+}
+
+.primary-scale-card.k-card {
+  border-top: 3px solid #a855f7;
+}
+
+.psc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.psc-symbol {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--amber-phosphor);
 }
 
-.v-val {
+.psc-name {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.psc-val {
   font-family: var(--font-mono);
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.psc-desc {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  color: #8da2be;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Collapsible Antique Scales */
+.historical-toggle-bar {
+  display: flex;
+  margin-top: 0.1rem;
+}
+
+.historical-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #11151f;
+  border: 1px dashed #263244;
+  color: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.35rem 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.historical-toggle-btn:hover {
+  color: #ffffff;
+  border-color: #435470;
+  background: #181f2c;
+}
+
+.historical-drawer {
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+  max-height: 400px;
+  opacity: 1;
+}
+
+.historical-drawer.collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+}
+
+.hist-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.35rem;
+  padding-top: 0.35rem;
+}
+
+.hist-card {
+  background: #10141d;
+  border: 1px solid #1e2635;
+  border-radius: 5px;
+  padding: 0.35rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  transition: all 0.15s ease;
+}
+
+.hist-card:hover {
+  background: #161c28;
+  border-color: #334155;
+}
+
+.hc-head {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #cbd5e1;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hc-sym {
+  color: #ff9f1c;
+  font-weight: 800;
+}
+
+.hc-val {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.hc-note {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ==========================================================================

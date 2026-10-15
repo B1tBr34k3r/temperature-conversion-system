@@ -1,18 +1,22 @@
 # TC-800 Laboratory Calibrator • Temperature Conversion System
 
-An artisanal, high-precision scientific temperature conversion and thermal telemetry instrument built for students, researchers, and laboratory engineers. Designed with a distinct **tactile analog-digital hardware aesthetic**—combining a physical bench-instrument interface, an **Express.js REST API**, and an embedded **SQLite 3** relational database engine operating with Write-Ahead Logging (WAL mode).
+An artisanal, high-precision scientific temperature conversion and thermal telemetry instrument built for students, researchers, and everyday laboratory work. Designed with a distinct **tactile analog-digital hardware aesthetic**—combining a physical bench-instrument interface, an **Express.js REST API**, an embedded **SQLite 3** relational database engine operating with Write-Ahead Logging (WAL mode), and a **100% standalone zero-dependency mode for GitHub Pages**.
+
+🔗 **Live Public Web Application:** [https://b1tbr34k3r.github.io/temperature-conversion-system/](https://b1tbr34k3r.github.io/temperature-conversion-system/)
 
 ---
 
 ## ✨ System Features & Tactile Hardware Design
 
-- **Artisanal Analog-Digital Instrument Surface:**
-  - **Damped Spring Galvanometer:** A physical analog needle driven by real spring-physics simulation (`F = -k*x - c*v`) that swings, overshoots, and dampens smoothly like a genuine bench galvanometer.
-  - **Liquid Dispersion Mercury Column:** Vertical laboratory glass thermometer tube with dynamic fluid level, meniscus surface-tension bounce, and animated boiling bubbles when temperature passes $100^\circ\text{C}$.
-  - **Dynamic Thermal Aura:** Adaptive ambient radiance that shifts between frosty cryogenic mist ($< 0^\circ\text{C}$), warm amber equilibrium ($0\text{--}99^\circ\text{C}$), and incandescent magma ($100^\circ\text{C}+$).
-  - **Continuous Magnitude Scrubber:** Interactive tactile slider with real-time value scrubbing and physical audio ticks.
-  - **Synthesized Mechanical Sound Design:** Tactile relay clicks, rotary switch clunks, and analog coil whines synthesized via the **Web Audio API** (zero external MP3/WAV assets).
-  - **Vintage Phosphor Screen:** Warm amber phosphor digits with cathode ray scanlines and scientific 64-bit precision telemetry.
+- **Intuitive Human-Friendly Telemetry (Relatable Everyday Context):**
+  - **Human Comfort Tachometer:** Damped spring-physics needle dynamically sweeps across intuitive everyday comfort zones: Freezing ($< 0^\circ\text{C}$), Comfort Living ($15\text{--}26^\circ\text{C}$), Summer Heat ($27\text{--}50^\circ\text{C}$), and Scalding/Boiling ($> 50^\circ\text{C}$).
+  - **Room Temperature Delta Callout:** Real-time delta readout displaying exact temperature offset relative to typical room comfort ($22^\circ\text{C} / 72^\circ\text{F}$).
+  - **Everyday Living Benchmarks:** Instant single-click test presets for relatable real-world objects: Ice Cream Freezer ($-18^\circ\text{C}$), Snow/Water Freezing ($0^\circ\text{C}$), AC Living Room ($22^\circ\text{C}$), Human Core ($37^\circ\text{C}$), Hot Coffee ($85^\circ\text{C}$), Boiling Kettle ($100^\circ\text{C}$), and Baking Pizza ($200^\circ\text{C}$).
+  - **Real-World Living Reality Guide:** Live contextual advice detailing what to wear (e.g. T-shirt vs Heavy Silicone Mitts), matter/water phase state, and health & safety precautions.
+  - **Primary Essentials + Antique Scales Drawer:** Clear, prominent cards for the Big Three global scales (Celsius, Fahrenheit, Kelvin), with an expandable drawer exploring 5 historical antique scales (Rankine, Delisle, Newton, Réaumur, Rømer) with concise historical origin notes.
+- **Synthesized Mechanical Sound Design:** Tactile relay clicks, rotary switch clunks, and analog coil whines synthesized via the **Web Audio API** (zero external MP3/WAV assets).
+- **Vintage Phosphor Screen:** Warm amber phosphor digits with cathode ray scanlines and scientific 64-bit precision telemetry.
+- **Embedded SQLite 3 & In-Browser Fallback:** Works full-stack via Express REST API or 100% client-side on GitHub Pages with local storage history and in-browser CSV/JSON downloads.
 
 - **8-Scale Scientific Engine:** Accurate transformations across all primary thermodynamic and historical scales:
   - **Celsius (°C)**, **Fahrenheit (°F)**, **Kelvin (K)**
