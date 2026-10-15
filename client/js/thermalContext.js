@@ -9,171 +9,160 @@
 
 class ThermalDiscoveryEngine {
   /**
-   * Natural & Cosmic Thermal Twin Engine
-   * Dynamically pairs any temperature with its real-world physical, planetary,
-   * or cosmic environment counterpart across nature and science.
+   * Practical Living & Everyday Comfort Advisor
+   * Translates any temperature into actionable, real-world human advice:
+   * What it feels like, recommended clothing/safety, and practical everyday tips.
    */
-  static getThermalTwin(celsius) {
-    const kelvin = Math.max(0, celsius + 273.15);
-
-    if (celsius <= -270) {
+  static getPracticalLivingAdvice(celsius) {
+    if (celsius <= -40) {
       return {
-        icon: '🌌',
-        name: 'Boomerang Nebula & Cosmic Void',
-        badge: 'Coldest Natural Place',
-        phase: '⚡ Absolute Zero Floor (1 K)',
-        desc: `At ${kelvin.toFixed(1)} K, rapidly expanding gases make this nebula colder than the cosmic microwave background (2.7 K).`
+        icon: '🥶',
+        headline: 'Extreme Sub-Zero Freeze',
+        badge: 'DANGEROUS FROSTBITE',
+        clothing: '🧥 Heavy Arctic parka, snow boots, thermal balaclava & mittens',
+        impact: `At ${celsius.toFixed(1)}°C, bare skin suffers frostbite within 5 minutes. Car batteries fail and tires stiffen.`,
+        tip: '💡 Never touch bare metal outdoors; always carry insulated emergency blankets.'
       };
     }
-    if (celsius <= -180) {
-      return {
-        icon: '🪐',
-        name: 'Titan & Pluto Cryogenic Seas',
-        badge: 'Outer Solar System',
-        phase: '❄️ Liquid Nitrogen & Methane',
-        desc: `At ${celsius.toFixed(0)}°C, nitrogen condenses into tranquil liquid rivers across Saturn's moon Titan beneath an orange organic haze.`
-      };
-    }
-    if (celsius <= -80) {
+    if (celsius <= -10) {
       return {
         icon: '❄️',
-        name: 'Vostok Station, Antarctica',
-        badge: 'Earth Surface Record',
-        phase: '🧊 Brittle Hexagonal Ice Matrix',
-        desc: 'Recorded at -89.2°C in 1983. Human breath freezes mid-air with an audible whisper called "the whisper of the stars".'
-      };
-    }
-    if (celsius <= -35) {
-      return {
-        icon: '🏔️',
-        name: 'Siberian Oymyakon / Yakutsk',
-        badge: 'Inhabited Frozen Frontier',
-        phase: '🧊 Solid Sub-Zero Permafrost',
-        desc: 'At -40°C (= -40°F), metal bonds to skin, vehicle engines run 24/7, and thrown boiling water instantly flashes into snow.'
+        headline: 'Deep Sub-Zero Winter',
+        badge: 'FREEZING COLD',
+        clothing: '🧤 Thick winter coat, fleece layers, thermal socks, beanie & gloves',
+        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), breath fogs heavily; ice and snow stay rock-hard without melting.`,
+        tip: '💡 Standard home food freezers operate at -18°C (0°F) to preserve groceries for months.'
       };
     }
     if (celsius < 0) {
       return {
-        icon: '🍦',
-        name: 'Glacial Crevasse & Deep Freeze',
-        badge: 'Terrestrial Cryosphere',
-        phase: '🧊 Rigid Crystalline Ice',
-        desc: `At ${celsius.toFixed(1)}°C, liquid water locks into crystal lattices, halting bacterial decay and forming continental glaciers.`
+        icon: '🧊',
+        headline: 'Freezing Winter Weather',
+        badge: 'ICE HAZARD',
+        clothing: '🧥 Winter jacket, warm sweater, scarf & insulated footwear',
+        impact: `At ${celsius.toFixed(1)}°C, rain turns to sleet and puddles freeze into slippery black ice on roads.`,
+        tip: '💡 Spread rock salt on walkways to melt ice, and protect outdoor garden plants from frost.'
       };
     }
     if (celsius === 0) {
       return {
         icon: '🧊',
-        name: 'Glacial Melt & Ice Equilibrium',
-        badge: 'Thermodynamic Baseline',
-        phase: '⚖️ Zero Phase-Shift Line',
-        desc: 'The exact physical boundary where ice absorbs 334 J/g latent heat to liquefy. Calibrated as 0° on the Celsius metric scale.'
+        headline: 'Water Freezing Point',
+        badge: '0°C FREEZE POINT',
+        clothing: '🧤 Warm winter coat, trousers, and insulated gloves',
+        impact: 'The exact freezing threshold where liquid water crystallizes into solid ice (32°F).',
+        tip: '💡 Water pipes can freeze and burst; leave faucets dripping slightly during freeze warnings.'
       };
     }
-    if (celsius <= 15) {
+    if (celsius <= 14) {
       return {
-        icon: '🌲',
-        name: 'Limestone Cave & Wine Cellar',
-        badge: 'Subterranean Ambient',
-        phase: '💧 Dense Liquid Condensate',
-        desc: `At ${celsius.toFixed(1)}°C, deep limestone caves stay constant year-round, historically used across Europe for aging cheeses and wines.`
+        icon: '🍂',
+        headline: 'Chilly Autumn / Spring Day',
+        badge: 'BRISK & COOL',
+        clothing: '🧥 Light jacket, hoodie, warm knit sweater, or windbreaker',
+        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), crisp outdoor air feels refreshing for walking or jogging, but chilly if sitting.`,
+        tip: '💡 Natural food pantries and cellars maintain ~10°C–12°C to naturally preserve produce and wine.'
       };
     }
-    if (celsius <= 26) {
+    if (celsius <= 25) {
       return {
-        icon: '🌸',
-        name: 'Temperate Earth Biosphere',
-        badge: 'Golden Living Zone',
-        phase: '✨ Ideal Biological Equilibrium',
-        desc: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), this is the optimal sweet spot for human comfort, photosynthesis, and liquid water vitality.`
+        icon: '🛋️',
+        headline: 'Comfortable Living Room',
+        badge: 'OPTIMAL COMFORT',
+        clothing: '👕 T-shirt, jeans, light comfortable indoor clothing',
+        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), this is the golden comfort zone for human focus, studying, and restful sleep.`,
+        tip: '💡 Keep home thermostats set around 21°C–23°C (70°F–73°F) for maximum comfort and energy efficiency.'
       };
     }
-    if (celsius <= 42) {
+    if (celsius <= 32) {
       return {
-        icon: '🫀',
-        name: 'Living Mammalian Warm Core',
-        badge: 'Homeostatic Metabolism',
-        phase: '🧬 Active Folded Enzymes',
-        desc: `At ${celsius.toFixed(1)}°C, warm-blooded enzymes fold with nanometer precision. A rise past 42°C triggers cellular heat-shock.`
+        icon: '☀️',
+        headline: 'Warm Summer Weather',
+        badge: 'WARM & PLEASANT',
+        clothing: '🩳 Shorts, short-sleeve shirt, sandals or light sneakers',
+        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), pleasant warm weather for swimming, beaches, and outdoor summer fun.`,
+        tip: '💡 Drink extra water during outdoor activities and apply sunscreen (SPF 30+) if in direct sun.'
       };
     }
-    if (celsius <= 60) {
+    if (celsius <= 38) {
       return {
-        icon: '🏜️',
-        name: 'Death Valley Furnace Creek',
-        badge: 'Earth Record Heatwave',
-        phase: '☀️ Scorching Arid Atmosphere',
-        desc: 'Earth ambient air peaked at 56.7°C (134°F) in 1913. Ground surface rocks easily soar past 90°C, hot enough to cook food.'
+        icon: '🏃',
+        headline: 'Body Temperature / Sweltering Heat',
+        badge: 'SWELTERING HEAT',
+        clothing: '🕶️ Loose breathable cotton clothing, sun hat & sunglasses',
+        impact: `37.0°C (98.6°F) is normal human core body temperature. Outdoors, hot air feels heavy and causes sweating.`,
+        tip: '💡 Seek shade during afternoon hours (12 PM–4 PM) and keep hydrated with electrolytes.'
       };
     }
-    if (celsius <= 85) {
+    if (celsius <= 50) {
+      return {
+        icon: '🥵',
+        headline: 'Dangerous Extreme Heatwave',
+        badge: 'HEATSTROKE WARNING',
+        clothing: '⛱️ Stay indoors in air conditioning; loose UV protective gear outdoors',
+        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), asphalt burns bare skin, and high humidity risks heat exhaustion.`,
+        tip: '💡 Never leave children or pets inside parked vehicles—car interiors heat up to lethal levels within minutes.'
+      };
+    }
+    if (celsius <= 70) {
+      return {
+        icon: '🚿',
+        headline: 'Hot Tap Water / Steamy Dishwater',
+        badge: 'HOT LIQUID',
+        clothing: '⚠️ Caution: Handle with care; too hot for prolonged skin contact',
+        impact: `At ${celsius.toFixed(1)}°C, hot domestic water can cause painful scalds in under 3 seconds.`,
+        tip: '💡 Set residential water heaters to 49°C–50°C (120°F) to prevent accidental household burns.'
+      };
+    }
+    if (celsius <= 90) {
       return {
         icon: '☕',
-        name: 'Yellowstone Prismatic Springs',
-        badge: 'Hydrothermal Extremophiles',
-        phase: '♨️ Near-Boiling Convection',
-        desc: `At ${celsius.toFixed(1)}°C, vibrant hyperthermal archaea thrive. Also marks the optimal temperature to brew artisan coffee without scorching.`
+        headline: 'Freshly Brewed Hot Coffee & Tea',
+        badge: 'HOT BEVERAGE',
+        clothing: '☕ Insulated mug; hold by cup handle or heat sleeve only',
+        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), standard serving temperature for piping-hot coffee, tea, and soups.`,
+        tip: '💡 Allow coffee to cool for 2–3 minutes (down to ~65°C) to taste delicate aromas without burning your tongue.'
       };
     }
     if (celsius <= 100) {
       return {
-        icon: '♨️',
-        name: 'Sea-Level Steam Transition',
-        badge: 'Water Boiling Frontier',
-        phase: '🔥 1,600× Steam Vaporization',
-        desc: `At ${celsius.toFixed(1)}°C (1 atm), water expands 1,600 times into steam—the thermodynamic driver of the Industrial Revolution.`
+        icon: '🫖',
+        headline: 'Boiling Water for Cooking',
+        badge: '100°C BOILING POINT',
+        clothing: '🧤 Silicone kitchen mitts; keep face clear of steam vents',
+        impact: 'Active rolling boil with energetic steam. Water at sea level cannot get hotter than this.',
+        tip: '💡 Ideal for boiling pasta, blanching veggies, sanitizing kitchenware, and sterilizing water.'
       };
     }
     if (celsius <= 250) {
       return {
         icon: '🍕',
-        name: 'Wood Pizza Hearth & Mercury Dusk',
-        badge: 'Kiln Pyrolysis & Planet Crust',
-        phase: '🔥 Maillard Crust Caramelization',
-        desc: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), sugars and amino acids crisp pizza crusts; matches dusk regolith on planet Mercury.`
-      };
-    }
-    if (celsius <= 500) {
-      return {
-        icon: '🪐',
-        name: 'Crushing Surface of Planet Venus',
-        badge: 'Planetary Greenhouse Hell',
-        phase: '🧪 Molten Lead & Tin Pools',
-        desc: `At ${celsius.toFixed(1)}°C under 90 atm of CO₂, rocks glow faint red in darkness and metallic lead puddles naturally on the surface.`
-      };
-    }
-    if (celsius <= 1300) {
-      return {
-        icon: '🌋',
-        name: 'Kilauea Basaltic Lava Flow',
-        badge: 'Molten Mantle Silicate',
-        phase: '🌋 Glowing Orange-Yellow Magma',
-        desc: `Basalt erupts at ${celsius.toFixed(0)}°C, glowing orange-yellow and paving new continental crust directly on tectonic plate edges.`
-      };
-    }
-    if (celsius <= 2000) {
-      return {
-        icon: '🏭',
-        name: 'Industrial Blast Smelting Furnace',
-        badge: 'Metallurgic Smelting Point',
-        phase: '⚡ Liquefied White-Hot Iron',
-        desc: `At ${celsius.toFixed(0)}°C, pure iron breaks its crystalline lattice into dazzling white molten liquid for industrial steel fabrication.`
+        headline: 'Hot Baking & Roasting Oven',
+        badge: 'BAKING TEMPERATURE',
+        clothing: '🧤 Heavy-duty heat-resistant oven mitts required',
+        impact: `At ${celsius.toFixed(1)}°C (${((celsius * 1.8) + 32).toFixed(1)}°F), typical oven temperature for baking pizza, crispy bread, and roasting chicken.`,
+        tip: '💡 This heat triggers the Maillard reaction, producing golden-brown crusts and delicious savory aromas.'
       };
     }
     return {
-      icon: '☀️',
-      name: 'Solar Photosphere Surface',
-      badge: 'Stellar Plasma Fusion',
-      phase: '⚡ Ionized Incandescent Plasma',
-      desc: `At ${celsius.toFixed(0)}°C (${kelvin.toFixed(0)} K), atoms shed electrons into incandescent plasma, radiating the yellow light powering our solar system.`
+      icon: '🔥',
+      headline: 'Extreme Stovetop Flame & Fire',
+      badge: 'OPEN FLAME HAZARD',
+      clothing: '🧯 Fire safety equipment & high-temperature shields',
+      impact: `At ${celsius.toFixed(0)}°C, temperatures far exceed cooking. Paper ignites at 233°C; aluminium melts at 660°C.`,
+      tip: '💡 Kitchen gas burner flames reach 1,000°C+; keep an ABC-rated kitchen fire extinguisher readily accessible.'
     };
   }
 
   /**
-   * Backward compatibility alias
+   * Backward compatibility aliases
    */
+  static getThermalTwin(celsius) {
+    return this.getPracticalLivingAdvice(celsius);
+  }
+
   static getHeatIntensity(celsius) {
-    return this.getThermalTwin(celsius);
+    return this.getPracticalLivingAdvice(celsius);
   }
 
   /**

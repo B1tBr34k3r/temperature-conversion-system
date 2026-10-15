@@ -8,9 +8,9 @@ A high-precision, tactile scientific temperature conversion studio designed for 
 
 ## ✨ Studio Features & Human-Centric Design
 
-- **Dual-Scale Conversion Bridge & Cosmic Thermal Twin (Zero Redundancy):**
+- **Dual-Scale Conversion Bridge & Practical Living Advisor (Zero Redundancy):**
   - **Dual-Scale Alignment Ruler:** A synchronized side-by-side visual ruler that graphically maps input magnitude to the target scale with live animated pips, exact scale ratio multipliers (e.g. $1^\circ\text{C} = 1.8000^\circ\text{F}$), and baseline shift chips ($+32^\circ\text{F}$).
-  - **Natural & Cosmic Thermal Twin Engine:** Dynamically pairs any temperature with its real-world physical, planetary, or cosmic environment counterpart across nature and science: from the Boomerang Nebula ($1\text{ K}$) and Titan's cryogenic methane oceans ($-196^\circ\text{C}$), to the Earth biosphere optimum ($22^\circ\text{C}$), human mammalian core ($37^\circ\text{C}$), baking pizza hearths ($200^\circ\text{C}$), the lead-melting surface of Venus ($465^\circ\text{C}$), and the solar photosphere ($5,500^\circ\text{C}$).
+  - **Practical Living & Everyday Comfort Advisor:** Translates any temperature into actionable, real-world human advice that anyone can understand—what it actually feels like (from frosty puddles to piping coffee and hot baking ovens), recommended clothing or safety gear (jackets, sunglasses, silicone oven mitts), and useful everyday household/culinary tips.
   - **Dynamic Thermal Curiosity Flashcards:** Temperature-triggered scientific and historical gems: from why water boils at just $68^\circ\text{C}$ on Mount Everest, to Anders Celsius's original inverted 1742 scale, to the Maillard reaction that browns baked goods.
 
 - **Living Comfort & Everyday Relatability:**
@@ -21,7 +21,7 @@ A high-precision, tactile scientific temperature conversion studio designed for 
 
 - **Artisanal Tactile Console Experience:**
   - **Synthesized Mechanical Sound Design:** Tactile relay clicks, rotary switch clunks, and analog coil whines synthesized via the **Web Audio API** (zero external MP3/WAV assets).
-  - **Vintage Phosphor Screen:** Warm amber phosphor digits with cathode ray scanlines and scientific 64-bit precision telemetry.
+  - **Luminescent Digital Screen:** Warm amber phosphor digits with scientific 64-bit IEEE-754 double precision telemetry.
   - **Embedded SQLite 3 & In-Browser Fallback:** Works full-stack via Express REST API or 100% client-side on GitHub Pages with local storage history and in-browser CSV/JSON downloads.
 
 - **8-Scale Scientific Engine:** Accurate transformations across all primary thermodynamic and historical scales:

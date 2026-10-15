@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const precisionSelect = document.getElementById('precisionSelect');
   const copyBtn = document.getElementById('copyBtn');
   const soundToggleBtn = document.getElementById('soundToggleBtn');
-  const crtToggleBtn = document.getElementById('crtToggleBtn');
   const liveSystemClock = document.getElementById('liveSystemClock');
 
   // Outputs & Visualizers
@@ -191,13 +190,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const isEnabled = window.instrumentAudio.toggleSound();
     soundToggleBtn.classList.toggle('active', isEnabled);
     soundToggleBtn.querySelector('.toggle-text').textContent = isEnabled ? 'RELAYS: ON' : 'AUDIO: MUTED';
-  });
-
-  // CRT Scanlines Toggle
-  crtToggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('crt-active');
-    crtToggleBtn.classList.toggle('active');
-    window.instrumentAudio.playRelayClick(950);
   });
 
   // Copy Result Button
@@ -403,19 +395,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (rulerToValue) rulerToValue.textContent = `${Number(toVal).toFixed(2)} ${getUnitSymbol(toScale)}`;
     if (rulerToMarker) rulerToMarker.style.left = `${bridge.toPct.toFixed(1)}%`;
 
-    // 2. Natural & Cosmic Thermal Twin (Dynamic Physical/Cosmic Equivalent)
-    const twin = window.ThermalDiscoveryEngine.getThermalTwin(celsius);
-    const twinIcon = document.getElementById('twinIcon');
-    const twinName = document.getElementById('twinName');
-    const twinBadge = document.getElementById('twinBadge');
-    const twinPhase = document.getElementById('twinPhase');
-    const twinDesc = document.getElementById('twinDesc');
+    // 2. Practical Living & Everyday Comfort Advisor
+    const advice = window.ThermalDiscoveryEngine.getPracticalLivingAdvice(celsius);
+    const advisorIcon = document.getElementById('advisorIcon');
+    const advisorHeadline = document.getElementById('advisorHeadline');
+    const advisorBadge = document.getElementById('advisorBadge');
+    const advisorClothing = document.getElementById('advisorClothing');
+    const advisorImpact = document.getElementById('advisorImpact');
+    const advisorTip = document.getElementById('advisorTip');
 
-    if (twinIcon) twinIcon.textContent = twin.icon;
-    if (twinName) twinName.textContent = twin.name;
-    if (twinBadge) twinBadge.textContent = twin.badge;
-    if (twinPhase) twinPhase.textContent = twin.phase;
-    if (twinDesc) twinDesc.textContent = twin.desc;
+    if (advisorIcon) advisorIcon.textContent = advice.icon;
+    if (advisorHeadline) advisorHeadline.textContent = advice.headline;
+    if (advisorBadge) advisorBadge.textContent = advice.badge;
+    if (advisorClothing) advisorClothing.textContent = advice.clothing;
+    if (advisorImpact) advisorImpact.textContent = advice.impact;
+    if (advisorTip) advisorTip.textContent = advice.tip;
 
     // 3. Dynamic Curiosity Trivia
     const trivia = window.ThermalDiscoveryEngine.getCuriosityTrivia(celsius);

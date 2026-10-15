@@ -76,17 +76,6 @@ body.theme-boil .thermal-aura {
               radial-gradient(circle at 85% 70%, rgba(255, 159, 28, 0.1) 0%, transparent 60%);
 }
 
-/* CRT Scanlines Overlay */
-body.crt-active::after {
-  content: "";
-  position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-  background-size: 100% 3px, 6px 100%;
-  pointer-events: none;
-  z-index: 9999;
-}
 
 /* ==========================================================================
    FULL-SCREEN VIEWPORT WORKSTATION WRAPPER
@@ -878,14 +867,14 @@ body.crt-active::after {
   margin-top: -0.1rem;
 }
 
-.twin-main {
+.advisor-main {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
   margin-top: 0.1rem;
 }
 
-.twin-name {
+.advisor-headline {
   font-family: var(--font-display, var(--font-sans));
   font-size: 0.96rem;
   font-weight: 800;
@@ -893,11 +882,25 @@ body.crt-active::after {
   line-height: 1.2;
 }
 
-.twin-phase {
+.advisor-clothing {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
   color: #f59e0b;
+  line-height: 1.3;
+}
+
+.advisor-tip {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #a5f3fc;
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 6px;
+  padding: 0.35rem 0.55rem;
+  line-height: 1.35;
+  margin-top: 0.1rem;
 }
 
 .dc-badge {
