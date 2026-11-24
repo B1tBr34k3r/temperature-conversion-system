@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node server/server.js",
     "test": "node tests/backend.test.js && node tests/milestone4.test.js",
-    "test:m4": "node tests/milestone4.test.js"
+    "test:m4": "node tests/milestone4.test.js",
+    "docker:build": "docker build -t b1tbr34k3r/temperature-conversion-system:v5.0 .",
+    "docker:run": "docker run -d -p 3000:3000 --name sdms-app b1tbr34k3r/temperature-conversion-system:v5.0",
+    "compose:up": "docker-compose up -d",
+    "compose:down": "docker-compose down"
   },
   "repository": {
     "type": "git",

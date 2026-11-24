@@ -1,0 +1,41 @@
+# ==============================================================================
+# TEMPERATURE CONVERSION SYSTEM - DOCKER COMPOSE SPECIFICATION
+# Milestone 5: Local & Production Orchestration Setup
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  temperature-converter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: b1tbr34k3r/temperature-conversion-system:v5.0
+    container_name: sdms-temperature-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      # Persistent named volume for SQLite database and WAL logs
+      - sqlite_data:/app/server/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.2'
+          memory: 128M
+
+volumes:
+  sqlite_data:
+    name: sdms_conversions_sqlite_volume

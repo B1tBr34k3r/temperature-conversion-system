@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThermaCraft • Milestone 5 Final Project Presentation</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(18, 24, 38, 0.95);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --accent: #10b981;
+      --purple: #8b5cf6;
+      --amber: #f59e0b;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10, 15, 26, 0.8);
+      backdrop-filter: blur(10px);
+    }
+    .logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .slide-indicator {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    main {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1100px;
+      height: 85%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px) scale(0.98);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    h2 {
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-bottom: 24px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    p.lead {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 16px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      color: #38bdf8;
+    }
+    .card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .metric {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #34d399;
+      margin-bottom: 4px;
+    }
+    .authors {
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer {
+      padding: 16px 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 15, 26, 0.8);
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+    }
+    button {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+    button.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    button.primary:hover {
+      background: #2563eb;
+    }
+    code {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span>🌡️ ThermaCraft</span>
+      <span class="badge">Milestone 5 Defense</span>
+    </div>
+    <div class="slide-indicator" id="slide-num">Slide 1 of 8</div>
+  </header>
+
+  <main>
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+      <h2>MITS-DU • SDMS Project 5683</h2>
+      <h1>ThermaCraft: Scientific Temperature Conversion System</h1>
+      <p class="lead">A High-Precision Thermodynamic Conversion Engine with IEEE-754 Stabilization, 3-Tier Enterprise Architecture, and Acoustic Feedback.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Lead Student Author</h3>
+          <p><strong>Prakhar Harne</strong><br>Enrollment: BTCB26O1047<br>Dept of Computer Science & Engineering</p>
+        </div>
+        <div class="card">
+          <h3>Project Co-Author</h3>
+          <p><strong>Naman Shrivastav</strong><br>Dept of Computer Science & Engineering<br>MITS-DU, Gwalior</p>
+        </div>
+        <div class="card">
+          <h3>Evaluation Details</h3>
+          <p>Academic Session: July–Dec 2026<br>Milestones 1–4: Evaluated (100% Pass)<br>Status: Milestone 5 Final Submission</p>
+        </div>
+      </div>
+      <div class="authors">
+        <span>Madhav Institute of Technology & Science, Gwalior</span>
+        <span>Version 5.0.0 Production Release</span>
+      </div>
+    </div>
+
+    <!-- Slide 2: Problem Statement -->
+    <div class="slide">
+      <h2>01. The Problem Space</h2>
+      <h1>Why Scientific Temperature Conversion is Broken</h1>
+      <p class="lead">Conventional temperature tools treat conversion as trivial arithmetic, leading to compounding errors in scientific, educational, and laboratory contexts.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Floating-Point IEEE-754 Drift</h3>
+          <p>Repeated binary arithmetic causes cumulative precision decay (e.g. <code>0.1 + 0.2 = 0.30000000000000004</code>), corrupting scientific sensor readings.</p>
+        </div>
+        <div class="card">
+          <h3>Physical Boundary Violations</h3>
+          <p>Standard converters permit inputs below Absolute Zero (<code>-300 °C</code> or <code>-10 K</code>), breaking foundational thermodynamic laws.</p>
+        </div>
+        <div class="card">
+          <h3>O(N²) Formula Explosion</h3>
+          <p>Pairing 8 scales directly requires 56 unique mathematical formulas, creating maintenance nightmares and uneven precision tolerances.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Architecture -->
+    <div class="slide">
+      <h2>02. Architectural Solution</h2>
+      <h1>3-Tier Enterprise Decoupled Model</h1>
+      <p class="lead">Clean separation of concerns guarantees that mathematical computation is isolated from UI presentation and database persistence.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Presentation Tier (SPA)</h3>
+          <p>Tactile modern web UI with CSS design tokens, dynamic canvas ray visualizer, and Web Audio API synthesizer. Zero heavy frontend frameworks required.</p>
+        </div>
+        <div class="card">
+          <h3>Business Logic Tier (Express API)</h3>
+          <p>Modular Node.js 20 backend with strict input validation, canonical Kelvin routing, step-by-step formula derivation, and diagnostic <code>/api/health</code>.</p>
+        </div>
+        <div class="card">
+          <h3>Persistence Tier (SQLite 3 WAL)</h3>
+          <p>ACID-compliant relational database operating in Write-Ahead Logging mode with B-Tree indices on timestamp and scale pairs. Streaming CSV/JSON export.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Mathematical Pivot -->
+    <div class="slide">
+      <h2>03. Algorithmic Core</h2>
+      <h1>Canonical Kelvin Pivot: O(2N) Scaling</h1>
+      <p class="lead">Every conversion routes through the SI thermodynamic base scale (Kelvin), shrinking algorithmic complexity from 56 equations to 16 clean transformations.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>8 Supported Scales</h3>
+          <p>Celsius, Fahrenheit, Kelvin, Rankine, Delisle, Newton, Réaumur, and Rømer. Immediate uniform precision across all historical and SI units.</p>
+        </div>
+        <div class="card">
+          <h3>56-Vector Inverse Symmetry</h3>
+          <p>Every transformation satisfies $f^{-1}(f(x)) = x$ within strict epsilon tolerance ($\le 10^{-9}$), mathematically proven across 56 round-trip permutations.</p>
+        </div>
+        <div class="card">
+          <h3>Absolute Zero Interception</h3>
+          <p>Strict physical validation intercepts any entry $< 0\text{ K}$ prior to arithmetic or persistence, enforcing the Third Law of Thermodynamics.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Innovation Highlights -->
+    <div class="slide">
+      <h2>04. Technical Innovations</h2>
+      <h1>Sensory & Educational Features</h1>
+      <p class="lead">ThermaCraft transforms a utility tool into a multi-sensory educational laboratory.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Web Audio Energy Synthesis</h3>
+          <p>Synthesizes thermal kinetic energy into sound waves (100 Hz to 2000 Hz) via Web Audio API oscillator, providing instant acoustic feedback as heat rises.</p>
+        </div>
+        <div class="card">
+          <h3>Step-by-Step Formula Viewer</h3>
+          <p>Generates transparent algebraic steps showing intermediate fractions and thermodynamic constants rather than black-box outputs.</p>
+        </div>
+        <div class="card">
+          <h3>Thermal Milestone Indicators</h3>
+          <p>Automatically classifies inputs into real-world states: Absolute Zero, Cryogenic, Freezing, Human Body, Boiling, and Superheated Plasma.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Production Containerization -->
+    <div class="slide">
+      <h2>05. Deployment & DevOps</h2>
+      <h1>Production Containerization & Health Probes</h1>
+      <p class="lead">Built for zero-friction deployment on bare metal, Docker environments, or managed cloud platforms.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Multi-Stage Alpine Docker</h3>
+          <p>Lightweight production image (<95 MB) with non-root <code>appuser</code> isolation and automated <code>HEALTHCHECK</code> probes.</p>
+        </div>
+        <div class="card">
+          <h3>Docker Compose Persistence</h3>
+          <p>Named volume mapping ensures SQLite database and WAL logs persist across restarts and image updates.</p>
+        </div>
+        <div class="card">
+          <h3>PM2 Cluster Management</h3>
+          <p>Enterprise process clustering across all CPU cores with automatic restart on memory thresholds (>300 MB).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: QA Audit -->
+    <div class="slide">
+      <h2>06. Quality Assurance</h2>
+      <h1>110 Automated Tests • 100% Pass Rate</h1>
+      <p class="lead">Exhaustive automated testing hierarchy spanning mathematical verification, integration, stress benchmarks, and security fuzzing.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="metric">110 / 110</div>
+          <p><strong>Total Automated Assertions Passed</strong><br>Zero failures, zero flaky tests across backend and mathematical test suites.</p>
+        </div>
+        <div class="card">
+          <div class="metric">4.16M ops/s</div>
+          <p><strong>Stress Throughput Benchmark</strong><br>100,000 conversions completed in 24.2 ms under continuous heavy load.</p>
+        </div>
+        <div class="card">
+          <div class="metric">100% Neutralized</div>
+          <p><strong>Security Fuzzing Matrix</strong><br>20 attack vectors (SQLi, XSS, NaN, Infinity, Sub-Zero) safely neutralized.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Live Demo & Viva Defense -->
+    <div class="slide">
+      <h2>07. Demonstration & Defense</h2>
+      <h1>Live System Demonstration & Viva Voce Q&A</h1>
+      <p class="lead">Interactive walkthrough checklist and anticipated technical defense topics.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Live Demo Checklist</h3>
+          <p>1. Scale selection & swap inversion<br>2. Scientific preset chip benchmarks<br>3. Acoustic thermal energy synthesis<br>4. SQLite history & CSV/JSON export<br>5. <code>/api/health</code> diagnostic probe</p>
+        </div>
+        <div class="card">
+          <h3>Viva Voce Defense Topics</h3>
+          <p>• Mathematical derivation of Kelvin Pivot<br>• IEEE-754 epsilon clamping strategies<br>• SQLite WAL mode concurrency advantages<br>• SQL Injection defense via prepared statements</p>
+        </div>
+      </div>
+      <div class="authors">
+        <span>Thank You! • Questions & Discussion</span>
+        <span>SDMS Milestone 5 Submission</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>Use <code>←</code> and <code>→</code> keys to navigate slides</div>
+    <div class="controls">
+      <button onclick="prevSlide()">← Previous</button>
+      <button class="primary" onclick="nextSlide()">Next →</button>
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const indicator = document.getElementById('slide-num');
+
+    function showSlide(index) {
+      if (index < 0 || index >= slides.length) return;
+      slides[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      indicator.textContent = `Slide ${currentSlide + 1} of ${slides.length}`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) showSlide(currentSlide - 1);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+  </script>
+</body>
+</html>
