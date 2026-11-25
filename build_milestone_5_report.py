@@ -176,7 +176,7 @@ def create_milestone_5_report():
     meta_data = [
         [("Project Title:", True), ("Develop a Temperature Conversion System", False), ("Project ID:", True), ("5683 (SDMS Portal)", False)],
         [("Lead Author:", True), ("Prakhar Harne (BTCB26O1047)", False), ("Co-Author:", True), ("Naman Shrivastav", False)],
-        [("Department / Sem:", True), ("Computer Science & Engineering / VII", False), ("Academic Session:", True), ("July–Dec 2026", False)],
+        [("Department / Sem:", True), ("Computer Science & Technology (CST) / VII", False), ("Academic Session:", True), ("July–Dec 2026", False)],
         [("Repository URL:", True), ("github.com/B1tBr34k3r/temperature-conversion-system", False), ("Current Version:", True), ("v5.0.0 Production Release", False)],
         [("Evaluation Date:", True), ("November 28, 2026 (Final Deliverable)", False), ("Institutional Status:", True), ("Final Submission / Viva Ready", False)]
     ]
@@ -669,8 +669,8 @@ def create_milestone_5_report():
     s_col_w = [Inches(3.2), Inches(3.2)]
     sign_data = [
         ["Lead Developer / Student Author:", "Project Co-Author:"],
-        ["PRAKHAR HARNE\nEnrollment: BTCB26O1047\nDepartment of Computer Science & Engineering\nMITS-DU, Gwalior",
-         "NAMAN SHRIVASTAV\nDepartment of Computer Science & Engineering\nMITS-DU, Gwalior"],
+        ["PRAKHAR HARNE\nEnrollment: BTCB26O1047\nDepartment of Computer Science & Technology (CST)\nMITS-DU, Gwalior",
+         "NAMAN SHRIVASTAV\nEnrollment: BTCB26O1041\nDepartment of Computer Science & Technology (CST)\nMITS-DU, Gwalior"],
         ["Date of Submission: November 28, 2026\nStatus: Final Deliverable Submitted on SDMS",
          "Date of Submission: November 28, 2026\nStatus: Ready for Final Viva Voce Defense"]
     ]
