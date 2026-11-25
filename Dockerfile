@@ -1,28 +1,25 @@
 # ==============================================================================
 # TEMPERATURE CONVERSION SYSTEM - PRODUCTION DOCKERFILE
 # Milestone 5: Deployment, Packaging & Production Readiness
-# Multi-stage lightweight Node.js 20 Alpine container
+# Multi-stage lightweight Node.js 24 Alpine container (with built-in node:sqlite)
 # ==============================================================================
 
-# ---- Stage 1: Build & Dependencies ----
-FROM node:20-alpine AS dependencies
+# ---- Stage 1: Dependencies ----
+FROM node:24-alpine AS dependencies
 WORKDIR /app
-
-# Install native dependencies required for node-gyp / better-sqlite3 build
-RUN apk add --no-cache python3 make g++ gcc libc-dev
 
 COPY package*.json ./
 RUN npm ci --only=production
 
 # ---- Stage 2: Final Production Runtime ----
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install runtime dependencies for SQLite (lightweight)
+# Install curl for automated healthcheck probing
 RUN apk add --no-cache curl
 
 # Create non-root system user for security isolation
