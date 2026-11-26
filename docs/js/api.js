@@ -5,11 +5,67 @@
  * Authors: Prakhar Harne & Naman Shrivastav
  */
 
+const CLIENT_SCALE_BOUNDS = {
+  C: { name: 'Celsius', symbol: '°C', absoluteZero: -273.15 },
+  F: { name: 'Fahrenheit', symbol: '°F', absoluteZero: -459.67 },
+  K: { name: 'Kelvin', symbol: 'K', absoluteZero: 0.0 },
+  R: { name: 'Rankine', symbol: '°R', absoluteZero: 0.0 },
+  De: { name: 'Delisle', symbol: '°De', absoluteZero: 559.725 },
+  N: { name: 'Newton', symbol: '°N', absoluteZero: -90.1395 },
+  Re: { name: 'Réaumur', symbol: '°Ré', absoluteZero: -218.52 },
+  Ro: { name: 'Rømer', symbol: '°Rø', absoluteZero: -135.90375 }
+};
+
 class ConversionApiClient {
   constructor(baseUrl = '') {
     this.baseUrl = baseUrl;
     this.isServerConnected = false;
     this.localHistoryKey = 'tc800_local_history';
+  }
+
+  get isOfflineMode() {
+    return !this.isServerConnected;
+  }
+
+  validateInput(rawInput, scale) {
+    if (rawInput === undefined || rawInput === null) {
+      throw new Error('Input cannot be null or undefined.');
+    }
+
+    const trimmed = String(rawInput).trim();
+    if (trimmed === '') {
+      throw new Error('Temperature input field cannot be empty.');
+    }
+
+    const numericRegex = /^[+-]?((\d+(\.\d*)?)|(\.\d+))([eE][+-]?\d+)?$/;
+    if (!numericRegex.test(trimmed)) {
+      throw new Error('Invalid character detected. Value must be a valid numerical constant.');
+    }
+
+    const val = Number(trimmed);
+    if (!Number.isFinite(val)) {
+      throw new Error('Value must resolve to a finite real number (NaN / Infinity rejected).');
+    }
+
+    const scaleMeta = CLIENT_SCALE_BOUNDS[scale];
+    if (!scaleMeta) {
+      throw new Error(`Unrecognized temperature scale: '${scale}'.`);
+    }
+
+    // Delisle runs inverted: cooling rises upward to +559.725 °De
+    if (scale === 'De') {
+      if (val > scaleMeta.absoluteZero + 1e-7) {
+        throw new Error(`Thermodynamic Limit Violation: Temperature cannot drop below Absolute Zero (${scaleMeta.absoluteZero} ${scaleMeta.symbol}).`);
+      }
+    } else if (val < scaleMeta.absoluteZero - 1e-7) {
+      throw new Error(`Thermodynamic Limit Violation: Temperature cannot drop below Absolute Zero (${scaleMeta.absoluteZero} ${scaleMeta.symbol}).`);
+    }
+
+    if (Math.abs(val) > 1e15) {
+      throw new Error('Numerical value exceeds safe computational threshold (±10^15).');
+    }
+
+    return val;
   }
 
   async checkHealth() {
@@ -26,23 +82,35 @@ class ConversionApiClient {
   }
 
   async convert(value, fromScale, toScale, precision = '4') {
-    try {
-      if (this.isServerConnected) {
-        const res = await fetch(`${this.baseUrl}/api/convert`, {
+    if (this.isServerConnected) {
+      let res;
+      try {
+        res = await fetch(`${this.baseUrl}/api/convert`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ value, fromScale, toScale, precision, saveToDb: true })
         });
+      } catch (err) {
+        // Network disconnect: degrade gracefully to standalone offline mode
+        this.isServerConnected = false;
+        res = null;
+      }
+
+      if (res) {
         if (res.ok) {
           const data = await res.json();
           return data.data;
         }
+        // Propagate backend validation/HTTP errors directly instead of falling back
+        if (res.status >= 400 && res.status < 500) {
+          const errBody = await res.json().catch(() => ({}));
+          throw new Error(errBody.error || `Request rejected (HTTP ${res.status}).`);
+        }
+        this.isServerConnected = false;
       }
-    } catch (err) {
-      this.isServerConnected = false;
     }
 
-    // Seamless Full Standalone Client Fallback (For GitHub Pages)
+    // Seamless Full Standalone Client Fallback (For GitHub Pages / Offline)
     return this.clientStandaloneConvert(value, fromScale, toScale, precision);
   }
 
@@ -73,9 +141,21 @@ class ConversionApiClient {
     return { deleted: true };
   }
 
+  formatStandalonePrecision(val, precision = '4') {
+    if (precision === 'raw') return String(val);
+    const places = parseInt(precision, 10);
+    if (isNaN(places) || places < 0) return String(val);
+    const factor = Math.pow(10, places);
+    const rounded = Math.round((val + Number.EPSILON) * factor) / factor;
+    return rounded.toFixed(places);
+  }
+
   // --- Client Standalone Mathematical Engine (For GitHub Pages) ---
   clientStandaloneConvert(value, fromScale, toScale, precision) {
-    const val = Number(value);
+    const val = this.validateInput(value, fromScale);
+    if (!CLIENT_SCALE_BOUNDS[toScale]) {
+      throw new Error(`Target scale '${toScale}' is invalid.`);
+    }
 
     // Convert from source to Base Celsius
     let c = val;
@@ -90,33 +170,48 @@ class ConversionApiClient {
       case 'Ro': c = (val - 7.5) * (40.0 / 21.0); break;
     }
 
-    // Convert from Base Celsius to Target Scale
+    // Direct triad fast-paths + Celsius projection
     let res = c;
-    switch (toScale) {
-      case 'C': res = c; break;
-      case 'F': res = (c * 9.0 / 5.0) + 32.0; break;
-      case 'K': res = c + 273.15; break;
-      case 'R': res = (c + 273.15) * (9.0 / 5.0); break;
-      case 'De': res = (100.0 - c) * 1.5; break;
-      case 'N': res = c * 0.33; break;
-      case 'Re': res = c * 0.8; break;
-      case 'Ro': res = (c * 21.0 / 40.0) + 7.5; break;
+    if (fromScale === toScale) {
+      res = val;
+    } else if (fromScale === 'C' && toScale === 'F') {
+      res = (val * 9.0 / 5.0) + 32.0;
+    } else if (fromScale === 'F' && toScale === 'C') {
+      res = (val - 32.0) * (5.0 / 9.0);
+    } else if (fromScale === 'C' && toScale === 'K') {
+      res = val + 273.15;
+    } else if (fromScale === 'K' && toScale === 'C') {
+      res = val - 273.15;
+    } else if (fromScale === 'F' && toScale === 'K') {
+      res = ((val - 32.0) * (5.0 / 9.0)) + 273.15;
+    } else if (fromScale === 'K' && toScale === 'F') {
+      res = ((val - 273.15) * 9.0 / 5.0) + 32.0;
+    } else {
+      switch (toScale) {
+        case 'C': res = c; break;
+        case 'F': res = (c * 9.0 / 5.0) + 32.0; break;
+        case 'K': res = c + 273.15; break;
+        case 'R': res = (c + 273.15) * (9.0 / 5.0); break;
+        case 'De': res = (100.0 - c) * 1.5; break;
+        case 'N': res = c * 0.33; break;
+        case 'Re': res = c * 0.8; break;
+        case 'Ro': res = (c * 21.0 / 40.0) + 7.5; break;
+      }
     }
 
-    // Precision formatting
-    const p = precision === 'raw' ? 4 : parseInt(precision, 10);
-    const formatted = res.toFixed(isNaN(p) ? 4 : p);
+    // Precision formatting with IEEE 754 epsilon guard
+    const formatted = this.formatStandalonePrecision(res, precision);
 
     // All-Scale Telemetry
     const allScalesTelemetry = {
-      C: { scale: 'C', name: 'Celsius', symbol: '°C', value: c.toFixed(p) },
-      F: { scale: 'F', name: 'Fahrenheit', symbol: '°F', value: ((c * 9 / 5) + 32).toFixed(p) },
-      K: { scale: 'K', name: 'Kelvin', symbol: 'K', value: (c + 273.15).toFixed(p) },
-      R: { scale: 'R', name: 'Rankine', symbol: '°R', value: ((c + 273.15) * 1.8).toFixed(p) },
-      De: { scale: 'De', name: 'Delisle', symbol: '°De', value: ((100 - c) * 1.5).toFixed(p) },
-      N: { scale: 'N', name: 'Newton', symbol: '°N', value: (c * 0.33).toFixed(p) },
-      Re: { scale: 'Re', name: 'Réaumur', symbol: '°Ré', value: (c * 0.8).toFixed(p) },
-      Ro: { scale: 'Ro', name: 'Rømer', symbol: '°Rø', value: (c * 21 / 40 + 7.5).toFixed(p) }
+      C: { scale: 'C', name: 'Celsius', symbol: '°C', value: this.formatStandalonePrecision(c, precision) },
+      F: { scale: 'F', name: 'Fahrenheit', symbol: '°F', value: this.formatStandalonePrecision((c * 9 / 5) + 32, precision) },
+      K: { scale: 'K', name: 'Kelvin', symbol: 'K', value: this.formatStandalonePrecision(c + 273.15, precision) },
+      R: { scale: 'R', name: 'Rankine', symbol: '°R', value: this.formatStandalonePrecision((c + 273.15) * 1.8, precision) },
+      De: { scale: 'De', name: 'Delisle', symbol: '°De', value: this.formatStandalonePrecision((100 - c) * 1.5, precision) },
+      N: { scale: 'N', name: 'Newton', symbol: '°N', value: this.formatStandalonePrecision(c * 0.33, precision) },
+      Re: { scale: 'Re', name: 'Réaumur', symbol: '°Ré', value: this.formatStandalonePrecision(c * 0.8, precision) },
+      Ro: { scale: 'Ro', name: 'Rømer', symbol: '°Rø', value: this.formatStandalonePrecision(c * 21 / 40 + 7.5, precision) }
     };
 
     // Human-understandable step-by-step derivation
@@ -226,4 +321,9 @@ class ConversionApiClient {
   }
 }
 
-window.apiClient = new ConversionApiClient();
+if (typeof window !== 'undefined') {
+  window.apiClient = new ConversionApiClient();
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { ConversionApiClient, CLIENT_SCALE_BOUNDS };
+}
