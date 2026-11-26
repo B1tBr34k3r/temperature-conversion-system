@@ -81,14 +81,14 @@ class ConversionApiClient {
     return null;
   }
 
-  async convert(value, fromScale, toScale, precision = '4') {
+  async convert(value, fromScale, toScale, precision = '4', saveToDb = true) {
     if (this.isServerConnected) {
       let res;
       try {
         res = await fetch(`${this.baseUrl}/api/convert`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ value, fromScale, toScale, precision, saveToDb: true })
+          body: JSON.stringify({ value, fromScale, toScale, precision, saveToDb: Boolean(saveToDb) })
         });
       } catch (err) {
         // Network disconnect: degrade gracefully to standalone offline mode
@@ -111,7 +111,7 @@ class ConversionApiClient {
     }
 
     // Seamless Full Standalone Client Fallback (For GitHub Pages / Offline)
-    return this.clientStandaloneConvert(value, fromScale, toScale, precision);
+    return this.clientStandaloneConvert(value, fromScale, toScale, precision, Boolean(saveToDb));
   }
 
   async getHistory() {
@@ -151,7 +151,7 @@ class ConversionApiClient {
   }
 
   // --- Client Standalone Mathematical Engine (For GitHub Pages) ---
-  clientStandaloneConvert(value, fromScale, toScale, precision) {
+  clientStandaloneConvert(value, fromScale, toScale, precision = '4', saveToDb = true) {
     const val = this.validateInput(value, fromScale);
     if (!CLIENT_SCALE_BOUNDS[toScale]) {
       throw new Error(`Target scale '${toScale}' is invalid.`);
@@ -240,17 +240,19 @@ class ConversionApiClient {
       ];
     }
 
-    // Save to local storage history
-    this.saveLocalHistory({
-      id: Date.now().toString().slice(-4),
-      timestamp: new Date().toISOString(),
-      inputValue: val,
-      fromScale,
-      resultValue: formatted,
-      toScale,
-      precisionSetting: precision,
-      physicalState: c >= 100 ? 'Boiling Steam' : (c <= 0 ? 'Freezing Ice' : 'Comfortable Room')
-    });
+    // Save to local storage history only when explicitly recording
+    if (saveToDb) {
+      this.saveLocalHistory({
+        id: Date.now().toString().slice(-4),
+        timestamp: new Date().toISOString(),
+        inputValue: val,
+        fromScale,
+        resultValue: formatted,
+        toScale,
+        precisionSetting: precision,
+        physicalState: c >= 100 ? 'Boiling Steam' : (c <= 0 ? 'Freezing Ice' : 'Comfortable Room')
+      });
+    }
 
     return {
       inputValue: val,

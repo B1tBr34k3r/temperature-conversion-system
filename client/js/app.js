@@ -44,9 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initialize Instrument: Spring-Physics Galvanometer
   const galvanometer = new PhysicalGalvanometer();
 
-  // Number Rolling Animation State
+  // Number Rolling Animation & Submit Guard State
   let currentAnimatedNum = 212.0;
   let numberAnimationId = null;
+  let isExplicitInFlight = false;
 
   // Start Live System Clock
   setInterval(updateLiveClock, 1000);
@@ -78,12 +79,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   tempInput.addEventListener('input', handleInputLive);
   tempInput.addEventListener('change', handleInputLive);
-  tempInput.addEventListener('keyup', (e) => {
+  tempInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       clearTimeout(debounceTimer);
       executeConversion(true);
-    } else {
-      handleInputLive();
     }
   });
 
@@ -253,12 +253,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    if (isExplicit && isExplicitInFlight) {
+      return;
+    }
+    if (isExplicit) {
+      isExplicitInFlight = true;
+    }
+
     try {
       const data = await window.apiClient.convert(
         rawVal,
         fromScale.value,
         toScale.value,
-        precisionSelect.value
+        precisionSelect.value,
+        isExplicit
       );
 
       // Successful Conversion
@@ -303,6 +311,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       tempInput.classList.add('input-invalid');
       resultDisplay.textContent = 'ERR';
       resultUnit.textContent = '';
+    } finally {
+      if (isExplicit) {
+        isExplicitInFlight = false;
+      }
     }
   }
 
@@ -549,7 +561,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         tempSlider.value = Math.max(-273.15, Math.min(500, parseFloat(btn.getAttribute('data-val'))));
         scrubValueDisplay.textContent = Number(tempSlider.value).toFixed(2);
         window.instrumentAudio.playRelayClick(1800);
-        executeConversion(true);
+        executeConversion(false);
       });
     });
   }
